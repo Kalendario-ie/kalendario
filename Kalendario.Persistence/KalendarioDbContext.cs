@@ -29,8 +29,12 @@ namespace Kalendario.Persistence
         }
 
         public DbSet<Account> Accounts { get; set; }
+
         public DbSet<Employee> Employees { get; set; }
+
         public DbSet<Service> Services { get; set; }
+
+        public DbSet<Customer> Customers { get; set; }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -56,6 +60,7 @@ namespace Kalendario.Persistence
         {
             modelBuilder.Entity<Employee>().HasQueryFilter(s => s.AccountId == _currentUserService.AccountId);
             modelBuilder.Entity<Service>().HasQueryFilter(s => s.AccountId == _currentUserService.AccountId);
+            modelBuilder.Entity<Customer>().HasQueryFilter(s => s.AccountId == _currentUserService.AccountId);
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }

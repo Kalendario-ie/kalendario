@@ -7,15 +7,15 @@ using Kalendario.Core.Domain;
 
 namespace Kalendario.Application.Queries
 {
-    public class GetEmployeesRequest : BaseGetAllRequest<EmployeeResourceModel>
+    public class GetCustomersRequest : BaseGetAllRequest<CustomerResourceModel>
     {
-        public class Handler : BaseGetAllRequestHandler<GetEmployeesRequest, Employee, EmployeeResourceModel>
+        public class Handler : BaseGetAllRequestHandler<GetCustomersRequest, Customer, CustomerResourceModel>
         {
             public Handler(IKalendarioDbContext context, IMapper mapper) : base(context, mapper)
             {
             }
 
-            protected override IQueryable<Employee> FilterEntities(IQueryable<Employee> entities, GetEmployeesRequest request)
+            protected override IQueryable<Customer> FilterEntities(IQueryable<Customer> entities, GetCustomersRequest request)
             {
                 return entities.Where(e => e.Name.ToLowerInvariant().Contains(request.Search.ToLowerInvariant()));
             }

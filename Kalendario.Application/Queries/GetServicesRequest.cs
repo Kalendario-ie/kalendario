@@ -1,37 +1,24 @@
 ﻿using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using AutoMapper;
 using Kalendario.Application.Common.Interfaces;
+using Kalendario.Application.Queries.Common;
 using Kalendario.Application.ResourceModel;
-using Kalendario.Application.Results;
 using Kalendario.Core.Domain;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace Kalendario.Application.Queries
 {
-    public class GetServicesRequest : IQuery<GetServicesResult>
+    public class GetServicesRequest : BaseGetAllRequest<ServiceResourceModel>
     {
-        public class Handler : IRequestHandler<GetServicesRequest, GetServicesResult>
+        public class Handler : BaseGetAllRequestHandler<GetServicesRequest, Service, ServiceResourceModel>
         {
-            private readonly IKalendarioDbContext _context;
-            private readonly IMapper _mapper;
-
-            public Handler(IKalendarioDbContext context, IMapper mapper)
+            public Handler(IKalendarioDbContext context, IMapper mapper) : base(context, mapper)
             {
-                _context = context;
-                _mapper = mapper;
             }
 
-            public async Task<GetServicesResult> Handle(GetServicesRequest request, CancellationToken cancellationToken)
+            protected override IQueryable<Service> FilterEntities(IQueryable<Service> entities,
+                GetServicesRequest request)
             {
-                return new GetServicesResult
-                {
-                    Services = await _context.Services
-                        .Select(service => _mapper.Map<ServiceResourceModel>(service))
-                        .ToListAsync(cancellationToken)
-                };
+                return entities.Where(e => e.Name.ToLowerInvariant().Contains(request.Search.ToLowerInvariant()));
             }
         }
     }

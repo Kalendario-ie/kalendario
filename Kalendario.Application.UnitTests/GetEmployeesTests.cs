@@ -1,9 +1,12 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Kalendario.Application.Queries;
+using Kalendario.Application.ResourceModel;
 using Kalendario.Application.Results;
 using Kalendario.Application.Test.Common;
 using Kalendario.Application.UnitTests.Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Kalendario.Application.UnitTests
@@ -14,17 +17,23 @@ namespace Kalendario.Application.UnitTests
         [TestMethod]
         public async Task EnsureOnlyCurrentUserAccountEmployeesShows()
         {
+            var validIds = await Context.Employees
+                .IgnoreQueryFilters()
+                .Where(c => c.AccountId == Constants.CurrentUserAccountId)
+                .Select(c => c.Id)
+                .ToListAsync();
+            
             var sut = new GetEmployeesRequest.Handler(Context, Mapper);
 
             var result = await sut.Handle(new GetEmployeesRequest(), CancellationToken.None);
             
-            Assert.IsInstanceOfType(result, typeof(GetEmployeesResult));
-            Assert.IsTrue(result.Employees.Count > 0);
+            Assert.IsInstanceOfType(result, typeof(GetAllResult<EmployeeResourceModel>));
+            Assert.IsTrue(result.Entities.Count > 0);
+            Assert.AreEqual(validIds.Count, result.Entities.Count);
             
-            foreach (var employee in result.Employees)
-            {
-                Assert.AreEqual(employee.AccountId, Constants.CurrentUserAccountId);
-            }
+            var isCurrentUserAccount = result.Entities
+                .All(entity => validIds.Contains(entity.Id));
+            Assert.IsTrue(isCurrentUserAccount);
         }
     }
 }

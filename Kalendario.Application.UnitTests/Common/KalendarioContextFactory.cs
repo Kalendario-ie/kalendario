@@ -38,10 +38,12 @@ namespace Kalendario.Application.Test.Common
             for (var i = 0; i < 5; i++)
             {
                 context.Employees.Add(new Employee { AccountId = Constants.CurrentUserAccountId});
-                context.Employees.Add(new Employee { AccountId = Constants.RandomAccountId});
-                
                 context.Services.Add(new Service() { AccountId = Constants.CurrentUserAccountId});
+                context.Customers.Add(new Customer() { AccountId = Constants.CurrentUserAccountId});
+                
+                context.Employees.Add(new Employee { AccountId = Constants.RandomAccountId});
                 context.Services.Add(new Service() { AccountId = Constants.RandomAccountId});
+                context.Customers.Add(new Customer() { AccountId = Constants.RandomAccountId});
             }
 
             context.SaveChanges();

@@ -12,26 +12,24 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Kalendario.Application.UnitTests
 {
     [TestClass]
-    public class GetServicesTests : QueryTestFixture
+    public class GetAccountsTest : QueryTestFixture
     {
         [TestMethod]
         public async Task EnsureOnlyCurrentUserAccountEmployeesShows()
         {
-            var validIds = await Context.Services
+            var validIds = await Context.Customers
                 .IgnoreQueryFilters()
                 .Where(c => c.AccountId == Constants.CurrentUserAccountId)
                 .Select(c => c.Id)
                 .ToListAsync();
             
-            var sut = new GetServicesRequest.Handler(Context, Mapper);
-
-            var result = await sut.Handle(new GetServicesRequest(), CancellationToken.None);
+            var sut = new GetCustomersRequest.Handler(Context, Mapper);
+            var result = await sut.Handle(new GetCustomersRequest(), CancellationToken.None);
             
-            Assert.IsInstanceOfType(result, typeof(GetAllResult<ServiceResourceModel>));
-            Assert.IsTrue(result.Entities.Count > 0);
+            Assert.IsInstanceOfType(result, typeof(GetAllResult<CustomerResourceModel>));
+            Assert.IsTrue(validIds.Count > 0);
             Assert.AreEqual(validIds.Count, result.Entities.Count);
 
-            
             var isCurrentUserAccount = result.Entities
                 .All(entity => validIds.Contains(entity.Id));
             Assert.IsTrue(isCurrentUserAccount);
