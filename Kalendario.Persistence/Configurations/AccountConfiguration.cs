@@ -19,6 +19,10 @@ namespace Kalendario.Persistence.Configurations
             builder.HasMany(a => a.Customers)
                 .WithOne(e => e.Account)
                 .HasForeignKey(e => e.AccountId);
+
+            builder.HasMany(a => a.Appointments)
+                .WithOne(a => a.Account)
+                .HasForeignKey(a => a.AccountId);
         }
     }
 }

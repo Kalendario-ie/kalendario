@@ -63,6 +63,7 @@ namespace Kalendario.Persistence
             modelBuilder.Entity<Employee>().HasQueryFilter(s => s.AccountId == _currentUserService.AccountId);
             modelBuilder.Entity<Service>().HasQueryFilter(s => s.AccountId == _currentUserService.AccountId);
             modelBuilder.Entity<Customer>().HasQueryFilter(s => s.AccountId == _currentUserService.AccountId);
+            modelBuilder.Entity<Appointment>().HasQueryFilter(s => s.AccountId == _currentUserService.AccountId);
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }
