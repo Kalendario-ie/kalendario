@@ -12,6 +12,10 @@ namespace Kalendario.Application.Queries.Common
     public abstract class BaseGetAllRequest<TResourceModel> : IQuery<GetAllResult<TResourceModel>>
     {
         public string Search { get; set; }
+
+        public int Start { get; set; }
+
+        public int Length { get; set; }
     }
 
     public abstract class BaseGetAllRequestHandler<TRequest, TDomain, TResourceModel> :
@@ -30,18 +34,25 @@ namespace Kalendario.Application.Queries.Common
 
         public async Task<GetAllResult<TResourceModel>> Handle(TRequest request, CancellationToken cancellationToken)
         {
+            var result = new GetAllResult<TResourceModel>();
             IQueryable<TDomain> entities = _context.GetDbSet<TDomain>(_context);
+
+            result.TotalCount = await entities.CountAsync(cancellationToken);
 
             if (request.Search != null)
             {
                 entities = FilterEntities(entities, request);
             }
-            return new GetAllResult<TResourceModel>
-            {
-                Entities = await entities
-                    .Select(domain => _mapper.Map<TResourceModel>(domain))
-                    .ToListAsync(cancellationToken)
-            };
+
+            result.FilteredCount = await entities.CountAsync(cancellationToken);
+
+            entities = entities.Skip(request.Start).Take(request.Length);
+
+            result.Entities = await entities
+                .Select(domain => _mapper.Map<TResourceModel>(domain))
+                .ToListAsync(cancellationToken);
+
+            return result;
         }
 
         protected abstract IQueryable<TDomain> FilterEntities(IQueryable<TDomain> entities, TRequest request);
