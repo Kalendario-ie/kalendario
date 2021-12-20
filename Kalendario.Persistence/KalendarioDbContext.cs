@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Common;
@@ -11,6 +13,12 @@ namespace Kalendario.Persistence
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTime _dateTime;
+
+        public KalendarioDbContext(DbContextOptions<KalendarioDbContext> options)
+            : base(options)
+        {
+        }
+
         public KalendarioDbContext(
             DbContextOptions<KalendarioDbContext> options,
             ICurrentUserService currentUserService,
@@ -19,7 +27,7 @@ namespace Kalendario.Persistence
             _currentUserService = currentUserService;
             _dateTime = dateTime;
         }
-        
+
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Service> Services { get; set; }
@@ -43,14 +51,12 @@ namespace Kalendario.Persistence
 
             return base.SaveChangesAsync(cancellationToken);
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>().HasQueryFilter(s => s.AccountId == _currentUserService.AccountId);
             modelBuilder.Entity<Service>().HasQueryFilter(s => s.AccountId == _currentUserService.AccountId);
-
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(KalendarioDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
     }
 }
-

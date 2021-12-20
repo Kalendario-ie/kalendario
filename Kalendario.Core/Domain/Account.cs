@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Kalendario.Core.Domain
 {
@@ -7,5 +8,9 @@ namespace Kalendario.Core.Domain
         public string Name { get; set; }
 
         public string Avatar { get; set; }
+
+        public ICollection<Employee> Employees { get; set; }
+
+        public ICollection<Service> Services { get; set; }
     }
 }
