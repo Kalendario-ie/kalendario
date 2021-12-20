@@ -11,6 +11,7 @@ namespace Kalendario.Application.Common.Interfaces
         DbSet<Employee> Employees { get; set; }
         DbSet<Service> Services { get; set; }
         DbSet<Customer> Customers { get; set; }
+        DbSet<Appointment> Appointments { get; set; }
 
         DbSet<TDomain> GetDbSet<TDomain>(IKalendarioDbContext context) where TDomain : class
         {

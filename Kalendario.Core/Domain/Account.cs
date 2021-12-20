@@ -15,5 +15,6 @@ namespace Kalendario.Core.Domain
         
         public ICollection<Customer> Customers { get; set; }
 
+        public ICollection<Appointment> Appointments { get; set; }
     }
 }
