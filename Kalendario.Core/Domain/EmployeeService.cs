@@ -2,7 +2,7 @@
 
 namespace Kalendario.Core.Domain
 {
-    public class EmployeeService
+    public class EmployeeService : AccountEntity
     {
         public Guid Id { get; set; }
 

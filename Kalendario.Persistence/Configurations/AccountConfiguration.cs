@@ -8,6 +8,10 @@ namespace Kalendario.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Account> builder)
         {
+            builder.HasMany(a => a.EmployeeServices)
+                .WithOne(e => e.Account)
+                .HasForeignKey(e => e.AccountId);
+
             builder.HasMany(a => a.Employees)
                 .WithOne(e => e.Account)
                 .HasForeignKey(e => e.AccountId);

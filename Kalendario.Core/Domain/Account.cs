@@ -11,6 +11,8 @@ namespace Kalendario.Core.Domain
 
         public ICollection<Employee> Employees { get; set; }
 
+        public ICollection<EmployeeService> EmployeeServices { get; set; }
+
         public ICollection<Service> Services { get; set; }
         
         public ICollection<Customer> Customers { get; set; }
