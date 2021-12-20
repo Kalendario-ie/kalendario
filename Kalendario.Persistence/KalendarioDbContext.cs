@@ -22,7 +22,8 @@ namespace Kalendario.Persistence
         
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Employee> Employees { get; set; }
-        
+        public DbSet<Service> Services { get; set; }
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())

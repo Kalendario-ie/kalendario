@@ -8,5 +8,6 @@ namespace Kalendario.Application.Common.Interfaces
         DbSet<Account> Accounts { get; set; }
 
         DbSet<Employee> Employees { get; set; }
+        DbSet<Service> Services { get; set; }
     }
 }

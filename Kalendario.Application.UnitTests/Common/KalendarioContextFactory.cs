@@ -39,6 +39,9 @@ namespace Kalendario.Application.Test.Common
             {
                 context.Employees.Add(new Employee { AccountId = Constants.CurrentUserAccountId});
                 context.Employees.Add(new Employee { AccountId = Constants.RandomAccountId});
+                
+                context.Services.Add(new Service() { AccountId = Constants.CurrentUserAccountId});
+                context.Services.Add(new Service() { AccountId = Constants.RandomAccountId});
             }
 
             context.SaveChanges();
