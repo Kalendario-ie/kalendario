@@ -1,3 +1,5 @@
+using System;
+
 namespace Kalendario.Api
 {
     public class WeatherForecast
