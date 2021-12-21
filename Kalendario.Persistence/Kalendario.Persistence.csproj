@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Common\Common.csproj" />
+      <ProjectReference Include="..\Kalendario.Common\Kalendario.Common.csproj" />
       <ProjectReference Include="..\Kalendario.Application\Kalendario.Application.csproj" />
     </ItemGroup>
 
