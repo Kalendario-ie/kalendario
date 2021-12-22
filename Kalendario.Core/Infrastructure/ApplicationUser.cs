@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Kalendario.Api.Models
+namespace Kalendario.Core.Infrastructure
 {
     public class ApplicationUser : IdentityUser
     {
