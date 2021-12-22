@@ -7,7 +7,7 @@ namespace Kalendario.Application.Validators
     {
         public GetCustomersRequestValidator()
         {
-            RuleFor(r => r.Search).MaximumLength(120).NotEmpty();
+            RuleFor(r => r.Search).MaximumLength(120);
             RuleFor(r => r.Length).LessThanOrEqualTo(150).NotEmpty();
         }
     }

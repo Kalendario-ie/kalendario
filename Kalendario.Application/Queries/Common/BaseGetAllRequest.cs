@@ -39,7 +39,7 @@ namespace Kalendario.Application.Queries.Common
 
             result.TotalCount = await entities.CountAsync(cancellationToken);
 
-            if (request.Search != null)
+            if (!string.IsNullOrWhiteSpace(request.Search))
             {
                 entities = FilterEntities(entities, request);
             }
