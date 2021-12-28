@@ -3,12 +3,8 @@ using System.Collections.Generic;
 
 namespace Kalendario.Core.Domain
 {
-    public class Account : BaseEntity
+    public class Account : BaseAccount
     {
-        public string Name { get; set; }
-
-        public string Avatar { get; set; }
-
         public ICollection<Employee> Employees { get; set; }
 
         public ICollection<EmployeeService> EmployeeServices { get; set; }

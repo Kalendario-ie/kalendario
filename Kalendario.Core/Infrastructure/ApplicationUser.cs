@@ -1,4 +1,5 @@
 ﻿using System;
+using Kalendario.Core.Domain;
 using Microsoft.AspNetCore.Identity;
 
 namespace Kalendario.Core.Infrastructure;
@@ -6,4 +7,5 @@ namespace Kalendario.Core.Infrastructure;
 public class ApplicationUser : IdentityUser
 {
     public Guid? AccountId { get; set; }
+    public ApplicationAccount Account { get; set; }
 }
