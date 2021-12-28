@@ -1,14 +1,13 @@
-﻿using Exsequor.Persistence;
+﻿using Kalendario.Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Kalendario.Persistence
+namespace Kalendario.Persistence;
+
+public class KalendarioDbContextFactory: DesignTimeDbContextFactoryBase<KalendarioDbContext>
 {
-    public class KalendarioDbContextFactory: DesignTimeDbContextFactoryBase<KalendarioDbContext>
+    protected override KalendarioDbContext CreateNewInstance(DbContextOptions<KalendarioDbContext> options)
     {
-        protected override KalendarioDbContext CreateNewInstance(DbContextOptions<KalendarioDbContext> options)
-        {
-            return new KalendarioDbContext(options);
-        }
+        return new KalendarioDbContext(options);
     }
 }

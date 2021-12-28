@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Kalendario.Common\Kalendario.Common.csproj" />
       <ProjectReference Include="..\Kalendario.Application\Kalendario.Application.csproj" />
+      <ProjectReference Include="..\Kalendario.Infrastructure.Common\Kalendario.Infrastructure.Common.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -16,16 +17,17 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.1" />
-      <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="6.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Migrations" />
+      <Content Include="..\Kalendario.Infrastructure.Common\Config\appsettings.json">
+        <Link>Config\appsettings.json</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Include="..\Kalendario.Infrastructure.Common\Config\appsettings.Local.json">
+        <Link>Config\appsettings.Local.json</Link>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
