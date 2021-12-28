@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Duende.IdentityServer.EntityFramework.Entities;
+﻿using Duende.IdentityServer.EntityFramework.Entities;
 using Duende.IdentityServer.EntityFramework.Interfaces;
 using Kalendario.Core.Infrastructure;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -15,6 +14,7 @@ namespace Kalendario.Infrastructure
 
         public Task<int> SaveChangesAsync() => base.SaveChangesAsync();
 
+        public DbSet<ApplicationAccount> Accounts { get; set; }
         public DbSet<PersistedGrant> PersistedGrants { get; set; }
         public DbSet<DeviceFlowCodes> DeviceFlowCodes { get; set; }
         public DbSet<Key> Keys { get; set; }
@@ -23,6 +23,7 @@ namespace Kalendario.Infrastructure
         {
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+            builder.Ignore<ApplicationAccount>();
         }
     }
 }
