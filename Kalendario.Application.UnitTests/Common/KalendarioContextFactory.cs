@@ -31,10 +31,12 @@ public class KalendarioContextFactory
     {
         context.AddRange(new Account()
         {
-            Id = Constants.CurrentUserAccountId
+            Id = Constants.CurrentUserAccountId,
+            Name = nameof(Constants.CurrentUserAccountId)
         }, new Account
         {
-            Id = Constants.RandomAccountId
+            Id = Constants.RandomAccountId,
+            Name = nameof(Constants.RandomAccountId)
         });
 
         for (var i = 0; i < 5; i++)
