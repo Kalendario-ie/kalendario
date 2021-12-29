@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Kalendario.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,5 +23,7 @@ namespace Kalendario.Application.Common.Interfaces
 
             return (DbSet<TDomain>) propertyInfo?.GetValue(context);
         }
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
