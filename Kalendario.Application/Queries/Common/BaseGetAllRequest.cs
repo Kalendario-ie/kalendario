@@ -13,9 +13,9 @@ namespace Kalendario.Application.Queries.Common
     {
         public string Search { get; set; }
 
-        public int Start { get; set; }
+        public int Start { get; set; } = 0;
 
-        public int Length { get; set; }
+        public int Length { get; set; } = 100;
     }
 
     public abstract class BaseGetAllRequestHandler<TRequest, TDomain, TResourceModel> :

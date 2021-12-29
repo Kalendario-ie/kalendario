@@ -1,26 +1,35 @@
 ﻿using System;
 using AutoMapper;
+using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.Common.Mappings;
 using Kalendario.Application.Test.Common;
+using Kalendario.Common;
 using Kalendario.Persistence;
+using Moq;
 
-namespace Kalendario.Application.UnitTests.Common
+namespace Kalendario.Application.UnitTests.Common;
+
+public class QueryTestFixture : IDisposable
 {
-    public class QueryTestFixture : IDisposable
+    public KalendarioDbContext Context { get; }
+
+    public IMapper Mapper { get; }
+
+    public readonly Mock<ICurrentUserService> CurrentUserServiceMock;
+
+    public readonly Mock<IDateTime> DateTimeMock;
+
+    public QueryTestFixture()
     {
-        public KalendarioDbContext Context { get; }
+        this.CurrentUserServiceMock = Mocks.CurrentUserServiceMock();
+        this.DateTimeMock = Mocks.DatetimeMock();
 
-        public IMapper Mapper { get; }
+        Context = KalendarioContextFactory.Create(CurrentUserServiceMock.Object, DateTimeMock.Object);
 
-        public QueryTestFixture()
-        {
-            Context = KalendarioContextFactory.Create();
+        var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<MappingProfile>(); });
 
-            var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<MappingProfile>(); });
-
-            Mapper = configurationProvider.CreateMapper();
-        }
-
-        public void Dispose() => KalendarioContextFactory.Destroy(Context);
+        Mapper = configurationProvider.CreateMapper();
     }
+
+    public void Dispose() => KalendarioContextFactory.Destroy(Context);
 }
