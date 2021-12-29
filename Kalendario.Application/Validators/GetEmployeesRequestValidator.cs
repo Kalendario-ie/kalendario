@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
-using Kalendario.Application.Queries;
+using Kalendario.Application.Queries.Admin;
 
-namespace Kalendario.Application.Validators
+namespace Kalendario.Application.Validators;
+
+public class GetEmployeesRequestValidator : AbstractValidator<GetEmployeesRequest>
 {
-    public class GetEmployeesRequestValidator : AbstractValidator<GetEmployeesRequest>
+    public GetEmployeesRequestValidator()
     {
-        public GetEmployeesRequestValidator()
-        {
-            RuleFor(r => r.Search).MaximumLength(120);
-            RuleFor(r => r.Length).LessThanOrEqualTo(150).NotEmpty();
-        }
+        RuleFor(r => r.Search).MaximumLength(120);
+        RuleFor(r => r.Length).LessThanOrEqualTo(150).NotEmpty();
     }
 }

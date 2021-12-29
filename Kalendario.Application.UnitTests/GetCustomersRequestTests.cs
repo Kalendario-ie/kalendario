@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Kalendario.Application.Queries;
+using Kalendario.Application.Queries.Admin;
 using Kalendario.Application.ResourceModel;
 using Kalendario.Application.Results;
 using Kalendario.Application.Test.Common;
