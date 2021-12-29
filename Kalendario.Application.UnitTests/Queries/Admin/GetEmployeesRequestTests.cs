@@ -10,27 +10,28 @@ using Kalendario.Application.UnitTests.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Kalendario.Application.UnitTests;
+namespace Kalendario.Application.UnitTests.Queries.Admin;
 
 [TestClass]
-public class GetCustomersRequestTests : QueryTestFixture
+public class GetEmployeesRequestTests : QueryTestFixture
 {
     [TestMethod]
     public async Task EnsureReturnsOnlyCurrentAccountEntities()
     {
-        var validIds = await Context.Customers
+        var validIds = await Context.Employees
             .IgnoreQueryFilters()
             .Where(c => c.AccountId == Constants.CurrentUserAccountId)
             .Select(c => c.Id)
             .ToListAsync();
             
-        var sut = new GetCustomersRequest.Handler(Context, Mapper);
-        var result = await sut.Handle(new GetCustomersRequest(), CancellationToken.None);
-            
-        Assert.IsInstanceOfType(result, typeof(GetAllResult<CustomerAdminResourceModel>));
-        Assert.IsTrue(validIds.Count > 0);
-        Assert.AreEqual(validIds.Count, result.Entities.Count);
+        var sut = new GetEmployeesRequest.Handler(Context, Mapper);
 
+        var result = await sut.Handle(new GetEmployeesRequest(), CancellationToken.None);
+            
+        Assert.IsInstanceOfType(result, typeof(GetAllResult<EmployeeAdminResourceModel>));
+        Assert.IsTrue(result.Entities.Count > 0);
+        Assert.AreEqual(validIds.Count, result.Entities.Count);
+            
         var isCurrentUserAccount = result.Entities
             .All(entity => validIds.Contains(entity.Id));
         Assert.IsTrue(isCurrentUserAccount);
