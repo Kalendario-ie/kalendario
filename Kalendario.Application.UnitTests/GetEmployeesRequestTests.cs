@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Kalendario.Application.Queries.Admin;
-using Kalendario.Application.ResourceModel;
+using Kalendario.Application.ResourceModels.Admin;
 using Kalendario.Application.Results;
 using Kalendario.Application.Test.Common;
 using Kalendario.Application.UnitTests.Common;
@@ -28,7 +28,7 @@ public class GetEmployeesRequestTests : QueryTestFixture
 
         var result = await sut.Handle(new GetEmployeesRequest(), CancellationToken.None);
             
-        Assert.IsInstanceOfType(result, typeof(GetAllResult<EmployeeResourceModel>));
+        Assert.IsInstanceOfType(result, typeof(GetAllResult<EmployeeAdminResourceModel>));
         Assert.IsTrue(result.Entities.Count > 0);
         Assert.AreEqual(validIds.Count, result.Entities.Count);
             
@@ -47,7 +47,7 @@ public class GetEmployeesRequestTests : QueryTestFixture
 
         var result = await sut.Handle(new GetEmployeesRequest(), CancellationToken.None);
             
-        Assert.IsInstanceOfType(result, typeof(GetAllResult<EmployeeResourceModel>));
+        Assert.IsInstanceOfType(result, typeof(GetAllResult<EmployeeAdminResourceModel>));
         Assert.AreEqual(0, result.Entities.Count);
         Assert.AreEqual(0, result.TotalCount);
         Assert.AreEqual(0, result.FilteredCount);

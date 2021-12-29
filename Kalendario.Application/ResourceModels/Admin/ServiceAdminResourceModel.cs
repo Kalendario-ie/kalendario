@@ -1,11 +1,10 @@
 ﻿using System;
-using AutoMapper;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Core.Domain;
 
-namespace Kalendario.Application.ResourceModel
+namespace Kalendario.Application.ResourceModels.Admin
 {
-    public class ServiceResourceModel : IMapFrom<Service>
+    public class ServiceAdminResourceModel : IMapFrom<Service>
     {
         public Guid Id { get; set; }
 

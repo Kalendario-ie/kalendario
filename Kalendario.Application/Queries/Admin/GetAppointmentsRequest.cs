@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Kalendario.Application.Common.Interfaces;
-using Kalendario.Application.ResourceModel;
+using Kalendario.Application.ResourceModels.Admin;
 using Kalendario.Application.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +50,7 @@ public class GetAppointmentsRequest : IQuery<GetAppointmentsResult>
             return new GetAppointmentsResult
             {
                 Appointments = await appointments
-                    .Select(a => _mapper.Map<AppointmentResourceModel>(a))
+                    .Select(a => _mapper.Map<AppointmentAdminResourceModel>(a))
                     .ToListAsync(cancellationToken)
             };
         }

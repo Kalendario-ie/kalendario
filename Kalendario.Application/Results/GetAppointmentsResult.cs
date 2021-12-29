@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using Kalendario.Application.ResourceModel;
+using Kalendario.Application.ResourceModels.Admin;
 
-namespace Kalendario.Application.Results
+namespace Kalendario.Application.Results;
+
+public class GetAppointmentsResult
 {
-    public class GetAppointmentsResult
-    {
-        public List<AppointmentResourceModel> Appointments { get; set; }
-    }
+    public List<AppointmentAdminResourceModel> Appointments { get; set; }
 }
