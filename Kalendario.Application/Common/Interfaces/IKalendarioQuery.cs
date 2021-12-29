@@ -2,7 +2,7 @@
 
 namespace Kalendario.Application.Common.Interfaces
 {
-    public interface IQuery<out T> : IRequest<T>
+    public interface IKalendarioQuery<out T> : IRequest<T>
     {
     }
 }

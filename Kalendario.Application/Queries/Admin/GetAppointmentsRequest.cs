@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kalendario.Application.Queries.Admin;
 
-public class GetAppointmentsRequest : IQuery<GetAppointmentsResult>
+public class GetAppointmentsRequest : IKalendarioQuery<GetAppointmentsResult>
 {
     public DateTime From { get; set; }
 
