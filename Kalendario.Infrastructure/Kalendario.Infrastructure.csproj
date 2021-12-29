@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Kalendario.Application\Kalendario.Application.csproj" />
         <ProjectReference Include="..\Kalendario.Core\Kalendario.Core.csproj" />
         <ProjectReference Include="..\Kalendario.Infrastructure.Common\Kalendario.Infrastructure.Common.csproj" />
     </ItemGroup>

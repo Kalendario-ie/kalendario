@@ -1,6 +1,5 @@
 ﻿using FluentValidation.AspNetCore;
 using Kalendario.Api.Common;
-using Kalendario.Api.Services;
 using Kalendario.Application;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Infrastructure;
@@ -35,9 +34,6 @@ public class Startup
 
         services.AddHealthChecks()
             .AddDbContextCheck<KalendarioDbContext>();
-
-        services.AddScoped<ICurrentUserService, CurrentUserService>()
-            .AddHttpContextAccessor();
 
         services.AddControllers();
         services.AddControllersWithViews()
