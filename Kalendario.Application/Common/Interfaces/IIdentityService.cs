@@ -5,5 +5,5 @@ namespace Kalendario.Application.Common.Interfaces;
 
 public interface IIdentityService
 {
-    Task<bool> IsInRoleAsync(Guid userId, string role);
+    Task<bool> IsInRoleAsync(string userId, string role);
 }

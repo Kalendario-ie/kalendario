@@ -1,4 +1,5 @@
 ﻿using Kalendario.Application.Common.Interfaces;
+using Kalendario.Common;
 using Kalendario.Core.Infrastructure;
 using Kalendario.Infrastructure.Identity;
 using Kalendario.Infrastructure.Services;
@@ -33,7 +34,11 @@ public static class DependencyInjection
         services.AddAuthentication()
             .AddIdentityServerJwt();
 
+        services.AddTransient<IDateTime, DateTimeService>();
+        services.AddTransient<IIdentityService, IdentityService>();
+
         services.AddScoped<ICurrentUserService, CurrentUserService>()
+            .AddScoped<IDomainEventService, DomainEventService>()
             .AddHttpContextAccessor();
 
         return services;
