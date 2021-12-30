@@ -24,4 +24,13 @@
         <ProjectReference Include="..\Kalendario.Infrastructure.Common\Kalendario.Infrastructure.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Config\appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Config\appsettings.Local.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>
