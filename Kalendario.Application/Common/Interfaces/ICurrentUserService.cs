@@ -5,7 +5,7 @@ namespace Kalendario.Application.Common.Interfaces
 {
     public interface ICurrentUserService
     {
-        public Guid UserId { get; }
+        public string UserId { get; }
 
         public Guid AccountId { get; }
        

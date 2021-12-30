@@ -13,11 +13,11 @@ public class CurrentUserService : ICurrentUserService
         if (user == null) return;
 
         IsAuthenticated = true;
-        UserId = Guid.Parse(user.GetUserId());
+        UserId = user.GetUserId();
         AccountId = Guid.Parse(user.GetAccountId());
     }
 
-    public Guid UserId { get; }
+    public string UserId { get; }
     public Guid AccountId { get; }
     public bool IsAuthenticated { get; }
 }

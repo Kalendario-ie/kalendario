@@ -2,6 +2,7 @@
 using Kalendario.Common;
 using Kalendario.Core.Infrastructure;
 using Kalendario.Infrastructure.Identity;
+using Kalendario.Infrastructure.Persistence;
 using Kalendario.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -18,7 +19,8 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseNpgsql(connectionString,
+        b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
         services.AddScoped<IKalendarioDbContext>(provider => provider.GetService<ApplicationDbContext>());
 

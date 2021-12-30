@@ -3,7 +3,7 @@ using Kalendario.Api.Filters;
 using Kalendario.Application;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Infrastructure;
-using Kalendario.Persistence;
+using Kalendario.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kalendario.Api;
