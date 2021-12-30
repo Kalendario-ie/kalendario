@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kalendario.Application.Queries.Common
 {
-    public abstract class BaseGetAllRequest<TResourceModel> : IKalendarioQuery<GetAllResult<TResourceModel>>
+    public abstract class BaseGetAllRequest<TResourceModel> : IKalendarioProtectedQuery<GetAllResult<TResourceModel>>
     {
         public string Search { get; set; }
 
