@@ -4,26 +4,25 @@ using System.Threading.Tasks;
 using Kalendario.Core.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Kalendario.Application.Common.Interfaces
+namespace Kalendario.Application.Common.Interfaces;
+
+public interface IKalendarioDbContext
 {
-    public interface IKalendarioDbContext
+    DbSet<Account> Accounts { get; set; }
+
+    DbSet<Employee> Employees { get; set; }
+    DbSet<Service> Services { get; set; }
+    DbSet<Customer> Customers { get; set; }
+    DbSet<Appointment> Appointments { get; set; }
+
+    DbSet<TDomain> GetDbSet<TDomain>(IKalendarioDbContext context) where TDomain : class
     {
-        DbSet<Account> Accounts { get; set; }
+        var propertyInfo = typeof(IKalendarioDbContext)
+            .GetProperties()
+            .FirstOrDefault(t => t.PropertyType == typeof(DbSet<TDomain>));
 
-        DbSet<Employee> Employees { get; set; }
-        DbSet<Service> Services { get; set; }
-        DbSet<Customer> Customers { get; set; }
-        DbSet<Appointment> Appointments { get; set; }
-
-        DbSet<TDomain> GetDbSet<TDomain>(IKalendarioDbContext context) where TDomain : class
-        {
-            var propertyInfo = typeof(IKalendarioDbContext)
-                .GetProperties()
-                .FirstOrDefault(t => t.PropertyType == typeof(DbSet<TDomain>));
-
-            return (DbSet<TDomain>) propertyInfo?.GetValue(context);
-        }
-
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        return (DbSet<TDomain>) propertyInfo?.GetValue(context);
     }
+
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
