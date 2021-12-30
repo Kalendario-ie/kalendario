@@ -7,5 +7,5 @@ namespace Kalendario.Core.Infrastructure;
 public class ApplicationUser : IdentityUser
 {
     public Guid? AccountId { get; set; }
-    public ApplicationAccount Account { get; set; }
+    public Account Account { get; set; }
 }

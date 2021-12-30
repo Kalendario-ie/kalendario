@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Kalendario.Core.Infrastructure;
 
 namespace Kalendario.Core.Domain
 {
-    public class Account : BaseAccount
+    public class Account : BaseEntity
     {
+        public string Name { get; set; }
+
+        public string Avatar { get; set; }
+
         public ICollection<Employee> Employees { get; set; }
 
         public ICollection<EmployeeService> EmployeeServices { get; set; }
@@ -14,5 +18,7 @@ namespace Kalendario.Core.Domain
         public ICollection<Customer> Customers { get; set; }
 
         public ICollection<Appointment> Appointments { get; set; }
+        
+        public ICollection<ApplicationUser> Users { get; set; }
     }
 }
