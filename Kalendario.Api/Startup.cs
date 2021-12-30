@@ -1,11 +1,10 @@
 ﻿using FluentValidation.AspNetCore;
-using Kalendario.Api.Common;
+using Kalendario.Api.Filters;
 using Kalendario.Application;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Infrastructure;
 using Kalendario.Persistence;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Serialization;
 
 namespace Kalendario.Api;
 
@@ -36,12 +35,15 @@ public class Startup
             .AddDbContextCheck<KalendarioDbContext>();
 
         services.AddControllers();
-        services.AddControllersWithViews()
-            .AddNewtonsoftJson(options =>
+        services.AddControllersWithViews(o =>
             {
-                options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                o.Filters.Add<ApiExceptionFilterAttribute>();
             })
-            .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<IKalendarioDbContext>());
+            .AddFluentValidation(fv =>
+            {
+                fv.AutomaticValidationEnabled = true;
+                fv.RegisterValidatorsFromAssemblyContaining<IKalendarioDbContext>();
+            });
         services.AddRazorPages();
 
         services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
@@ -68,8 +70,6 @@ public class Startup
             app.UseHsts();
         }
 
-
-        app.UseCustomExceptionHandler();
         app.UseHealthChecks("/health");
         app.UseHttpsRedirection();
         app.UseStaticFiles();
