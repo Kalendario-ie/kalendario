@@ -24,15 +24,4 @@
         <ProjectReference Include="..\Kalendario.Infrastructure.Common\Kalendario.Infrastructure.Common.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="..\Kalendario.Infrastructure.Common\Config\appsettings.json">
-        <Link>Config\appsettings.json</Link>
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <Content Include="..\Kalendario.Infrastructure.Common\Config\appsettings.Local.json">
-        <Link>Config\appsettings.Local.json</Link>
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-    </ItemGroup>
-
 </Project>

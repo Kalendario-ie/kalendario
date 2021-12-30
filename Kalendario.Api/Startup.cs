@@ -25,14 +25,13 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         
-        services.AddKalendarioAuthentication(Configuration)
-            .AddPersistence(Configuration)
+        services.AddInfrastructure(Configuration)
             .AddApplication();
 
         services.AddDatabaseDeveloperPageExceptionFilter();
 
         services.AddHealthChecks()
-            .AddDbContextCheck<KalendarioDbContext>();
+            .AddDbContextCheck<ApplicationDbContext>();
 
         services.AddControllers();
         services.AddControllersWithViews(o =>
