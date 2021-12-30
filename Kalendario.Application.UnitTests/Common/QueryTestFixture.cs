@@ -23,12 +23,9 @@ public class QueryTestFixture : IDisposable
     {
         this.CurrentUserServiceMock = Mocks.CurrentUserServiceMock();
         this.DateTimeMock = Mocks.DatetimeMock();
-
         Context = KalendarioContextFactory.Create(CurrentUserServiceMock.Object, DateTimeMock.Object);
-
-        var configurationProvider = new MapperConfiguration(cfg => { cfg.AddProfile<MappingProfile>(); });
-
-        Mapper = configurationProvider.CreateMapper();
+        KalendarioContextFactory.PopulateDb(Context);
+        Mapper = AutomapperFactory.Create();
     }
 
     public void Dispose() => KalendarioContextFactory.Destroy(Context);

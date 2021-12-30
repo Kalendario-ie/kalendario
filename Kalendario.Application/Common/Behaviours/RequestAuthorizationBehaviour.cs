@@ -48,7 +48,7 @@ public class RequestAuthorizationBehaviour<TRequest, TResponse> : IPipelineBehav
                 .ToArray()
         );
         
-        var authorized = authorizedResults.Any();
+        var authorized = authorizedResults.Any(value => value);
 
         // Must be a member of at least one role in roles
         if (!authorized)

@@ -16,9 +16,7 @@ public class KalendarioContextFactory
             .UseInMemoryDatabase(Guid.NewGuid().ToString())
             .Options;
 
-        var context = new KalendarioDbContext(options, currentUserService, dateTime);
-        PopulateDb(context);
-        return context;
+        return new KalendarioDbContext(options, currentUserService, dateTime);
     }
 
     public static void Destroy(KalendarioDbContext context)
@@ -27,7 +25,7 @@ public class KalendarioContextFactory
         context.Dispose();
     }
 
-    private static void PopulateDb(KalendarioDbContext context)
+    public static void PopulateDb(KalendarioDbContext context)
     {
         context.AddRange(new Account()
         {

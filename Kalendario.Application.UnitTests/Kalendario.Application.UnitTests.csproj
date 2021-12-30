@@ -19,8 +19,4 @@
       <ProjectReference Include="..\Kalendario.Persistence\Kalendario.Persistence.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Fixtures" />
-    </ItemGroup>
-
 </Project>

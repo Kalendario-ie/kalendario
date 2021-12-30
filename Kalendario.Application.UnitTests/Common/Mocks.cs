@@ -27,4 +27,9 @@ public static class Mocks
             .Returns(DateTime.Now);
         return mock;
     }
+
+    public static Mock<IIdentityService> IIdentityServiceMock()
+    {
+        return new Mock<IIdentityService>();
+    }
 }
