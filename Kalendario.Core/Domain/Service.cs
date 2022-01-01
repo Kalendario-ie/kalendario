@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Kalendario.Core.Domain
 {
@@ -6,8 +7,18 @@ namespace Kalendario.Core.Domain
     {
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         public double Price { get; set; }
 
-        public ICollection<Employee> Employees { get; set; }
+        public TimeSpan Duration { get; set; }
+
+        public Guid ServiceCategoryId { get; set; }
+        
+        public ServiceCategory ServiceCategory { get; set; } = null;
+        
+        public List<Employee> Employees { get; set; } = new();
+
+        public List<Appointment> Appointments { get; set; } = new();
     }
 }
