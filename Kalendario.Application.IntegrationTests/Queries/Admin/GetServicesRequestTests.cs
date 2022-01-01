@@ -33,9 +33,9 @@ public class GetServicesRequestTests : TestBase
     public async Task DefaultQuery_ShouldReturn_CurrentUserAccountCustomers()
     {
         await RunAsAdministratorAsync(typeof(Service), Service.ViewRole, Constants.CurrentUserAccountId);
-        await AddAsync(new Service() {AccountId = Constants.CurrentUserAccountId});
-        await AddAsync(new Service() {AccountId = Constants.CurrentUserAccountId});
-        await AddAsync(new Service() {AccountId = Constants.RandomAccountId});
+        await AddAsync(new Service() {Name = "Service 1", AccountId = Constants.CurrentUserAccountId});
+        await AddAsync(new Service() {Name = "Service 2", AccountId = Constants.CurrentUserAccountId});
+        await AddAsync(new Service() {Name = "Service 1", AccountId = Constants.RandomAccountId});
         var query = new GetServicesQuery();
         var result = await FluentActions.Invoking(() => SendAsync(query)).Invoke();
         

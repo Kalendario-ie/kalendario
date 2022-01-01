@@ -13,7 +13,7 @@ namespace Kalendario.Core.Domain
 
         public TimeSpan Duration { get; set; }
 
-        public Guid ServiceCategoryId { get; set; }
+        public Guid? ServiceCategoryId { get; set; }
         
         public ServiceCategory ServiceCategory { get; set; } = null;
         

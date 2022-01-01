@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Kalendario.Persistence.Configurations
+namespace Kalendario.Infrastructure.Configurations
 {
     public class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
     {
