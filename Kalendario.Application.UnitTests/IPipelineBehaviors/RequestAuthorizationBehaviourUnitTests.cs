@@ -35,7 +35,7 @@ public class RequestAuthorizationBehaviourUnitTests
             new RequestAuthorizationBehaviour<SimpleRequest, Unit>(_iIdentityServiceMock.Object,
                 _currentUserServiceMock.Object);
 
-        _iIdentityServiceMock.Setup(i => i.IsInRoleAsync(It.IsAny<Guid>(), It.IsAny<string>()))
+        _iIdentityServiceMock.Setup(i => i.IsInRoleAsync(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(() => Task.FromResult(false));
 
         await Assert.ThrowsExceptionAsync<ForbiddenAccessException>(() => validationBehavior.Handle(simpleRequest,
@@ -52,7 +52,7 @@ public class RequestAuthorizationBehaviourUnitTests
             new RequestAuthorizationBehaviour<SimpleRequest, Unit>(_iIdentityServiceMock.Object,
                 _currentUserServiceMock.Object);
 
-        _iIdentityServiceMock.Setup(i => i.IsInRoleAsync(It.IsAny<Guid>(), It.IsAny<string>()))
+        _iIdentityServiceMock.Setup(i => i.IsInRoleAsync(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(() => Task.FromResult(true));
 
         var unit = await validationBehavior.Handle(simpleRequest, CancellationToken.None,
@@ -70,7 +70,7 @@ public class RequestAuthorizationBehaviourUnitTests
             new RequestAuthorizationBehaviour<MultipleRolesRequest, Unit>(_iIdentityServiceMock.Object,
                 _currentUserServiceMock.Object);
 
-        _iIdentityServiceMock.Setup(i => i.IsInRoleAsync(It.IsAny<Guid>(), It.IsAny<string>()))
+        _iIdentityServiceMock.Setup(i => i.IsInRoleAsync(It.IsAny<string>(), It.IsAny<string>()))
             .Returns(() => Task.FromResult(false));
 
         await Assert.ThrowsExceptionAsync<ForbiddenAccessException>(() => validationBehavior.Handle(
@@ -89,9 +89,9 @@ public class RequestAuthorizationBehaviourUnitTests
             new RequestAuthorizationBehaviour<MultipleRolesRequest, Unit>(_iIdentityServiceMock.Object,
                 _currentUserServiceMock.Object);
 
-        _iIdentityServiceMock.Setup(i => i.IsInRoleAsync(It.IsAny<Guid>(), It.IsAny<string>()))
-            .Returns((Guid userId, string role) =>
-                Task.FromResult(role == $"{typeof(BaseEntity).Name}_{BaseEntity.CreateRole}"));
+        _iIdentityServiceMock.Setup(i => i.IsInRoleAsync(It.IsAny<string>(), It.IsAny<string>()))
+            .Returns((string userId, string role) =>
+                Task.FromResult(role.Contains(BaseEntity.CreateRole)));
 
         var unit = await validationBehavior.Handle(multipleRolesRequest, CancellationToken.None,
             () => Task.FromResult(Unit.Value));

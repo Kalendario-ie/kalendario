@@ -12,7 +12,7 @@ public static class Mocks
     {
         var mock = new Mock<ICurrentUserService>();
         mock.Setup(m => m.UserId)
-            .Returns(Constants.CurrentUserId);
+            .Returns(Constants.CurrentUserId.ToString());
         mock.Setup(m => m.AccountId)
             .Returns(Constants.CurrentUserAccountId);
         mock.Setup(m => m.IsAuthenticated)
