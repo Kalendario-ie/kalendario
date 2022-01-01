@@ -12,11 +12,19 @@ using static Testing;
 public class CreateAccountCommandTests : TestBase
 {
     [Test]
-    public async Task UnauthenticatedUsers_ShouldThrow_AuthenticationException()
+    public async Task UnauthenticatedUser_ShouldThrow_AuthenticationException()
     {
         RunAsAnonymousUser();
         var command = new CreateAccountCommand();
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<UnauthorizedAccessException>();
+    }
+    
+    [Test]
+    public async Task UnauthorizedUser_ShouldThrow_ForbiddenAccessException()
+    {
+        await RunAsDefaultUserAsync();
+        var command = new CreateAccountCommand();
+        await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ForbiddenAccessException>();
     }
     
     [TestCase("")]

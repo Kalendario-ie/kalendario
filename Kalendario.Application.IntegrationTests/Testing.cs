@@ -1,10 +1,15 @@
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Kalendario.Api;
 using Kalendario.Application.Authorization;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.IntegrationTests.Common;
+using Kalendario.Core.Domain;
 using Kalendario.Core.Infrastructure;
 using Kalendario.Infrastructure.Extensions;
 using Kalendario.Infrastructure.Persistence;
@@ -15,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Newtonsoft.Json;
 using Npgsql;
 using NUnit.Framework;
 using Respawn;
@@ -27,7 +33,6 @@ public class Testing
     private static IConfigurationRoot _configuration = null!;
     private static IServiceScopeFactory _scopeFactory = null!;
     private static Checkpoint _checkpoint = null!;
-    private static string? _currentUserId;
 
     public static Mock<ICurrentUserService> currentUserServiceMock =
         TestMocks.CurrentUserServiceMock(Guid.Empty, Guid.Empty, false);
@@ -115,19 +120,26 @@ public class Testing
         return await RunAsUserAsync("test@local", "Testing1234!", Array.Empty<string>());
     }
 
-    public static async Task<string> RunAsAdministratorAsync(Type entityClass, string actionType)
+    public static async Task<string> RunAsAdministratorAsync(Type entityClass, string actionType,
+        Guid accountId = default)
     {
         return await RunAsUserAsync("administrator@local", "Administrator1234!",
-            new[] {AuthorizationHelper.RoleName(entityClass, actionType)});
+            new[] {AuthorizationHelper.RoleName(entityClass, actionType)}, accountId);
     }
 
-    public static async Task<string> RunAsUserAsync(string userName, string password, string[] roles)
+    public static async Task<string> RunAsUserAsync(string userName, string password, string[] roles,
+        Guid accountId = default)
     {
         using var scope = _scopeFactory.CreateScope();
 
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
         var user = new ApplicationUser {UserName = userName, Email = userName};
+
+        if (accountId != default)
+        {
+            user.AccountId = accountId;
+        }
 
         var result = await userManager.CreateAsync(user, password);
 
@@ -145,14 +157,13 @@ public class Testing
 
         if (result.Succeeded)
         {
-            _currentUserId = user.Id;
-
             currentUserServiceMock.Setup(m => m.UserId)
-                .Returns(_currentUserId);
+                .Returns(user.Id);
             currentUserServiceMock.Setup(m => m.IsAuthenticated)
                 .Returns(true);
-
-            return _currentUserId;
+            currentUserServiceMock.Setup(m => m.AccountId)
+                .Returns(accountId);
+            return user.Id;
         }
 
         var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
@@ -162,10 +173,9 @@ public class Testing
 
     public static async Task ResetState()
     {
-        await using var conn = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-        await conn.OpenAsync();
-        await _checkpoint.Reset(conn);
-        _currentUserId = null;
+        await ResetDatabase();
+        await SeedDatabase();
+        ResetCurrentUserService();
     }
 
     public static async Task<TEntity?> FindAsync<TEntity>(params object[] keyValues)
@@ -202,5 +212,33 @@ public class Testing
     [OneTimeTearDown]
     public void RunAfterAnyTests()
     {
+    }
+
+    private static async Task ResetDatabase()
+    {
+        await using var conn = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        await conn.OpenAsync();
+        await _checkpoint.Reset(conn);
+    }
+    private static async Task SeedDatabase()
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        await context.Accounts.AddRangeAsync(await DeserializeFile<Account>("Accounts.json"));
+        await context.SaveChangesAsync(CancellationToken.None);
+    }
+
+    private static void ResetCurrentUserService()
+    {
+        currentUserServiceMock.Setup(m => m.UserId)
+            .Returns(string.Empty);
+        currentUserServiceMock.Setup(m => m.IsAuthenticated)
+            .Returns(false);
+    }
+
+    private static async Task<List<T>> DeserializeFile<T>(string fileName)
+    {
+        string accountsJson = await File.ReadAllTextAsync(@"Seed" + Path.DirectorySeparatorChar + fileName);
+        return JsonConvert.DeserializeObject<List<T>>(accountsJson)!;
     }
 }
