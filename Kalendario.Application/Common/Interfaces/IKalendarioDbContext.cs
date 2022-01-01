@@ -18,14 +18,7 @@ public interface IKalendarioDbContext
     
     DbSet<Appointment> Appointments { get; }
 
-    DbSet<TDomain> GetDbSet<TDomain>(IKalendarioDbContext context) where TDomain : class
-    {
-        var propertyInfo = typeof(IKalendarioDbContext)
-            .GetProperties()
-            .FirstOrDefault(t => t.PropertyType == typeof(DbSet<TDomain>));
-
-        return (DbSet<TDomain>) propertyInfo?.GetValue(context);
-    }
+    DbSet<TEntity> Set<TEntity>() where TEntity : class;
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

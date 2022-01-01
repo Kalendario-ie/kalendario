@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.Results;
+using Kalendario.Core.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Kalendario.Application.Queries.Common
+namespace Kalendario.Application.Queries.Admin.Common
 {
     public abstract class BaseGetAllRequest<TResourceModel> : IKalendarioProtectedQuery<GetAllResult<TResourceModel>>
     {
@@ -21,21 +22,27 @@ namespace Kalendario.Application.Queries.Common
     public abstract class BaseGetAllRequestHandler<TRequest, TDomain, TResourceModel> :
         IRequestHandler<TRequest, GetAllResult<TResourceModel>>
         where TRequest : BaseGetAllRequest<TResourceModel>
-        where TDomain : class
+        where TDomain : AccountEntity
     {
         private readonly IKalendarioDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ICurrentUserService _currentUserService;
 
-        protected BaseGetAllRequestHandler(IKalendarioDbContext context, IMapper mapper)
+        protected BaseGetAllRequestHandler(
+            IKalendarioDbContext context,
+            IMapper mapper,
+            ICurrentUserService currentUserService)
         {
             _context = context;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
 
         public async Task<GetAllResult<TResourceModel>> Handle(TRequest request, CancellationToken cancellationToken)
         {
             var result = new GetAllResult<TResourceModel>();
-            IQueryable<TDomain> entities = _context.GetDbSet<TDomain>(_context);
+            var entities = _context.Set<TDomain>()
+                .Where(e => e.AccountId == _currentUserService.AccountId);
 
             result.TotalCount = await entities.CountAsync(cancellationToken);
 

@@ -1,17 +1,20 @@
 ﻿using System.Linq;
 using AutoMapper;
 using Kalendario.Application.Common.Interfaces;
-using Kalendario.Application.Queries.Common;
+using Kalendario.Application.Common.Security;
+using Kalendario.Application.Queries.Admin.Common;
 using Kalendario.Application.ResourceModels.Admin;
 using Kalendario.Core.Domain;
 
 namespace Kalendario.Application.Queries.Admin;
 
+[Authorize(typeof(Employee), Employee.ViewRole)]
 public class GetEmployeesRequest : BaseGetAllRequest<EmployeeAdminResourceModel>
 {
     public class Handler : BaseGetAllRequestHandler<GetEmployeesRequest, Employee, EmployeeAdminResourceModel>
     {
-        public Handler(IKalendarioDbContext context, IMapper mapper) : base(context, mapper)
+        public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserService currentUserService)
+            : base(context, mapper, currentUserService)
         {
         }
 
