@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Kalendario.Application.Authorization;
 
 namespace Kalendario.Application.Common.Security;
 
@@ -13,7 +14,7 @@ public class AuthorizeAttribute : Attribute
     /// <param name="roles">A comma delimited list of roles.</param>
     /// </summary>
     public AuthorizeAttribute(Type entity, string roles) =>
-        Roles = roles.Split(',').Select(role => $"{entity.Name}_{role}");
+        Roles = roles.Split(',').Select(role => AuthorizationHelper.RoleName(entity, role));
 
     public IEnumerable<string> Roles { get; }
 }

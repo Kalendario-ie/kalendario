@@ -9,12 +9,17 @@ namespace Kalendario.Application.Authorization;
 
 public static class AuthorizationHelper
 {
+    public static string RoleName(Type entityType, string role)
+    {
+        return $"{entityType.Name}_{role}";
+    }
+
     public static List<string> GetAllRoles()
     {
         return typeof(IKalendarioDbContext)
             .GetProperties()
             .Select(p => p.PropertyType.GetGenericArguments()[0])
-            .SelectMany(entityType => FindEntityRoles(entityType).Select(role => $"{entityType.Name}_{role}"))
+            .SelectMany(entityType => FindEntityRoles(entityType).Select(role => RoleName(entityType, role)))
             .ToList();
     }
 
