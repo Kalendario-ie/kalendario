@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kalendario.Application.Queries.Admin;
 
-public class GetAppointmentsRequest : IKalendarioProtectedQuery<GetAppointmentsResult>
+public class GetAppointmentsQuery : IKalendarioProtectedQuery<GetAppointmentsResult>
 {
     public DateTime From { get; set; }
 
@@ -21,7 +21,7 @@ public class GetAppointmentsRequest : IKalendarioProtectedQuery<GetAppointmentsR
 
     public Guid EmployeeId { get; set; }
         
-    public class Handler : IRequestHandler<GetAppointmentsRequest, GetAppointmentsResult>
+    public class Handler : IRequestHandler<GetAppointmentsQuery, GetAppointmentsResult>
     {
         private readonly IKalendarioDbContext _context;
         private readonly IMapper _mapper;
@@ -32,19 +32,19 @@ public class GetAppointmentsRequest : IKalendarioProtectedQuery<GetAppointmentsR
             _mapper = mapper;
         }
 
-        public async Task<GetAppointmentsResult> Handle(GetAppointmentsRequest request, CancellationToken cancellationToken)
+        public async Task<GetAppointmentsResult> Handle(GetAppointmentsQuery query, CancellationToken cancellationToken)
         {
             var appointments = _context.Appointments
-                .Where(a => a.Start >= request.From && a.End <= request.To);
+                .Where(a => a.Start >= query.From && a.End <= query.To);
 
-            if (request.CustomerId != Guid.Empty)
+            if (query.CustomerId != Guid.Empty)
             {
-                appointments = appointments.Where(a => a.CustomerId == request.CustomerId);
+                appointments = appointments.Where(a => a.CustomerId == query.CustomerId);
             }
 
-            if (request.EmployeeId != Guid.Empty)
+            if (query.EmployeeId != Guid.Empty)
             {
-                appointments = appointments.Where(a => a.EmployeeId == request.EmployeeId);
+                appointments = appointments.Where(a => a.EmployeeId == query.EmployeeId);
             }
 
             return new GetAppointmentsResult

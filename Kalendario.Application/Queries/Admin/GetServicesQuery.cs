@@ -9,9 +9,9 @@ using Kalendario.Core.Domain;
 namespace Kalendario.Application.Queries.Admin;
 
 [Authorize(typeof(Service), Service.ViewRole)]
-public class GetServicesRequest : BaseGetAllRequest<ServiceAdminResourceModel>
+public class GetServicesQuery : BaseGetAllQuery<ServiceAdminResourceModel>
 {
-    public class Handler : BaseGetAllRequestHandler<GetServicesRequest, Service, ServiceAdminResourceModel>
+    public class Handler : BaseGetAllRequestHandler<GetServicesQuery, Service, ServiceAdminResourceModel>
     {
         public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserService currentUserService) 
             : base(context, mapper, currentUserService)
@@ -19,9 +19,9 @@ public class GetServicesRequest : BaseGetAllRequest<ServiceAdminResourceModel>
         }
 
         protected override IQueryable<Service> FilterEntities(IQueryable<Service> entities,
-            GetServicesRequest request)
+            GetServicesQuery query)
         {
-            return entities.Where(e => e.Name.ToLowerInvariant().Contains(request.Search.ToLowerInvariant()));
+            return entities.Where(e => e.Name.ToLowerInvariant().Contains(query.Search.ToLowerInvariant()));
         }
     }
 }

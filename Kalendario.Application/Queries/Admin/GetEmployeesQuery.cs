@@ -8,19 +8,19 @@ using Kalendario.Core.Domain;
 
 namespace Kalendario.Application.Queries.Admin;
 
-[Authorize(typeof(Customer), Customer.ViewRole)]
-public class GetCustomersRequest : BaseGetAllRequest<CustomerAdminResourceModel>
+[Authorize(typeof(Employee), Employee.ViewRole)]
+public class GetEmployeesQuery : BaseGetAllQuery<EmployeeAdminResourceModel>
 {
-    public class Handler : BaseGetAllRequestHandler<GetCustomersRequest, Customer, CustomerAdminResourceModel>
+    public class Handler : BaseGetAllRequestHandler<GetEmployeesQuery, Employee, EmployeeAdminResourceModel>
     {
         public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserService currentUserService)
             : base(context, mapper, currentUserService)
         {
         }
 
-        protected override IQueryable<Customer> FilterEntities(IQueryable<Customer> entities, GetCustomersRequest request)
+        protected override IQueryable<Employee> FilterEntities(IQueryable<Employee> entities, GetEmployeesQuery query)
         {
-            return entities.Where(e => e.Name.ToLowerInvariant().Contains(request.Search.ToLowerInvariant()));
+            return entities.Where(e => e.Name.ToLowerInvariant().Contains(query.Search.ToLowerInvariant()));
         }
     }
 }

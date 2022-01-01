@@ -17,7 +17,7 @@ public class GetEmployeesRequestTests : TestBase
     public async Task UnauthenticatedUsers_ShouldThrow_AuthenticationException()
     {
         RunAsAnonymousUser();
-        var query = new GetEmployeesRequest();
+        var query = new GetEmployeesQuery();
         await FluentActions.Invoking(() => SendAsync(query)).Should().ThrowAsync<UnauthorizedAccessException>();
     }
 
@@ -25,7 +25,7 @@ public class GetEmployeesRequestTests : TestBase
     public async Task UnauthorizedUser_ShouldThrow_ForbiddenAccessException()
     {
         await RunAsDefaultUserAsync();
-        var query = new GetEmployeesRequest();
+        var query = new GetEmployeesQuery();
         await FluentActions.Invoking(() => SendAsync(query)).Should().ThrowAsync<ForbiddenAccessException>();
     }
 
@@ -36,7 +36,7 @@ public class GetEmployeesRequestTests : TestBase
         await AddAsync(new Employee() {AccountId = Constants.CurrentUserAccountId});
         await AddAsync(new Employee() {AccountId = Constants.CurrentUserAccountId});
         await AddAsync(new Employee() {AccountId = Constants.RandomAccountId});
-        var query = new GetEmployeesRequest();
+        var query = new GetEmployeesQuery();
         var result = await FluentActions.Invoking(() => SendAsync(query)).Invoke();
         
         Assert.AreEqual(2, result.TotalCount);

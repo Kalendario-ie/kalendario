@@ -17,7 +17,7 @@ public class GetServicesRequestTests : TestBase
     public async Task UnauthenticatedUsers_ShouldThrow_AuthenticationException()
     {
         RunAsAnonymousUser();
-        var query = new GetServicesRequest();
+        var query = new GetServicesQuery();
         await FluentActions.Invoking(() => SendAsync(query)).Should().ThrowAsync<UnauthorizedAccessException>();
     }
 
@@ -25,7 +25,7 @@ public class GetServicesRequestTests : TestBase
     public async Task UnauthorizedUser_ShouldThrow_ForbiddenAccessException()
     {
         await RunAsDefaultUserAsync();
-        var query = new GetServicesRequest();
+        var query = new GetServicesQuery();
         await FluentActions.Invoking(() => SendAsync(query)).Should().ThrowAsync<ForbiddenAccessException>();
     }
 
@@ -36,7 +36,7 @@ public class GetServicesRequestTests : TestBase
         await AddAsync(new Service() {AccountId = Constants.CurrentUserAccountId});
         await AddAsync(new Service() {AccountId = Constants.CurrentUserAccountId});
         await AddAsync(new Service() {AccountId = Constants.RandomAccountId});
-        var query = new GetServicesRequest();
+        var query = new GetServicesQuery();
         var result = await FluentActions.Invoking(() => SendAsync(query)).Invoke();
         
         Assert.AreEqual(2, result.TotalCount);

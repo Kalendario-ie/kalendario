@@ -3,7 +3,7 @@ using Kalendario.Application.Queries.Admin;
 
 namespace Kalendario.Application.Validators;
 
-public class GetServicesRequestValidator : AbstractValidator<GetEmployeesRequest>
+public class GetServicesRequestValidator : AbstractValidator<GetEmployeesQuery>
 {
     public GetServicesRequestValidator()
     {

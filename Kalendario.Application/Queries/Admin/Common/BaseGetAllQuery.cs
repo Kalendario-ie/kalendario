@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Kalendario.Application.Queries.Admin.Common
 {
-    public abstract class BaseGetAllRequest<TResourceModel> : IKalendarioProtectedQuery<GetAllResult<TResourceModel>>
+    public abstract class BaseGetAllQuery<TResourceModel> : IKalendarioProtectedQuery<GetAllResult<TResourceModel>>
     {
         public string Search { get; set; }
 
@@ -21,7 +21,7 @@ namespace Kalendario.Application.Queries.Admin.Common
 
     public abstract class BaseGetAllRequestHandler<TRequest, TDomain, TResourceModel> :
         IRequestHandler<TRequest, GetAllResult<TResourceModel>>
-        where TRequest : BaseGetAllRequest<TResourceModel>
+        where TRequest : BaseGetAllQuery<TResourceModel>
         where TDomain : AccountEntity
     {
         private readonly IKalendarioDbContext _context;
