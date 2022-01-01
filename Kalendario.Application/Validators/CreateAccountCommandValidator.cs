@@ -12,7 +12,7 @@ public class CreateAccountCommandValidator : AbstractValidator<CreateAccountComm
             .MaximumLength(120)
             .NotNull()
             .NotEmpty()
-            .Matches("^[!@$%^&*(){}:;<>,.?/+_=|'~\\-“\"]*$")
-            .WithMessage("'{PropertyName}' must not contain the following characters £ # “” or spaces.");
+            .Matches(@"\A[A-Za-z0-9\x20]*\Z")
+            .WithMessage("'{PropertyName}' may only contain characters numbers and space.");
     }
 }
