@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Kalendario.Core.Domain;
+using Kalendario.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kalendario.Application.Common.Interfaces;

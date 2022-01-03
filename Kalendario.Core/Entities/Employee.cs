@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Kalendario.Core.Domain
+namespace Kalendario.Core.Entities
 {
     public class Employee : AccountEntity
     {

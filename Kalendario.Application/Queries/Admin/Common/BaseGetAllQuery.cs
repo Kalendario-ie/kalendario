@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.Results;
-using Kalendario.Core.Domain;
+using Kalendario.Core.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

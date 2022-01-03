@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Kalendario.Application.Commands.Admin;
 using Kalendario.Application.Common.Exceptions;
-using Kalendario.Core.Domain;
+using Kalendario.Core.Entities;
 using NUnit.Framework;
 
 namespace Kalendario.Application.IntegrationTests.Commands;

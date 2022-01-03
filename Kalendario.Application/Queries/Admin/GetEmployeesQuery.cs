@@ -4,7 +4,7 @@ using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.Common.Security;
 using Kalendario.Application.Queries.Admin.Common;
 using Kalendario.Application.ResourceModels.Admin;
-using Kalendario.Core.Domain;
+using Kalendario.Core.Entities;
 
 namespace Kalendario.Application.Queries.Admin;
 

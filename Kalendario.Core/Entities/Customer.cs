@@ -1,4 +1,4 @@
-﻿namespace Kalendario.Core.Domain
+﻿namespace Kalendario.Core.Entities
 {
     public class Customer : AccountEntity
     {

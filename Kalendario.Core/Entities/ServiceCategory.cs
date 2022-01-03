@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Kalendario.Core.ValueObject;
 
-namespace Kalendario.Core.Domain;
+namespace Kalendario.Core.Entities;
 
 public class ServiceCategory : AccountEntity
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using Kalendario.Core.Domain;
+using Kalendario.Core.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Kalendario.Core.Infrastructure;

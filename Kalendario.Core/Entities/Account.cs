@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Kalendario.Core.Infrastructure;
 
-namespace Kalendario.Core.Domain
+namespace Kalendario.Core.Entities
 {
     public class Account : BaseEntity
     {

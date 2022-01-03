@@ -1,6 +1,6 @@
 ﻿using System;
 using Kalendario.Application.Common.Interfaces;
-using Kalendario.Core.Domain;
+using Kalendario.Core.Entities;
 
 namespace Kalendario.Application.ResourceModels.Admin
 {

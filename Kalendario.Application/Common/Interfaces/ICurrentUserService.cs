@@ -1,5 +1,4 @@
 ﻿using System;
-using Kalendario.Core.Domain;
 
 namespace Kalendario.Application.Common.Interfaces
 {

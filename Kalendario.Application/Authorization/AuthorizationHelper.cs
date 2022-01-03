@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Kalendario.Application.Common.Interfaces;
-using Kalendario.Core.Domain;
+using Kalendario.Core.Entities;
 
 namespace Kalendario.Application.Authorization;
 

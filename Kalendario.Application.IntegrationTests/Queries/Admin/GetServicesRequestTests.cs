@@ -4,7 +4,7 @@ using FluentAssertions;
 using Kalendario.Application.Common.Exceptions;
 using Kalendario.Application.IntegrationTests.Common;
 using Kalendario.Application.Queries.Admin;
-using Kalendario.Core.Domain;
+using Kalendario.Core.Entities;
 using NUnit.Framework;
 
 namespace Kalendario.Application.IntegrationTests.Queries.Admin;

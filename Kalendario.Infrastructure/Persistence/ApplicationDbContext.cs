@@ -2,7 +2,7 @@
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Common;
 using Kalendario.Core.Common;
-using Kalendario.Core.Domain;
+using Kalendario.Core.Entities;
 using Kalendario.Core.Infrastructure;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;

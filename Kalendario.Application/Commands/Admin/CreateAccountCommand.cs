@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Kalendario.Application.Common.Exceptions;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.Common.Security;
-using Kalendario.Core.Domain;
+using Kalendario.Core.Entities;
 using MediatR;
 
 namespace Kalendario.Application.Commands.Admin;

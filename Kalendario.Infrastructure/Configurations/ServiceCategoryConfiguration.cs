@@ -1,4 +1,4 @@
-﻿using Kalendario.Core.Domain;
+﻿using Kalendario.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

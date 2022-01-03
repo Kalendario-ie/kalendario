@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -9,7 +8,7 @@ using Kalendario.Api;
 using Kalendario.Application.Authorization;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.IntegrationTests.Common;
-using Kalendario.Core.Domain;
+using Kalendario.Core.Entities;
 using Kalendario.Core.Infrastructure;
 using Kalendario.Infrastructure.Extensions;
 using Kalendario.Infrastructure.Persistence;
