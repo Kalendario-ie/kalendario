@@ -12,6 +12,8 @@ public interface IKalendarioDbContext
     DbSet<Employee> Employees { get; }
 
     DbSet<Service> Services { get; }
+
+    DbSet<ServiceCategory> ServiceCategories { get; }
     
     DbSet<Customer> Customers { get; }
     

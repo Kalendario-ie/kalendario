@@ -31,6 +31,7 @@ namespace Kalendario.Infrastructure.Persistence
         public DbSet<Account> Accounts => Set<Account>();
         public DbSet<Employee> Employees => Set<Employee>();
         public DbSet<Service> Services => Set<Service>();
+        public DbSet<ServiceCategory> ServiceCategories => Set<ServiceCategory>();
         public DbSet<Customer> Customers => Set<Customer>();
         public DbSet<Appointment> Appointments => Set<Appointment>();
         public DbSet<Schedule> Schedules => Set<Schedule>();
