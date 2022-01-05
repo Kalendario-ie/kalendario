@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Kalendario.Application.Common.Exceptions;
+using Kalendario.Application.Common.Extensions;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.Common.Security;
 using MediatR;
@@ -39,16 +40,11 @@ public class RequestAuthorizationBehaviour<TRequest, TResponse> : IPipelineBehav
         if (!authorizeAttributesWithRoles.Any())
             return await next();
 
-
-        var authorizedResults = await Task.WhenAll(
-            authorizeAttributesWithRoles
-                .Select(a => a.Roles)
-                .SelectMany(roles => roles)
-                .Select(role => _identityService.IsInRoleAsync(_currentUserService.UserId, role.Trim()))
-                .ToArray()
-        );
-        
-        var authorized = authorizedResults.Any(value => value);
+        var authorized = await authorizeAttributesWithRoles
+            .Select(a => a.Roles)
+            .SelectMany(roles => roles)
+            .Select(role => _identityService.IsInRoleAsync(_currentUserService.UserId, role.Trim()))
+            .AnyAsync();
 
         // Must be a member of at least one role in roles
         if (!authorized)
