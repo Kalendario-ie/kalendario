@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Kalendario.Api;
@@ -187,8 +188,8 @@ public class Testing
         return await context.FindAsync<TEntity>(keyValues);
     }
 
-    public static async Task AddAsync<TEntity>(TEntity entity)
-        where TEntity : class
+    public static async Task<Guid> AddAsync<TEntity>(TEntity entity)
+        where TEntity : BaseEntity
     {
         using var scope = _scopeFactory.CreateScope();
 
@@ -197,6 +198,8 @@ public class Testing
         context.Add(entity);
 
         await context.SaveChangesAsync();
+
+        return entity.Id;
     }
 
     public static async Task<int> CountAsync<TEntity>() where TEntity : class
@@ -206,6 +209,15 @@ public class Testing
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
         return await context.Set<TEntity>().CountAsync();
+    }
+
+    public static async Task<List<TEntity>> WhereAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        return await context.Set<TEntity>().Where(predicate).ToListAsync();
     }
 
     [OneTimeTearDown]
