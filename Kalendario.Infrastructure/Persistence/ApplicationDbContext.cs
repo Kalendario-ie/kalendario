@@ -33,6 +33,8 @@ namespace Kalendario.Infrastructure.Persistence
         public DbSet<Service> Services => Set<Service>();
         public DbSet<Customer> Customers => Set<Customer>();
         public DbSet<Appointment> Appointments => Set<Appointment>();
+        public DbSet<Schedule> Schedules => Set<Schedule>();
+        public DbSet<ScheduleFrame> ScheduleFrames => Set<ScheduleFrame>();
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

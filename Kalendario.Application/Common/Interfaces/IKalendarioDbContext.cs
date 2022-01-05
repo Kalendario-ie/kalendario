@@ -17,6 +17,10 @@ public interface IKalendarioDbContext
     
     DbSet<Appointment> Appointments { get; }
 
+    DbSet<Schedule> Schedules { get; }
+
+    DbSet<ScheduleFrame> ScheduleFrames { get; }
+
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
