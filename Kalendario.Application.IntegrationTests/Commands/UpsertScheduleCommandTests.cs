@@ -14,7 +14,7 @@ namespace Kalendario.Application.IntegrationTests.Commands;
 
 using static Testing;
 
-public class CreateScheduleCommandTests : TestBase
+public class UpsertScheduleCommandTests : TestBase
 {
     private Schedule TestSchedule => new()
     {
