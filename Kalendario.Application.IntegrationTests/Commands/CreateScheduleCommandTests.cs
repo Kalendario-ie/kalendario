@@ -59,7 +59,6 @@ public class CreateScheduleCommandTests : TestBase
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ForbiddenAccessException>();
     }
 
-
     [Test]
     public async Task UserWithUpdateRoleOnly_ShouldGetForbiddenAccess_OnCreateTry()
     {
@@ -339,8 +338,12 @@ public class CreateScheduleCommandTests : TestBase
         var schedule2Frames = await WhereAsync<ScheduleFrame>(f => f.ScheduleId == result.Id);
         Assert.AreEqual(10, schedule2Frames.Count);
         schedule2Frames.ForEach(f => { Assert.AreEqual(Constants.CurrentUserAccountId, f.AccountId); });
-    }
 
+        var entity = await FindAsync<Schedule>(result.Id);
+        Assert.IsInstanceOf<Schedule>(entity);
+        Assert.IsNotNull(entity);
+        Assert.AreEqual(result.Id, entity.Id);
+    }
 
     private ScheduleFrame CreateFrame(DayOfWeek offset, int order, string start, string end)
     {
