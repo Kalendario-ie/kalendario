@@ -3,9 +3,9 @@ using Kalendario.Application.Queries.Admin;
 
 namespace Kalendario.Application.Validators;
 
-public class GetServicesRequestValidator : AbstractValidator<GetEmployeesQuery>
+public class GetServicesQueryValidator : AbstractValidator<GetEmployeesQuery>
 {
-    public GetServicesRequestValidator()
+    public GetServicesQueryValidator()
     {
         RuleFor(r => r.Search).MaximumLength(120);
         RuleFor(r => r.Length).LessThanOrEqualTo(150).NotEmpty();
