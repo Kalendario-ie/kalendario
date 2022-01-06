@@ -25,6 +25,15 @@ public class Entities
         }
     };
     
+    public static Customer TestCustomer(string accountId = Constants.CurrentUserAccountIdString) => new()
+    {
+        Name = "Example",
+        AccountId = Guid.Parse(accountId),
+        PhoneNumber = "9834012984",
+        Email = "teste@test.com",
+        Warning = "this is a warning"
+    };
+    
     private static ScheduleFrame CreateFrame(DayOfWeek offset, int order, string start, string end)
     {
         return new ScheduleFrame

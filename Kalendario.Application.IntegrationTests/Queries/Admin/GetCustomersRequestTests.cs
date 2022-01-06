@@ -33,9 +33,9 @@ public class GetCustomersRequestTests : TestBase
     public async Task DefaultQuery_ShouldReturn_CurrentUserAccountCustomers()
     {
         await RunAsAdministratorAsync(typeof(Customer), Customer.ViewRole, Constants.CurrentUserAccountId);
-        await AddAsync(new Customer() {AccountId = Constants.CurrentUserAccountId});
-        await AddAsync(new Customer() {AccountId = Constants.CurrentUserAccountId});
-        await AddAsync(new Customer() {AccountId = Constants.RandomAccountId});
+        await AddAsync(Entities.TestCustomer());
+        await AddAsync(Entities.TestCustomer());
+        await AddAsync(Entities.TestCustomer(Constants.RandomAccountIdString));
         var query = new GetCustomersQuery();
         var result = await FluentActions.Invoking(() => SendAsync(query)).Invoke();
         

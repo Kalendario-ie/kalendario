@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -14,6 +15,7 @@ namespace Kalendario.Application.Commands.Admin.Common;
 
 public abstract class BaseUpsertAdminCommand<TResult> : IKalendarioProtectedCommand<TResult>
 {
+    [JsonIgnore]
     public Guid? Id { get; set; }
 
     public abstract class BaseUpsertAdminCommandHandler<TRequest, TDomain, TResourceModel> :
