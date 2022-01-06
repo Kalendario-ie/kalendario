@@ -14,7 +14,7 @@ public class CurrentUserService : ICurrentUserService
 
         IsAuthenticated = true;
         UserId = user.GetUserId();
-        AccountId = Guid.Parse(user.GetAccountId());
+        AccountId = Guid.TryParse(user.GetAccountId(), out var guid) ? guid : Guid.Empty;
     }
 
     public string UserId { get; }
