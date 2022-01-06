@@ -50,6 +50,8 @@ public abstract class BaseUpsertAdminCommand<TResult> : IKalendarioProtectedComm
                 throw new ForbiddenAccessException();
             }
 
+            await AdditionalValidation(request);
+
             var domain = await (request.Id.HasValue
                 ? Entities
                     .Where(e => e.AccountId == CurrentUserService.AccountId)
@@ -77,5 +79,6 @@ public abstract class BaseUpsertAdminCommand<TResult> : IKalendarioProtectedComm
         protected abstract IQueryable<TDomain> Entities { get; }
 
         protected abstract void UpdateDomain(TDomain domain, TRequest request);
+        protected abstract Task AdditionalValidation(TRequest request);
     }
 }

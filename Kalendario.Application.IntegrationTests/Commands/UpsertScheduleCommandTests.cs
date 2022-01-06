@@ -68,11 +68,13 @@ public class UpsertScheduleCommandTests : TestBase
     }
 
     [Test]
-    public async Task UpsertToAnotherAccountSchedule_ShouldThrow_NotFoundException()
+    public async Task Upsert_AnotherAccountSchedule_ShouldThrow_NotFoundException()
     {
-        await RunAsAdministratorAsync(typeof(Schedule), Schedule.UpdateRole);
+        await RunAsAdministratorAsync(typeof(Schedule), Schedule.UpdateRole, Constants.CurrentUserAccountId);
+
         var scheduleId = await AddAsync(new Schedule {AccountId = Constants.RandomAccountId, Name = "Test"});
-        var command = new UpsertScheduleCommand() {Id = scheduleId};
+        var command = new UpsertScheduleCommand {Id = scheduleId};
+        
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<NotFoundException>();
 
         var schedule = await FindAsync<Schedule>(scheduleId);

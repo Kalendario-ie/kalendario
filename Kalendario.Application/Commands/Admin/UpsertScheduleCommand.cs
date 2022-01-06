@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Kalendario.Application.Commands.Admin.Common;
 using Kalendario.Application.Common.Interfaces;
@@ -46,6 +47,11 @@ public class UpsertScheduleCommand : BaseUpsertAdminCommand<ScheduleAdminResourc
                 .ToList();
 
             domain.Frames = frames;
+        }
+
+        protected override Task AdditionalValidation(UpsertScheduleCommand request)
+        {
+            return Task.CompletedTask;
         }
 
         private IEnumerable<ScheduleFrame> ConvertToFrame(IEnumerable<CreateScheduleFrame> frames, DayOfWeek dayOfWeek)
