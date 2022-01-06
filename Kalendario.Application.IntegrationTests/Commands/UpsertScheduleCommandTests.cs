@@ -16,25 +16,6 @@ using static Testing;
 
 public class UpsertScheduleCommandTests : TestBase
 {
-    private Schedule TestSchedule => new()
-    {
-        Name = "Example",
-        AccountId = Constants.CurrentUserAccountId,
-        Frames = new List<ScheduleFrame>
-        {
-            CreateFrame(DayOfWeek.Sunday, 0, "09:00", "17:00"),
-            CreateFrame(DayOfWeek.Monday, 0, "09:00", "13:00"),
-            CreateFrame(DayOfWeek.Monday, 1, "14:00", "15:00"),
-            CreateFrame(DayOfWeek.Monday, 2, "16:00", "17:00"),
-            CreateFrame(DayOfWeek.Tuesday, 0, "09:00", "14:00"),
-            CreateFrame(DayOfWeek.Tuesday, 1, "14:00", "17:00"),
-            CreateFrame(DayOfWeek.Wednesday, 0, "10:00", "11:00"),
-            CreateFrame(DayOfWeek.Thursday, 0, "11:00", "12:00"),
-            CreateFrame(DayOfWeek.Friday, 0, "12:00", "13:00"),
-            CreateFrame(DayOfWeek.Saturday, 0, "13:00", "14:00"),
-        }
-    };
-
     [Test]
     public async Task UnauthenticatedUser_ShouldThrow_AuthenticationException()
     {
@@ -54,7 +35,7 @@ public class UpsertScheduleCommandTests : TestBase
     [Test]
     public async Task UserWithCreateRoleOnly_ShouldGetForbiddenAccess_OnUpdateTry()
     {
-        await RunAsAdministratorAsync(typeof(Schedule), Schedule.CreateRole);
+        await RunAsAdministratorAsync(typeof(Schedule), Schedule.CreateRole, Constants.CurrentUserAccountId);
         var command = new UpsertScheduleCommand {Id = Guid.NewGuid()};
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ForbiddenAccessException>();
     }
@@ -62,7 +43,7 @@ public class UpsertScheduleCommandTests : TestBase
     [Test]
     public async Task UserWithUpdateRoleOnly_ShouldGetForbiddenAccess_OnCreateTry()
     {
-        await RunAsAdministratorAsync(typeof(Schedule), Schedule.UpdateRole);
+        await RunAsAdministratorAsync(typeof(Schedule), Schedule.UpdateRole, Constants.CurrentUserAccountId);
         var command = new UpsertScheduleCommand();
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ForbiddenAccessException>();
     }
@@ -72,9 +53,9 @@ public class UpsertScheduleCommandTests : TestBase
     {
         await RunAsAdministratorAsync(typeof(Schedule), Schedule.UpdateRole, Constants.CurrentUserAccountId);
 
-        var scheduleId = await AddAsync(new Schedule {AccountId = Constants.RandomAccountId, Name = "Test"});
+        var scheduleId = await AddAsync(Entities.TestSchedule(Constants.RandomAccountIdString));
         var command = new UpsertScheduleCommand {Id = scheduleId};
-        
+
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<NotFoundException>();
 
         var schedule = await FindAsync<Schedule>(scheduleId);
@@ -86,7 +67,7 @@ public class UpsertScheduleCommandTests : TestBase
     {
         await RunAsAdministratorAsync(typeof(Schedule), Schedule.UpdateRole, Constants.CurrentUserAccountId);
 
-        var schedule = TestSchedule;
+        var schedule = Entities.TestSchedule();
         var scheduleId = await AddAsync(schedule);
 
         var command = new UpsertScheduleCommand
@@ -136,7 +117,7 @@ public class UpsertScheduleCommandTests : TestBase
     {
         await RunAsAdministratorAsync(typeof(Schedule), Schedule.UpdateRole, Constants.CurrentUserAccountId);
 
-        var schedule = TestSchedule;
+        var schedule = Entities.TestSchedule();
         var scheduleId = await AddAsync(schedule);
 
         var command = new UpsertScheduleCommand
@@ -178,7 +159,7 @@ public class UpsertScheduleCommandTests : TestBase
     {
         await RunAsAdministratorAsync(typeof(Schedule), Schedule.UpdateRole, Constants.CurrentUserAccountId);
 
-        var schedule = TestSchedule;
+        var schedule = Entities.TestSchedule();
         var scheduleId = await AddAsync(schedule);
         var newFrameStart = TimeOnly.Parse("19:00");
         var newFrameEnd = TimeOnly.Parse("20:00");
@@ -238,7 +219,7 @@ public class UpsertScheduleCommandTests : TestBase
     {
         await RunAsAdministratorAsync(typeof(Schedule), Schedule.UpdateRole, Constants.CurrentUserAccountId);
 
-        var schedule = TestSchedule;
+        var schedule = Entities.TestSchedule();
         var scheduleId = await AddAsync(schedule);
         var newFrameStart = TimeOnly.Parse("06:00");
         var newFrameEnd = TimeOnly.Parse("07:00");
@@ -293,7 +274,7 @@ public class UpsertScheduleCommandTests : TestBase
     {
         await RunAsAdministratorAsync(typeof(Schedule), Schedule.CreateRole, Constants.CurrentUserAccountId);
 
-        var schedule = TestSchedule;
+        var schedule = Entities.TestSchedule();
         var scheduleId = await AddAsync(schedule);
 
         var command = new UpsertScheduleCommand
@@ -336,7 +317,7 @@ public class UpsertScheduleCommandTests : TestBase
         var schedule1Frames = await WhereAsync<ScheduleFrame>(f => f.ScheduleId == scheduleId);
         Assert.AreEqual(10, schedule1Frames.Count);
         schedule1Frames.ForEach(f => { Assert.AreEqual(Constants.CurrentUserAccountId, f.AccountId); });
-        
+
         var schedule2Frames = await WhereAsync<ScheduleFrame>(f => f.ScheduleId == result.Id);
         Assert.AreEqual(10, schedule2Frames.Count);
         schedule2Frames.ForEach(f => { Assert.AreEqual(Constants.CurrentUserAccountId, f.AccountId); });
@@ -345,15 +326,6 @@ public class UpsertScheduleCommandTests : TestBase
         Assert.IsInstanceOf<Schedule>(entity);
         Assert.IsNotNull(entity);
         Assert.AreEqual(result.Id, entity.Id);
-    }
-
-    private ScheduleFrame CreateFrame(DayOfWeek offset, int order, string start, string end)
-    {
-        return new ScheduleFrame
-        {
-            Offset = offset, Order = order, AccountId = Constants.CurrentUserAccountId,
-            Start = TimeOnly.Parse(start), End = TimeOnly.Parse(end)
-        };
     }
 
     private IEnumerable<CreateScheduleFrame> ConvertFrames(IEnumerable<ScheduleFrame> frames)
