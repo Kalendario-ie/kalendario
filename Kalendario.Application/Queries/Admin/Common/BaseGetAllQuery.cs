@@ -24,7 +24,7 @@ namespace Kalendario.Application.Queries.Admin.Common
         where TRequest : BaseGetAllQuery<TResourceModel>
         where TDomain : AccountEntity
     {
-        private readonly IKalendarioDbContext _context;
+        protected readonly IKalendarioDbContext Context;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
 
@@ -33,7 +33,7 @@ namespace Kalendario.Application.Queries.Admin.Common
             IMapper mapper,
             ICurrentUserService currentUserService)
         {
-            _context = context;
+            Context = context;
             _mapper = mapper;
             _currentUserService = currentUserService;
         }
@@ -41,7 +41,7 @@ namespace Kalendario.Application.Queries.Admin.Common
         public async Task<GetAllResult<TResourceModel>> Handle(TRequest request, CancellationToken cancellationToken)
         {
             var result = new GetAllResult<TResourceModel>();
-            var entities = _context.Set<TDomain>()
+            var entities = Entities
                 .Where(e => e.AccountId == _currentUserService.AccountId);
 
             result.TotalCount = await entities.CountAsync(cancellationToken);
@@ -61,6 +61,8 @@ namespace Kalendario.Application.Queries.Admin.Common
 
             return result;
         }
+
+        protected abstract IQueryable<TDomain> Entities { get; }
 
         protected abstract IQueryable<TDomain> FilterEntities(IQueryable<TDomain> entities, TRequest request);
     }

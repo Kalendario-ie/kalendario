@@ -18,6 +18,8 @@ public class GetServicesQuery : BaseGetAllQuery<ServiceAdminResourceModel>
         {
         }
 
+        protected override IQueryable<Service> Entities => Context.Services;
+
         protected override IQueryable<Service> FilterEntities(IQueryable<Service> entities,
             GetServicesQuery query)
         {

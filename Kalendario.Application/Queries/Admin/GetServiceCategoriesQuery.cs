@@ -18,6 +18,8 @@ public class GetServiceCategoriesQuery : BaseGetAllQuery<ServiceCategoryAdminRes
         {
         }
 
+        protected override IQueryable<ServiceCategory> Entities => Context.ServiceCategories;
+
         protected override IQueryable<ServiceCategory> FilterEntities(IQueryable<ServiceCategory> entities,
             GetServiceCategoriesQuery query)
         {

@@ -18,6 +18,8 @@ public class GetEmployeesQuery : BaseGetAllQuery<EmployeeAdminResourceModel>
         {
         }
 
+        protected override IQueryable<Employee> Entities => Context.Employees;
+
         protected override IQueryable<Employee> FilterEntities(IQueryable<Employee> entities, GetEmployeesQuery query)
         {
             return entities.Where(e => e.Name.ToLowerInvariant().Contains(query.Search.ToLowerInvariant()));
