@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Castle.Core.Internal;
 using FluentAssertions;
 using Kalendario.Application.Commands.Admin;
 using Kalendario.Application.Common.Exceptions;
@@ -15,26 +16,28 @@ using static Testing;
 
 public class UpsertServiceCommandTests : TestBase
 {
-    private Guid _currentUserAccountServiceCategoryId = Guid.NewGuid();
-    private Guid _differentAccountServiceCategoryId = Guid.NewGuid();
+    private const string CurrentUserAccountServiceCategoryId = "5D42F6EF-08DC-4254-985B-D0D1146DA638";
+    private const string DifferentAccountServiceCategoryId = "D39F39BC-30F3-41BE-8E42-DC800DE47BB1";
 
-    private Service TestService => new()
+    private Service TestService(string accountId = Constants.CurrentUserAccountIdString) => new()
     {
         Name = "Example",
-        AccountId = Constants.CurrentUserAccountId,
+        AccountId = Guid.Parse(accountId),
         Description = "Description Example",
         Price = 20.1,
         Duration = TimeSpan.FromHours(1),
-        ServiceCategoryId = _currentUserAccountServiceCategoryId
+        ServiceCategoryId = Guid.Parse(CurrentUserAccountServiceCategoryId)
     };
-    
-    private UpsertServiceCommand ValidCommand => new()
+
+    private UpsertServiceCommand ValidCommand(string id = "",
+        string serviceCategoryId = CurrentUserAccountServiceCategoryId) => new()
     {
+        Id = id.IsNullOrEmpty() ? null : Guid.Parse(id),
         Name = "new service name",
         Description = "new service description",
         Price = 100.12,
         Duration = TimeSpan.FromHours(4),
-        ServiceCategoryId = _currentUserAccountServiceCategoryId
+        ServiceCategoryId = Guid.Parse(serviceCategoryId)
     };
 
     [SetUp]
@@ -44,12 +47,14 @@ public class UpsertServiceCommandTests : TestBase
         await AddAsync(new ServiceCategory
         {
             Name = "category 1",
-            Id = _currentUserAccountServiceCategoryId, AccountId = Constants.CurrentUserAccountId, Colour = Colour.Blue
+            Id = Guid.Parse(CurrentUserAccountServiceCategoryId), AccountId = Constants.CurrentUserAccountId,
+            Colour = Colour.Blue
         });
         await AddAsync(new ServiceCategory
         {
             Name = "category 1",
-            Id = _differentAccountServiceCategoryId, AccountId = Constants.RandomAccountId, Colour = Colour.Blue
+            Id = Guid.Parse(DifferentAccountServiceCategoryId), AccountId = Constants.RandomAccountId,
+            Colour = Colour.Blue
         });
     }
 
@@ -57,7 +62,9 @@ public class UpsertServiceCommandTests : TestBase
     public async Task UnauthenticatedUser_ShouldThrow_AuthenticationException()
     {
         RunAsAnonymousUser();
-        var command = ValidCommand;
+
+        var command = ValidCommand();
+
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<UnauthorizedAccessException>();
     }
 
@@ -65,25 +72,30 @@ public class UpsertServiceCommandTests : TestBase
     public async Task UnauthorizedUser_ShouldThrow_ForbiddenAccessException()
     {
         await RunAsDefaultUserAsync();
-        var command = ValidCommand;
+
+        var command = ValidCommand();
+
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ForbiddenAccessException>();
     }
 
     [Test]
     public async Task UserWithCreateRoleOnly_ShouldGetForbiddenAccess_OnUpdateTry()
     {
-        await RunAsAdministratorAsync(typeof(Service), Service.CreateRole);
-        var serviceId = await AddAsync(new Service {AccountId = Constants.RandomAccountId, Name = "Test"});
-        var command = ValidCommand;
-        command.Id = serviceId;
+        await RunAsAdministratorAsync(typeof(Service), Service.CreateRole, Constants.CurrentUserAccountId);
+
+        var serviceId = await AddAsync(TestService());
+        var command = ValidCommand(serviceId.ToString());
+
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ForbiddenAccessException>();
     }
 
     [Test]
     public async Task UserWithUpdateRoleOnly_ShouldGetForbiddenAccess_OnCreateTry()
     {
-        await RunAsAdministratorAsync(typeof(Service), Service.UpdateRole);
-        var command = ValidCommand;
+        await RunAsAdministratorAsync(typeof(Service), Service.UpdateRole, Constants.CurrentUserAccountId);
+
+        var command = ValidCommand();
+
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ForbiddenAccessException>();
     }
 
@@ -92,9 +104,8 @@ public class UpsertServiceCommandTests : TestBase
     {
         await RunAsAdministratorAsync(typeof(Service), Service.UpdateRole, Constants.CurrentUserAccountId);
 
-        var serviceId = await AddAsync(new Service {AccountId = Constants.RandomAccountId, Name = "Test"});
-        var command = ValidCommand;
-        command.Id = serviceId;
+        var serviceId = await AddAsync(TestService(Constants.RandomAccountIdString));
+        var command = ValidCommand(serviceId.ToString());
 
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<NotFoundException>();
 
@@ -107,9 +118,8 @@ public class UpsertServiceCommandTests : TestBase
     {
         await RunAsAdministratorAsync(typeof(Service), Service.UpdateRole, Constants.CurrentUserAccountId);
 
-        var serviceId = await AddAsync(TestService);
-        var command = ValidCommand;
-        command.Id = serviceId;
+        var serviceId = await AddAsync(TestService());
+        var command = ValidCommand(serviceId.ToString());
 
         var result = await FluentActions.Invoking(() => SendAsync(command)).Invoke();
 
@@ -123,8 +133,8 @@ public class UpsertServiceCommandTests : TestBase
     {
         await RunAsAdministratorAsync(typeof(Service), Service.CreateRole, Constants.CurrentUserAccountId);
 
-        var command = ValidCommand;
-        
+        var command = ValidCommand();
+
         var result = await FluentActions.Invoking(() => SendAsync(command)).Invoke();
 
         var entity = await FindAsync<Service>(result.Id);
@@ -137,13 +147,10 @@ public class UpsertServiceCommandTests : TestBase
     {
         await RunAsAdministratorAsync(typeof(Service), Service.UpdateRole, Constants.CurrentUserAccountId);
 
-        var serviceId = await AddAsync(TestService);
-        var command = ValidCommand;
-        command.Id = serviceId;
-        command.ServiceCategoryId = _differentAccountServiceCategoryId;
-        
-        await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
+        var serviceId = await AddAsync(TestService());
+        var command = ValidCommand(serviceId.ToString(), DifferentAccountServiceCategoryId);
 
+        await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
 
     [Test]
@@ -151,11 +158,8 @@ public class UpsertServiceCommandTests : TestBase
     {
         await RunAsAdministratorAsync(typeof(Service), Service.CreateRole, Constants.CurrentUserAccountId);
 
-        var command = ValidCommand;
-        command.ServiceCategoryId = _differentAccountServiceCategoryId;
-        
+        var command = ValidCommand(string.Empty, DifferentAccountServiceCategoryId);
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
-
     }
 
     private void AssertResultEqualCommand(ServiceAdminResourceModel result, UpsertServiceCommand command)
