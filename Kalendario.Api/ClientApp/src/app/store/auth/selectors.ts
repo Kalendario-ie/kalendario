@@ -1,6 +1,7 @@
 import {createSelector} from '@reduxjs/toolkit';
 import {AuthUser} from 'src/app/api/auth';
 import {ApiValidationError} from 'src/app/api/common/api-errors';
+import {employeeParser} from 'src/app/api/employees';
 import {RootState} from 'src/app/store/store';
 
 
@@ -13,7 +14,7 @@ export const selectApiError: (rootState: RootState) => ApiValidationError | null
 export const selectUser: (rootState: RootState) => AuthUser | null =
     (rootState) => rootState.auth.user
 
-export const selectUserEmployee = createSelector(selectUser, user => user?.employee)
+export const selectUserEmployee = createSelector(selectUser, user => employeeParser(null)) // TODO: Fix here.
 
 export const selectLoadingUser: (rootState: RootState) => boolean =
     (rootState) => rootState.auth.loadingUser;

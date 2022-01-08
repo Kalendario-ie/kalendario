@@ -20,15 +20,8 @@ export interface AuthEmployee extends Person {
 }
 
 export interface AuthUser extends IReadModel {
-    firstName: string;
-    lastName: string;
-    email: string;
-    employee: AuthEmployee | null;
-    employeeId: number;
-    groups: number[];
-    permissions: string[];
-    company: { id: number, name: string } | null;
-    verified: boolean;
+    sid: string;
+    AccountId: string;
 }
 
 export interface SocialAccount {

@@ -1,13 +1,15 @@
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
 import {AuthUser, hasPermission, PermissionModel, PermissionType} from 'src/app/api/auth';
-import {authApi} from "src/app/api/auth/clients";
 import {useAppSelector} from 'src/app/store';
 import {selectLoadingUser, selectUser, setLoadingUser, setUser} from 'src/app/store/auth';
+import {AuthorizeService} from 'src/components/api-authorization/AuthorizeService';
 
 interface AuthAutoLoginProps {
     children: React.ReactNode;
 }
+
+const authService = new AuthorizeService();
 
 const AuthAutoLogin: React.FunctionComponent<AuthAutoLoginProps> = (
     {children}
@@ -15,9 +17,9 @@ const AuthAutoLogin: React.FunctionComponent<AuthAutoLoginProps> = (
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(setLoadingUser(true));
-        authApi.whoAmI().then(user => {
-            dispatch(setUser(user));
-        });
+        authService
+            .getUser()
+            .then((result) => dispatch(setUser(result)));
     }, [dispatch]);
 
     return (

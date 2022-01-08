@@ -18,13 +18,11 @@ import {AuthUser} from 'src/app/api/auth';
 import {CompanyDetails} from 'src/app/api/companies';
 import {RequestModel} from 'src/app/api/requests';
 import {ADMIN_ROUTES} from 'src/app/modules/admin/urls';
-import {AUTH_ROUTES} from 'src/app/modules/auth/urls';
 import {companiesUrls} from 'src/app/modules/companies/paths';
-import {EMPLOYEE_ROUTES} from 'src/app/modules/employee/urls';
 import {USER_ROUTES} from 'src/app/modules/users/urls';
 import AvatarImg from 'src/app/shared/components/primitives/avatar-img';
 import {KIconButton} from 'src/app/shared/components/primitives/buttons';
-import {LoginMenu} from 'src/components/api-authorization/LoginMenu';
+import {ApplicationPaths} from 'src/components/api-authorization/ApiAuthorizationConstants';
 
 interface AppNavbarProps {
     company: CompanyDetails | null;
@@ -74,20 +72,18 @@ const AppNavbar: React.FunctionComponent<AppNavbarProps> = (
                             </NavLink>
                         </NavItem>
                         }
-                        {/*{!user &&*/}
-                        {/*<>*/}
-                        {/*    <NavItem>*/}
-                        {/*        <NavLink tag={Link} to={AUTH_ROUTES.LOGIN}><FormattedMessage*/}
-                        {/*            id={'AUTH.LOGIN'}/></NavLink>*/}
-                        {/*    </NavItem>*/}
-                        {/*    <NavItem>*/}
-                        {/*        <NavLink tag={Link} to={AUTH_ROUTES.REGISTER}><FormattedMessage*/}
-                        {/*            id={'AUTH.REGISTER'}/></NavLink>*/}
-                        {/*    </NavItem>*/}
-                        {/*</>*/}
-                        {/*}*/}
-                        <LoginMenu>
-                        </LoginMenu>
+                        {!user &&
+                        <>
+                            <NavItem>
+                                <NavLink tag={Link} to={ApplicationPaths.Login}><FormattedMessage
+                                    id={'AUTH.LOGIN'}/></NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink tag={Link} to={ApplicationPaths.Register}><FormattedMessage
+                                    id={'AUTH.REGISTER'}/></NavLink>
+                            </NavItem>
+                        </>
+                        }
                         {user &&
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav caret>
@@ -100,23 +96,23 @@ const AppNavbar: React.FunctionComponent<AppNavbarProps> = (
                                     </NavLink>
                                 </DropdownItem>
                                 <DropdownItem divider/>
-                                {user.company &&
+                                {user.AccountId &&
                                 <DropdownItem>
                                     <NavLink tag={Link} to={ADMIN_ROUTES.ROOT}>
                                         <FormattedMessage id={'NAVBAR.ADMIN'}/>
                                     </NavLink>
                                 </DropdownItem>
                                 }
-                                {user.employee &&
-                                <DropdownItem>
-                                    <NavLink tag={Link} to={EMPLOYEE_ROUTES.ROOT}>
-                                        <FormattedMessage id={'NAVBAR.EMPLOYEE'}/>
-                                    </NavLink>
-                                </DropdownItem>
-                                }
+                                {/*{user.employee &&*/}
+                                {/*<DropdownItem>*/}
+                                {/*    <NavLink tag={Link} to={EMPLOYEE_ROUTES.ROOT}>*/}
+                                {/*        <FormattedMessage id={'NAVBAR.EMPLOYEE'}/>*/}
+                                {/*    </NavLink>*/}
+                                {/*</DropdownItem>*/}
+                                {/*}*/}
                                 <DropdownItem divider/>
                                 <DropdownItem>
-                                    <NavLink tag={Link} to={AUTH_ROUTES.LOGOUT}>
+                                    <NavLink tag={Link} to={ApplicationPaths.LogOut}>
                                         <FormattedMessage id={'AUTH.LOGOUT'}/>
                                     </NavLink>
                                 </DropdownItem>
