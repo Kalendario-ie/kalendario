@@ -20,13 +20,13 @@ const EmployeesTable: React.FunctionComponent<AdminTableContainerProps<Employee>
 
 
     const columns = useMemo(() => {
-        const handleFileSubmit = (entity: Employee, file: File) =>
-            adminEmployeeClient.uploadProfilePicture(entity.id, file)
-                .then(res => {
-                    dispatch(employeeReducerActions.upsertOne({...entity, photoUrl: res.url}));
-                    return true;
-                })
-                .catch(error => false);
+        const handleFileSubmit = (entity: Employee, file: File) => Promise.resolve(true) // todo fix here.
+            // adminEmployeeClient.uploadProfilePicture(entity.id, file)
+            //     .then(res => {
+            //         dispatch(employeeReducerActions.upsertOne({...entity, photoUrl: res.url}));
+            //         return true;
+            //     })
+            //     .catch(error => false);
 
         return [
             ExpanderColumn,

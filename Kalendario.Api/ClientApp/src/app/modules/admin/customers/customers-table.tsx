@@ -1,10 +1,11 @@
+import {CustomerAdminResourceModel} from 'src/app/api/api';
 import {Customer} from 'src/app/api/customers';
 import React, {useMemo} from 'react';
 import {AdminTableContainerProps} from 'src/app/shared/admin/interfaces';
 import KTable from 'src/app/shared/components/tables/k-table';
 import KTextColumnFilter from 'src/app/shared/components/tables/k-text-column-filter';
 
-const CustomersTable: React.FunctionComponent<AdminTableContainerProps<Customer>> = (
+const CustomersTable: React.FunctionComponent<AdminTableContainerProps<CustomerAdminResourceModel>> = (
     {
         entities,
         buttonsColumn,

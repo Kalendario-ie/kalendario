@@ -57,8 +57,8 @@ function* initializeStore(action: { type: string, payload: string }) {
     const isInitialized: boolean = yield select(selectors.selectIsInitialized);
     if (!isInitialized) {
         try {
-            const permissions: Permission[] = yield call(adminPermissionGroupClient.permissions);
-            yield put(actions.setPermissions(permissions));
+            // const permissions: Permission[] = yield call(adminPermissionGroupClient.permissions); // TODO: FIx here.
+            // yield put(actions.setPermissions(permissions));
         } catch (error) {
             yield put(actions.setApiError(error as ApiBaseError));
         }

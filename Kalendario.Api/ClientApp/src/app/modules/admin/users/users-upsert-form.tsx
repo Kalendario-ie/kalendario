@@ -28,7 +28,7 @@ const UsersUpsertForm: React.FunctionComponent<AdminEditContainerProps<AdminUser
                      validationSchema={UpsertUserRequestValidation}
         >
             {entity?.id &&
-            <ChangePasswordForm id={entity.id}/>
+            <ChangePasswordForm id={+entity.id}/>
             }
             <KFormikInput name="firstName"/>
             <KFormikInput name="lastName"/>

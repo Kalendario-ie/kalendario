@@ -1,8 +1,8 @@
-import {TimeOfDay} from 'src/app/api/common/models';
+import {TimeSpan} from 'src/app/api/api';
 
 export interface TimeFrame {
-    start: TimeOfDay;
-    end: TimeOfDay;
+    start: TimeSpan;
+    end: TimeSpan;
     name: string;
 }
 

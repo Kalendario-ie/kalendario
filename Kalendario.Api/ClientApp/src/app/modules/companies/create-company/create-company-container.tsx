@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {AdminCompany, adminCompanyClient, adminCompanyParser} from 'src/app/api/admin-companies';
+import {CreateAccountCommand} from 'src/app/api/api';
 import {ApiValidationError} from 'src/app/api/common/api-errors';
 import {ADMIN_ROUTES} from 'src/app/modules/admin/urls';
 import {KFlexRow} from 'src/app/shared/components/flex';
@@ -12,7 +13,7 @@ const CreateCompanyContainer: React.FunctionComponent = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const history = useHistory();
 
-    const onSubmit = (company: AdminCompany): void => {
+    const onSubmit = (company: CreateAccountCommand): void => {
         setIsSubmitting(true);
         adminCompanyClient
             .post(company)

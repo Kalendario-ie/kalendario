@@ -1,6 +1,6 @@
 import React from 'react';
 import {Appointment} from 'src/app/api/appointments';
-import {timeToString} from 'src/app/api/common/models';
+import {timeToString, Zero} from 'src/app/api/common/models';
 import {Employee} from 'src/app/api/employees';
 import {getShift} from 'src/app/api/schedule';
 import {isAvailable} from 'src/app/api/shifts';
@@ -30,7 +30,7 @@ const PanelHours: React.FunctionComponent = () => {
             {hours.map((hour, i) =>
                 <React.Fragment key={i}>
                     <div style={style} className={styles.sideItem}>
-                        {timeToString({hour, minute: 0})}
+                        {timeToString(Zero())}
                     </div>
                     <div style={style}/>
                 </React.Fragment>
@@ -58,7 +58,7 @@ const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
     }
 
     function backgroundColor(hour: number, minute: number) {
-        return schedule && getShift(schedule, currentDate)?.frames
+        return schedule && getShift(schedule, currentDate)
             .some(frame => isAvailable(frame, hour, minute)) ? '' : styles.unavailableSlot;
     }
 

@@ -2,6 +2,7 @@ import moment, {Moment} from 'moment';
 import React, {useEffect, useState} from 'react';
 import {isMobile} from 'react-device-detect';
 import {useSelector} from 'react-redux';
+import {ScheduleAdminResourceModel} from 'src/app/api/api';
 import {adminAppointmentClient, Appointment} from 'src/app/api/appointments';
 import {getShift, Schedule} from 'src/app/api/schedule';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
@@ -89,19 +90,19 @@ const EmployeeDashboardDatePicker: React.FunctionComponent<EmployeeDashboardDate
 
 interface EmployeeScheduleViewProps {
     date: Moment;
-    schedule: Schedule;
+    schedule: ScheduleAdminResourceModel;
 }
 
 const EmployeeScheduleView: React.FunctionComponent<EmployeeScheduleViewProps> = ({date, schedule}) => {
-    const shift = getShift(schedule, date);
+    const frames = getShift(schedule, date);
     return (
         <KFlexRow justify="center">
-            {shift && shift.frames.map((frame, index) =>
+            {frames.map((frame, index) =>
                 <React.Fragment key={index}>
-                    {index !== 0 ? ' |' : ''} {frame.name}
+                    {index !== 0 ? ' |' : ''} {frame.start} // todo: fix here.
                 </React.Fragment>
             )}
-            {!shift &&
+            {!frames &&
             <>
                 No shift available
             </>
@@ -155,12 +156,12 @@ const EmployeeDashboard: React.FunctionComponent = () => {
     const employee = useSelector(selectUserEmployee);
 
     useEffect(() => {
-        adminAppointmentClient.get(
-            {
-                employee: employee?.id,
-                from_date: momentToIso(currentDate.clone().startOf('day')),
-                to_date: momentToIso(currentDate.clone().endOf('day')),
-            }).then(res => setAppointments(res.results));
+        // adminAppointmentClient.get(
+        //     {
+        //         employee: employee?.id,
+        //         from_date: momentToIso(currentDate.clone().startOf('day')),
+        //         to_date: momentToIso(currentDate.clone().endOf('day')),
+        //     }).then(res => setAppointments(res.results));  TODO: FIX HERE.
     }, [currentDate, employee?.id]);
 
 
@@ -176,7 +177,7 @@ const EmployeeDashboard: React.FunctionComponent = () => {
                     <div>
                         <hr/>
                     </div>
-                    <EmployeeScheduleView schedule={employee.schedule} date={currentDate}/>
+                    {/*<EmployeeScheduleView schedule={employee.schedule} date={currentDate}/>*/}  // todo Fix here.
                     <div>
                         <hr/>
                     </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import {FormGroup} from 'reactstrap';
+import {ScheduleAdminResourceModel} from 'src/app/api/api';
 import {Schedule, upsertScheduleRequestParser} from 'src/app/api/schedule';
 import ScheduleFormikInput from 'src/app/modules/admin/schedules/schedule-shift-input/schedule-formik-input';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
@@ -7,7 +8,7 @@ import {KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 
 
-const ScheduleUpsertForm: React.FunctionComponent<AdminEditContainerProps<Schedule>> = (
+const ScheduleUpsertForm: React.FunctionComponent<AdminEditContainerProps<ScheduleAdminResourceModel>> = (
     {
         entity,
         apiError,

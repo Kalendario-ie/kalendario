@@ -1,21 +1,15 @@
-import {
-    AddNotesRequest,
-    CreateAppointmentRequest,
-    SlotRequestParams
-} from 'src/app/api/companies/requests';
+import baseApiAxios from 'src/app/api/common/clients/base-api';
+import {AddNotesRequest, CreateAppointmentRequest, SlotRequestParams} from 'src/app/api/companies/requests';
 import {RequestModel, requestParser} from 'src/app/api/requests';
 import {convertMoment} from '../common/helpers';
 import {CompanyDetails, Slot} from './models';
-import baseModelRequest from '../common/clients/base-django-api';
-import {companyParser, companyDetailsParser, slotParser} from './parsers';
-import baseApiAxios from 'src/app/api/common/clients/base-api';
-
+import {companyDetailsParser, slotParser} from './parsers';
 
 
 const baseUrl = 'companies/';
 
 export const companyClient = {
-    ...baseModelRequest(baseUrl, companyParser),
+    // ...baseModelRequest(baseUrl, companyParser), //TODO: FIX LATER
     fromName: (name: string): Promise<CompanyDetails> => {
         return baseApiAxios.get<CompanyDetails>(baseUrl + name + '/')
             .then(result => companyDetailsParser(result.data));
@@ -33,7 +27,7 @@ export const companyClient = {
 const requestsUrl = 'requests/';
 
 export const companyRequestClient = {
-    ...baseModelRequest<RequestModel>(requestsUrl, requestParser),
+    // ...baseModelRequest<RequestModel>(requestsUrl, requestParser), //TODO: Fix Later
 
     createAppointment(data: CreateAppointmentRequest) {
         convertMoment(data);

@@ -20,7 +20,7 @@ const AppointmentHistoryItem: React.FunctionComponent<AppointmentHistoryItemProp
                bodiless={true}
                footer={
                    <KFlexRow className="small" justify="between">
-                       <KFlexColumn>{appointment.historyUser?.name}</KFlexColumn>
+                       <KFlexColumn>{appointment.historyUser?.name}</KFlexColumn> // TODO: FIX HERE
                        <KFlexColumn>{historyDate}</KFlexColumn>
                    </KFlexRow>
                }
@@ -58,7 +58,7 @@ const AppointmentHistoryItem: React.FunctionComponent<AppointmentHistoryItemProp
 }
 
 interface AppointmentHistoryContainerProps {
-    id: number;
+    id?: number | string; // TODO: THIS IS STRING ONLY
     isOpen: boolean;
     onClose: () => void;
 }
@@ -72,10 +72,10 @@ const AppointmentHistoryContainer: React.FunctionComponent<AppointmentHistoryCon
     const [appointments, setAppointments] = useState<AppointmentHistory[]>([]);
 
     useEffect(() => {
-        adminAppointmentClient.history(id)
-            .then(res => {
-                setAppointments(res.results);
-            });
+        // adminAppointmentClient.history(id)
+        //     .then(res => {
+        //         setAppointments(res.results);
+        //     }); // todo: fix here.
     }, [id]);
 
     return (

@@ -26,7 +26,6 @@ export function customerRequestAppointmentParser(data: any): CustomerRequestAppo
 
     return {
         ...customerAppointmentParser(data),
-        name,
         type: EventType.CustomerRequestAppointment,
         customerNotes: data.customerNotes,
         companyName: data.owner?.name ? data.owner.name : '',
@@ -85,8 +84,8 @@ export function upsertCustomerAppointmentRequestParser(appointment: Appointment 
         employee: appointment.employee.id,
         internalNotes: appointment.internalNotes,
         ignoreAvailability: false,
-        customer: customerAppointment.customer.id,
-        service: customerAppointment.service.id,
+        customer: 0,
+        service: 0,
     }
 }
 

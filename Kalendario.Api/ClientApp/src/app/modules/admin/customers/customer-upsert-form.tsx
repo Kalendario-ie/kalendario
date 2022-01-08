@@ -1,10 +1,11 @@
 import React from 'react';
+import {CustomerAdminResourceModel} from 'src/app/api/api';
 import {Customer, saveCustomerRequestParser} from 'src/app/api/customers';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import * as yup from 'yup';
 
-const CustomerUpsertForm: React.FunctionComponent<AdminEditContainerProps<Customer>> = (
+const CustomerUpsertForm: React.FunctionComponent<AdminEditContainerProps<CustomerAdminResourceModel>> = (
     {
         entity,
         apiError,

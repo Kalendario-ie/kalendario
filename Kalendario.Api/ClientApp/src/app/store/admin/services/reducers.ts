@@ -1,4 +1,5 @@
 import {createSelector} from '@reduxjs/toolkit';
+import {ServiceAdminResourceModel} from 'src/app/api/api';
 import {adminServiceClient, Service} from 'src/app/api/services';
 import {kCreateBaseStore} from 'src/app/store/admin/common/adapter';
 import {serviceCategorySelectors} from '../serviceCategories';
@@ -11,13 +12,13 @@ const {
     reducer,
     sagas,
     selectors
-} = kCreateBaseStore<Service>(storeName, adminServiceClient, (state) => state.adminServices);
+} = kCreateBaseStore(storeName, adminServiceClient, (state) => state.adminServices);
 
 const selectServicesWithCategories = createSelector(
     selectors.selectAll,
     serviceCategorySelectors.selectAll,
     (services, categories) => categories.map(cat =>
-        ({...cat, children: services.filter(s => s.category === cat.id)})
+        ({...cat, children: services.filter(s => s.serviceCategoryId === cat.id)})
     )
 )
 
@@ -25,7 +26,7 @@ const selectServicesWithCategoriesByIds = createSelector(
     selectors.selectAll,
     serviceCategorySelectors.selectByIds,
     (services, categories) => categories.map(cat =>
-        ({...cat, children: services.filter(s => s.category === cat.id)})
+        ({...cat, children: services.filter(s => s.serviceCategoryId === cat.id)})
     )
 )
 

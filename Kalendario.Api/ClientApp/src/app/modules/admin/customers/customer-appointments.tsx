@@ -1,5 +1,6 @@
 import moment from 'moment';
 import React, {useContext, useEffect, useState} from 'react';
+import {CustomerAdminResourceModel} from 'src/app/api/api';
 import {Appointment} from 'src/app/api/appointments';
 import {PermissionModel} from 'src/app/api/auth';
 import {Customer} from 'src/app/api/customers';
@@ -79,10 +80,10 @@ const CustomerAppointmentsTable: React.FunctionComponent<AdminTableContainerProp
 }
 
 
-const CustomerContext = React.createContext<Customer | null>(null);
+const CustomerContext = React.createContext<CustomerAdminResourceModel | null>(null);
 
 interface CustomerAppointmentsProps {
-    customer: Customer;
+    customer: CustomerAdminResourceModel;
 }
 
 const CustomerAppointments: React.FunctionComponent<CustomerAppointmentsProps> = (

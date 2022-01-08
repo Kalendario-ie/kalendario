@@ -131,7 +131,7 @@ const CustomerAppointmentUpsertForm: React.FunctionComponent<CustomerAppointment
             <FormikStartEndTimeInput/>
             <KFormikInput name="employee" as={'select'} options={employees}/>
             <KFormikInput name="service" as={'select'} options={services}/>
-            <KFormikCustomerInput initialCustomer={appointment?.customer || null}/>
+            {/*<KFormikCustomerInput initialCustomer={appointment?.customer || null}/>*/} //TODO: Fix Here
             <KFormikInput name="internalNotes" as={'textarea'}/>
             <KFormikInput placeholder="Allow Overlapping" name="ignoreAvailability" as={'checkbox'}/>
         </>

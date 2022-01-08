@@ -1,4 +1,5 @@
 import React, {useEffect, useMemo} from 'react';
+import {ServiceAdminResourceModel} from 'src/app/api/api';
 import {timeToString} from 'src/app/api/common/models';
 import {Service} from 'src/app/api/services';
 import {AdminTableContainerProps} from 'src/app/shared/admin/interfaces';
@@ -10,7 +11,7 @@ import {useAppDispatch, useAppSelector} from 'src/app/store';
 import {serviceCategoryActions, serviceCategorySelectors} from 'src/app/store/admin/serviceCategories';
 
 
-const ServicesTable: React.FunctionComponent<AdminTableContainerProps<Service>> = (
+const ServicesTable: React.FunctionComponent<AdminTableContainerProps<ServiceAdminResourceModel>> = (
     {
         entities,
         buttonsColumn,

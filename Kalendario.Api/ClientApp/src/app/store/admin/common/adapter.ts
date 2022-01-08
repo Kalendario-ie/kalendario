@@ -37,13 +37,18 @@ export interface BaseSelectors<TEntity> extends EntitySelectors<TEntity, any> {
     selectCreatedEntity: (state: any) => TEntity | undefined;
 }
 
-export interface PatchActionPayload {
-    id: number,
-    entity: any
+export interface PatchActionPayload<TUpsertCommand> {
+    id: string,
+    command: TUpsertCommand
 }
 
-export interface CreateActionPayload {
-    entity: any
+export interface CreateActionPayload<TUpsertCommand> {
+    command: TUpsertCommand
+}
+
+export interface ExtendedBaseActions<TUpsertCommand> extends BaseActions {
+    createEntity: ActionCreatorWithPayload<CreateActionPayload<TUpsertCommand>>;
+    patchEntity: ActionCreatorWithPayload<PatchActionPayload<TUpsertCommand>>;
 }
 
 export interface BaseActions {
@@ -51,16 +56,16 @@ export interface BaseActions {
     fetchEntities: ActionCreatorWithPayload<object>;
     fetchEntity: ActionCreatorWithPayload<number>;
     fetchEntitiesWithSetAll: ActionCreatorWithPayload<object>;
-    createEntity: ActionCreatorWithPayload<CreateActionPayload>;
-    patchEntity: ActionCreatorWithPayload<PatchActionPayload>;
     deleteEntity: ActionCreatorWithPayload<number>;
     setEditMode: ActionCreatorWithPayload<boolean>;
     setIsSubmitting: ActionCreatorWithPayload<boolean>;
 }
 
-export function kCreateBaseStore<TEntity extends IReadModel>(
+
+
+export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand>(
     sliceName: string,
-    client: BaseModelRequest<TEntity>,
+    client: BaseModelRequest<TEntity, TUpsertCommand>,
     selector: (state: any) => BaseState<TEntity>
 ) {
 
@@ -69,13 +74,13 @@ export function kCreateBaseStore<TEntity extends IReadModel>(
         sortComparer: compareByName,
     })
 
-    const actions: BaseActions = {
+    const actions: ExtendedBaseActions<TUpsertCommand> = {
         initializeStore: createAction<void>(`${sliceName}/initializeStore`),
         fetchEntities: createAction<object>(`${sliceName}/fetchEntities`),
         fetchEntity: createAction<number>(`${sliceName}/fetchEntity`),
         fetchEntitiesWithSetAll: createAction<object>(`${sliceName}/fetchEntitiesWithSetAll`),
-        createEntity: createAction<CreateActionPayload>(`${sliceName}/createEntity`),
-        patchEntity: createAction<PatchActionPayload>(`${sliceName}/patchEntity`),
+        createEntity: createAction<CreateActionPayload<TUpsertCommand>>(`${sliceName}/createEntity`),
+        patchEntity: createAction<PatchActionPayload<TUpsertCommand>>(`${sliceName}/patchEntity`),
         deleteEntity: createAction<number>(`${sliceName}/deleteEntity`),
         setEditMode: createAction<any>(`${sliceName}/setEditMode`),
         setIsSubmitting: createAction<any>(`${sliceName}/setIsSubmitting`),
@@ -149,10 +154,10 @@ export function kCreateBaseStore<TEntity extends IReadModel>(
         yield put(actions.fetchEntities(action.payload))
     }
 
-    function* fetchEntities(action: { type: string, payload: object }) {
+    function* fetchEntities(action: { type: string, payload: { search: string | undefined, start: number | undefined, length: number | undefined } }) {
         try {
-            const result: ApiListResult<TEntity> = yield call(client.get, action.payload);
-            yield put(slice.actions.upsertMany(result.results));
+            const result: ApiListResult<TEntity> = yield call(client.get, action.payload.search, action.payload.start, action.payload.length);
+            yield put(slice.actions.upsertMany(result.entities));
             yield put(slice.actions.setInitialized(true));
         } catch (error) {
             yield put(slice.actions.setApiError(error));
@@ -163,8 +168,8 @@ export function kCreateBaseStore<TEntity extends IReadModel>(
     function* fetchEntity(action: { type: string, payload: number }) {
         yield put(slice.actions.setIsLoading(true));
         try {
-            const entity: TEntity = yield call(client.detail, action.payload);
-            yield put(slice.actions.upsertOne(entity));
+            // const entity: TEntity = yield call(client.detail, action.payload);
+            // yield put(slice.actions.upsertOne(entity));
         } catch (error) {
             yield put(slice.actions.setApiError(error));
         }
@@ -175,18 +180,18 @@ export function kCreateBaseStore<TEntity extends IReadModel>(
         yield put(slice.actions.setIsLoading(true));
         yield put(slice.actions.removeAll([]));
         try {
-            const result: ApiListResult<TEntity> = yield call(client.get, action.payload);
-            yield put(slice.actions.setAll(result.results));
+            // const result: ApiListResult<TEntity> = yield call(client.get, action.payload);
+            // yield put(slice.actions.setAll(result.results));
         } catch (error) {
             yield put(slice.actions.setApiError(error));
         }
         yield put(slice.actions.setIsLoading(false));
     }
 
-    function* createEntity(action: { type: string, payload: CreateActionPayload }) {
+    function* createEntity(action: { type: string, payload: CreateActionPayload<TUpsertCommand> }) {
         try {
             yield put(slice.actions.setIsSubmitting(true));
-            const entity: TEntity = yield call(client.post, action.payload.entity);
+            const entity: TEntity = yield call(client.post, action.payload.command);
             yield put(slice.actions.upsertOne(entity));
             yield put(slice.actions.setApiError(null));
             yield put(slice.actions.setEditMode(false));
@@ -197,10 +202,10 @@ export function kCreateBaseStore<TEntity extends IReadModel>(
         }
     }
 
-    function* patchEntity(action: { type: string, payload: PatchActionPayload }) {
+    function* patchEntity(action: { type: string, payload: PatchActionPayload<TUpsertCommand> }) {
         try {
             yield put(slice.actions.setIsSubmitting(true));
-            const entity: TEntity = yield call(client.patch, action.payload.id, action.payload.entity);
+            const entity: TEntity = yield call(client.put, action.payload.id, action.payload.command);
             yield put(slice.actions.upsertOne(entity));
             yield put(slice.actions.setApiError(null));
             yield put(slice.actions.setEditMode(false));
@@ -212,7 +217,7 @@ export function kCreateBaseStore<TEntity extends IReadModel>(
 
     function* deleteEntity(action: { type: string, payload: number }) {
         try {
-            yield call(client.delete, action.payload);
+            // yield call(client.delete, action.payload);
             yield put(slice.actions.removeOne(action.payload));
             yield put(slice.actions.setApiError(null));
             yield put(slice.actions.setEditMode(false));

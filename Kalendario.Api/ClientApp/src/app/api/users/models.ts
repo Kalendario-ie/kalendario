@@ -7,6 +7,7 @@ export function checkForPermission(user: AdminUser, permission: string, model: P
 }
 
 export interface AdminUser extends IReadModel {
+    name: string;
     firstName: string;
     lastName: string;
     email: string;

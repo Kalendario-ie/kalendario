@@ -1,5 +1,6 @@
 import React, {ChangeEvent, useState} from 'react';
-import {timeFromString, TimeOfDay, timeToISOString} from 'src/app/api/common/models';
+import {TimeSpan} from 'src/app/api/api';
+import {timeFromString, TimeOfDay, timeToISOString, Zero} from 'src/app/api/common/models';
 import {KBaseInputProps} from 'src/app/shared/components/primitives/inputs/interfaces';
 import {KFlexRow} from 'src/app/shared/components/flex';
 
@@ -20,14 +21,14 @@ export const KDurationInput: React.FunctionComponent<KFormikDurationInputProps> 
     const [timeOfDay, setTimeOfDay] = useState(timeFromString(value));
 
     const hourHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        handleChange(e, {hour: +e.target.value, minute: timeOfDay.minute});
+        handleChange(e, {...Zero(), hours: +e.target.value, minutes: timeOfDay.minutes});
     }
 
     const minuteHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        handleChange(e, {hour: timeOfDay.hour, minute: +e.target.value})
+        handleChange(e, {...Zero(), hours: timeOfDay.hours, minutes: +e.target.value})
     }
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>, newValue: TimeOfDay) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>, newValue: TimeSpan) => {
         const type = 'string';
         setTimeOfDay(newValue);
         onChange && onChange({...e, target: {...e.target, type, value: timeToISOString(newValue)}});
@@ -47,7 +48,7 @@ export const KDurationInput: React.FunctionComponent<KFormikDurationInputProps> 
                 onBlur={onBlur}
                 onChange={hourHandler}
                 type="number"
-                value={timeOfDay.hour}/>
+                value={timeOfDay.hours}/>
             <span className="mx-2">min(s)</span>
             <input
                 style={style}
@@ -57,7 +58,7 @@ export const KDurationInput: React.FunctionComponent<KFormikDurationInputProps> 
                 onChange={minuteHandler}
                 type="number"
                 max={60}
-                value={timeOfDay.minute}/>
+                value={timeOfDay.minutes}/>
         </KFlexRow>
     )
 }

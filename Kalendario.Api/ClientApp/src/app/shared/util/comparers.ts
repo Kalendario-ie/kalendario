@@ -4,7 +4,8 @@ import {stringToMoment} from 'src/app/shared/util/moment-helpers';
 
 
 export const compareByName = (a: IReadModel, b: IReadModel): number => {
-    return a.name.localeCompare(b.name);
+    return 0 // TODO: Fix Here.
+    // return a.name.localeCompare(b.name);
 }
 
 export const compareByStartDate = (a: BaseAppointment, b: BaseAppointment): number => {

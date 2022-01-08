@@ -1,4 +1,10 @@
 import {Moment} from 'moment';
+import {
+    CreateScheduleFrame,
+    ScheduleAdminResourceModel,
+    ScheduleFrameAdminResourceModel,
+    UpsertScheduleCommand
+} from 'src/app/api/api';
 import {PermissionModel} from 'src/app/api/auth';
 import {timeToISOString} from 'src/app/api/common/models';
 import {Schedule} from 'src/app/api/schedule/models';
@@ -20,50 +26,49 @@ export function scheduleParser(data: any): Schedule {
     }
 }
 
-export function getShift(schedule: Schedule, date: Moment) {
+export function getShift(schedule: ScheduleAdminResourceModel, date: Moment): ScheduleFrameAdminResourceModel[] {
     switch (date.isoWeekday()) {
         case 1:
-            return schedule.mon;
+            return schedule.monday;
         case 2:
-            return schedule.tue;
+            return schedule.tuesday;
         case 3:
-            return schedule.wed;
+            return schedule.wednesday;
         case 4:
-            return schedule.thu;
+            return schedule.thursday;
         case 5:
-            return schedule.fri;
+            return schedule.friday;
         case 6:
-            return schedule.sat;
+            return schedule.saturday;
         case 7:
-            return schedule.sun;
+            return schedule.sunday;
     }
+    return schedule.sunday;
 }
 
-function shiftToUpsertShift(shift?: Shift): UpsertScheduleRequestShift {
-    return shift ? {
-        frames: shift.frames.map(frame => ({start: timeToISOString(frame.start), end: timeToISOString(frame.end)}))
-    } : {frames: []};
+function shiftToUpsertShift(frames: ScheduleFrameAdminResourceModel[]): CreateScheduleFrame[] {
+    return frames;
 }
 
-export function upsertScheduleRequestParser(schedule: Schedule | null): UpsertScheduleRequest {
+export function upsertScheduleRequestParser(schedule: ScheduleAdminResourceModel | null): UpsertScheduleCommand {
     return schedule ? {
         name: schedule.name,
-        mon: shiftToUpsertShift(schedule.mon),
-        tue: shiftToUpsertShift(schedule.tue),
-        wed: shiftToUpsertShift(schedule.wed),
-        thu: shiftToUpsertShift(schedule.thu),
-        fri: shiftToUpsertShift(schedule.fri),
-        sat: shiftToUpsertShift(schedule.sat),
-        sun: shiftToUpsertShift(schedule.sun)
+        monday: shiftToUpsertShift(schedule.monday),
+        tuesday: shiftToUpsertShift(schedule.tuesday),
+        wednesday: shiftToUpsertShift(schedule.wednesday),
+        thursday: shiftToUpsertShift(schedule.thursday),
+        friday: shiftToUpsertShift(schedule.friday),
+        saturday: shiftToUpsertShift(schedule.saturday),
+        sunday: shiftToUpsertShift(schedule.sunday)
 
     } : {
         name: '',
-        mon: {frames: []},
-        tue: {frames: []},
-        wed: {frames: []},
-        thu: {frames: []},
-        fri: {frames: []},
-        sat: {frames: []},
-        sun: {frames: []}
+        monday: [],
+        tuesday: [],
+        wednesday: [],
+        thursday: [],
+        friday: [],
+        saturday: [],
+        sunday: []
     }
 }

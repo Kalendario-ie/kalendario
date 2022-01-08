@@ -18,10 +18,7 @@ export function permissionParser(data: any): Permission {
 }
 
 export function upsertPermissionGroupRequestParser(permissionGroup: PermissionGroup | null): UpsertPermissionGroupRequest {
-    return permissionGroup ? {
-        name: permissionGroup.name,
-        permissions: permissionGroup.permissions
-    } : {
+    return {
         name: '',
         permissions: []
     }

@@ -1,9 +1,8 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {useHistory} from "react-router-dom";
-import {Company, companyClient} from 'src/app/api/companies';
+import {Company} from 'src/app/api/companies';
 import {selectCompany, selectOwnerId} from 'src/app/store/companies';
-import HomeView from './home-view';
 
 
 const HomeContainer: React.FunctionComponent = () => {
@@ -16,14 +15,14 @@ const HomeContainer: React.FunctionComponent = () => {
             history.push(`/c/${company.name}`);
         }
         if (ownerId && !company) {
-            companyClient.detail(ownerId)
-                .then(company => history.push(`/c/${company.name}`))
+            // companyClient.detail(ownerId)
+            //     .then(company => history.push(`/c/${company.name}`)) //todo: fix here.
         }
     }, [company, history, ownerId]);
 
 
-    const promiseOptions = (value: string) => companyClient.get({search: value})
-        .then(res => res.results);
+    // const promiseOptions = (value: string) => companyClient.get({search: value})
+    //     .then(res => res.results); // todo fix here
 
     const navigateToPage = (company: Company | null) => {
         if (company) {
@@ -34,8 +33,9 @@ const HomeContainer: React.FunctionComponent = () => {
     return (
         <>
             {!ownerId &&
-            <HomeView values={promiseOptions}
-                      onChange={navigateToPage}/>
+                <></>
+            // <HomeView values={promiseOptions}
+            //           onChange={navigateToPage}/>
             }
         </>
     )

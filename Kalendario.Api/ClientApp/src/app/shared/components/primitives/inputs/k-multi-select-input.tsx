@@ -19,7 +19,7 @@ export const KMultiSelectInput: React.FunctionComponent<KMultiSelectProps> = (
         onChange,
         onBlur,
     }) => {
-    const values = new Set<number>(value);
+    const values = new Set<number | string>(value); // TODO: String only.
 
     const handleCheckboxChange = (option: MultiSelectOption) => (e: ChangeEvent<HTMLInputElement>) => {
         if (option.children && isOptionChecked(option)) {

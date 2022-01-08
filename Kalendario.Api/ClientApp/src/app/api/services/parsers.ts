@@ -1,5 +1,12 @@
+import {
+    Colour,
+    ServiceAdminResourceModel,
+    ServiceCategoryAdminResourceModel,
+    UpsertServiceCategoryCommand,
+    UpsertServiceCommand
+} from 'src/app/api/api';
 import {PermissionModel} from 'src/app/api/auth';
-import {timeFromString, timeToISOString} from 'src/app/api/common/models';
+import {timeFromString, timeToISOString, Zero} from 'src/app/api/common/models';
 import {Service, ServiceCategory} from 'src/app/api/services/models';
 import {UpsertServiceCategoryRequest, UpsertServiceRequest} from 'src/app/api/services/requests';
 
@@ -18,35 +25,28 @@ export function serviceCategoryParser(data: any): ServiceCategory {
     }
 }
 
-export function createUpsertServiceRequest(service: Service | null | undefined): UpsertServiceRequest {
+export function createUpsertServiceCommand(service: ServiceAdminResourceModel | null | undefined): UpsertServiceCommand {
     return service ? {
-        private: service.private,
-        category: service.category || 0,
-        color: service.color,
-        cost: service.cost,
+        name: service.name,
         description: service.description,
-        duration: timeToISOString(service.duration),
-        isFrom: false,
-        name: service.name
+        price: service.price,
+        duration: service.duration,
+        serviceCategoryId: timeToISOString(service.duration),
     } : {
-        category: 0,
-        color: '',
-        cost: 0,
-        description: '',
-        duration: '',
-        isFrom: false,
         name: '',
-        private: false
-
+        description: '',
+        price: 0,
+        duration: Zero(),
+        serviceCategoryId: '',
     }
 }
 
-export function createUpsertServiceCategoryRequest(category: ServiceCategory | null | undefined): UpsertServiceCategoryRequest {
+export function createUpsertServiceCategoryRequest(category: ServiceCategoryAdminResourceModel | null | undefined): UpsertServiceCategoryCommand {
     return category ? {
         name: category.name,
-        color: category.color || ''
+        colour: category.colour || {code: '#FFFFFF'}
     } : {
         name: '',
-        color: '',
+        colour: {code: '#FFFFFF'},
     }
 }

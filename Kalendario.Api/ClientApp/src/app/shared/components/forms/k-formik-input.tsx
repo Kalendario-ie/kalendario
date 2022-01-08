@@ -15,7 +15,8 @@ export interface KFormikInputProps extends KFormikInputBaseProps {
 }
 
 function inputAs(as: string,
-                 options: { id: number; name: string }[] | undefined
+                 options: { id: number | string //todo: string only here
+                     name: string }[] | undefined
 ): string | React.FunctionComponent<any> {
     switch (as) {
         case 'duration':

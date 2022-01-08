@@ -1,9 +1,8 @@
+import {TimeSpan} from 'src/app/api/api';
 import {PermissionModel} from 'src/app/api/auth';
 
 export interface IReadModel {
-    id: number;
-    permissionModel: PermissionModel;
-    name: string;
+    id: number | string; // todo: change to string only
 }
 
 export interface Person extends IReadModel {
@@ -33,18 +32,29 @@ export interface TimeOfDay {
     minute: number;
 }
 
-export const Zero = () =>  ({hour: 0, minute: 0});
+export const Zero = (): TimeSpan => ({
+    days: 0,
+    milliseconds: 0,
+    seconds: 0,
+    ticks: 0,
+    totalDays: 0,
+    totalHours: 0,
+    totalMilliseconds: 0,
+    totalMinutes: 0,
+    totalSeconds: 0,
+    hours: 0,
+    minutes: 0
+});
 
-export const timeFromString = (time: string): TimeOfDay => {
-    const timeOfDay = Zero();
-    timeOfDay.hour = +time.substr(0, 2);
-    timeOfDay.minute = +time.substr(3, 2);
-    return timeOfDay;
+export const timeFromString = (time: string): TimeSpan => {
+    const hours = +time.substr(0, 2);
+    const minutes = +time.substr(3, 2);
+    return {...Zero(), hours, minutes};
 }
 
-export const timeToString = (t: TimeOfDay) => stringfy(t.hour) + ':' + stringfy(t.minute);
+export const timeToString = (t: TimeSpan) => stringfy(t.hours) + ':' + stringfy(t.minutes);
 
-export const timeToISOString = (t: TimeOfDay) => stringfy(t.hour) + ':' + stringfy(t.minute) + ':00';
+export const timeToISOString = (t: TimeSpan) => stringfy(t.hours) + ':' + stringfy(t.minutes) + ':00';
 
 // hashCode(): number {
 //     return this.hour + this.minute / 60;

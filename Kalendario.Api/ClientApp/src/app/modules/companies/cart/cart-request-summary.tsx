@@ -37,7 +37,7 @@ const CartRequestSummary: React.FunctionComponent<CartRequestSummaryProps> = (
                                             <h6 className="c-primary">{appointment.service.price}</h6>
                                             {showDelete &&
                                             <button className="btn btn-sm btn-outline-danger"
-                                                    onClick={() => deleteClick(appointment.id)}
+                                                    onClick={() => deleteClick(+appointment.id)} // todo fix here.
                                             >
                                                 <i className="fa fa-trash"/>
                                             </button>

@@ -1,5 +1,5 @@
 export interface TreeViewItem {
-    id: number;
+    id: number | string;
     name: string;
     children?: TreeViewItem[];
 }

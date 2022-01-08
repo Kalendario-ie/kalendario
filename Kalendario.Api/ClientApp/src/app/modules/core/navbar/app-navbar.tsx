@@ -24,6 +24,7 @@ import {EMPLOYEE_ROUTES} from 'src/app/modules/employee/urls';
 import {USER_ROUTES} from 'src/app/modules/users/urls';
 import AvatarImg from 'src/app/shared/components/primitives/avatar-img';
 import {KIconButton} from 'src/app/shared/components/primitives/buttons';
+import {LoginMenu} from 'src/components/api-authorization/LoginMenu';
 
 interface AppNavbarProps {
     company: CompanyDetails | null;
@@ -73,18 +74,20 @@ const AppNavbar: React.FunctionComponent<AppNavbarProps> = (
                             </NavLink>
                         </NavItem>
                         }
-                        {!user &&
-                        <>
-                            <NavItem>
-                                <NavLink tag={Link} to={AUTH_ROUTES.LOGIN}><FormattedMessage
-                                    id={'AUTH.LOGIN'}/></NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink tag={Link} to={AUTH_ROUTES.REGISTER}><FormattedMessage
-                                    id={'AUTH.REGISTER'}/></NavLink>
-                            </NavItem>
-                        </>
-                        }
+                        {/*{!user &&*/}
+                        {/*<>*/}
+                        {/*    <NavItem>*/}
+                        {/*        <NavLink tag={Link} to={AUTH_ROUTES.LOGIN}><FormattedMessage*/}
+                        {/*            id={'AUTH.LOGIN'}/></NavLink>*/}
+                        {/*    </NavItem>*/}
+                        {/*    <NavItem>*/}
+                        {/*        <NavLink tag={Link} to={AUTH_ROUTES.REGISTER}><FormattedMessage*/}
+                        {/*            id={'AUTH.REGISTER'}/></NavLink>*/}
+                        {/*    </NavItem>*/}
+                        {/*</>*/}
+                        {/*}*/}
+                        <LoginMenu>
+                        </LoginMenu>
                         {user &&
                         <UncontrolledDropdown nav inNavbar>
                             <DropdownToggle nav caret>

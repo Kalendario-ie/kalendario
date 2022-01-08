@@ -1,7 +1,7 @@
 import {useFormikContext} from 'formik';
 import React, {useState} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {timeFromString, timeToString} from 'src/app/api/common/models';
+import {timeFromString, timeToString, Zero} from 'src/app/api/common/models';
 import {UpsertScheduleRequestFrame} from 'src/app/api/schedule/requests';
 import {KFlexColumn} from 'src/app/shared/components/flex';
 import {KFormikInput} from 'src/app/shared/components/forms';
@@ -21,8 +21,8 @@ const ScheduleFrame: React.FunctionComponent<ScheduleFrameProps> = (
         onClick
     }) => {
     const [start, end] = [timeFromString(frame.start), timeFromString(frame.end)];
-    const top = +(start.hour + 1 + start.minute / 60) * 3
-    const height = ((end.hour + end.minute / 60) - (start.hour + start.minute / 60)) * 3
+    const top = +(start.hours + 1 + start.minutes / 60) * 3
+    const height = ((end.hours + end.minutes / 60) - (start.hours + start.minutes / 60)) * 3
 
     return (
         <div className={`${styles.frameBox} bg-accent c-pointer`}
@@ -54,8 +54,8 @@ const ScheduleFormikInput: React.FunctionComponent<ScheduleFormikInputProps> = (
     const hours = Array.from(Array(24).keys());
     const className = `${styles.lineCell} ${isMonday ? '' : styles.borderLeft}`;
 
-    const handleAddClick = (hour: number) => () => {
-        const newFrame = {start: timeToString({hour, minute: 0}), end: timeToString({hour: hour + 1, minute: 0})};
+    const handleAddClick = (hours: number) => () => {
+        const newFrame = {start: timeToString({...Zero(), hours}), end: timeToString({...Zero(), hours: hours + 1})};
         const values = [...formikValues.value, newFrame];
         formikHelpers.setValue(values);
         setSelectedIndex(values.length - 1);
@@ -79,11 +79,11 @@ const ScheduleFormikInput: React.FunctionComponent<ScheduleFormikInputProps> = (
         formikValues.value.splice(toDelete, 1);
     }
 
-    const hourCell = (hour: number) =>
+    const hourCell = (hours: number) =>
         <KFlexColumn className="position-relative">
-            {isMonday && <div className={styles.hourBox}>{timeToString({hour, minute: 0})}</div>}
+            {isMonday && <div className={styles.hourBox}>{timeToString({...Zero(), hours})}</div>}
             <KShowOnHoverContainer className={className}>
-                <KIconButton color="primary" onClick={handleAddClick(hour)} icon="plus-square"/>
+                <KIconButton color="primary" onClick={handleAddClick(hours)} icon="plus-square"/>
             </KShowOnHoverContainer>
         </KFlexColumn>
 

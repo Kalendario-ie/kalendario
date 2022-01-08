@@ -2,6 +2,7 @@ import {useFormikContext} from 'formik';
 import React, {useEffect, useState} from 'react';
 import AsyncSelect from 'react-select/async';
 import {FormGroup, Label} from 'reactstrap';
+import {CustomerAdminResourceModel} from 'src/app/api/api';
 import {adminCustomerClient, Customer} from 'src/app/api/customers';
 import CustomerUpsertForm from 'src/app/modules/admin/customers/customer-upsert-form';
 import {useEditModal} from 'src/app/shared/admin/hooks';
@@ -12,11 +13,11 @@ import {useAppDispatch} from 'src/app/store';
 import {customerActions, customerSelectors, customerSlice} from 'src/app/store/admin/customers';
 
 interface FormikCustomerInput {
-    initialCustomer: Customer | null;
+    initialCustomer: CustomerAdminResourceModel | null;
 }
 
 export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> = ({initialCustomer}) => {
-    const [customer, setCustomer] = useState<Customer | null>(initialCustomer);
+    const [customer, setCustomer] = useState<CustomerAdminResourceModel | null>(initialCustomer);
     const [openModal, modal, createdCustomer] = useEditModal(customerSelectors, customerActions, CustomerUpsertForm);
     const dispatch = useAppDispatch();
     const formik = useFormikContext();
@@ -34,9 +35,9 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [createdCustomer]);
 
-    const promiseOptions = (value: string) => adminCustomerClient.get({search: value}).then(res => res.results);
+    const promiseOptions = (search: string) => adminCustomerClient.get(search, 0, 200).then(res => res.entities!);
 
-    const navigateToPage = (selectedCustomer: Customer | null) => {
+    const navigateToPage = (selectedCustomer: CustomerAdminResourceModel | null) => {
         setCustomer(selectedCustomer);
         setValue(selectedCustomer?.id || null);
     }
@@ -69,7 +70,7 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
             <KFlexColumn>
                 <KFlexRow justify={'between'}>
                     <KIcon icon="user" color="primary" text={customer.name}/>
-                    <KIcon icon="phone" color="primary" text={customer.phone}/>
+                    <KIcon icon="phone" color="primary" text={customer.phoneNumber}/>
                     <KIcon icon="at" color="primary" text={customer.email}/>
                 </KFlexRow>
                 <KFlexSpacer size={0.4}/>

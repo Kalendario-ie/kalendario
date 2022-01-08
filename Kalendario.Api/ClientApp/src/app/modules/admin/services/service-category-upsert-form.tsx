@@ -1,4 +1,5 @@
 import React from 'react';
+import {ServiceCategoryAdminResourceModel} from 'src/app/api/api';
 import {
     createUpsertServiceCategoryRequest,
     ServiceCategory,
@@ -7,7 +8,7 @@ import {
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 
-const ServiceCategoryUpsertForm: React.FunctionComponent<AdminEditContainerProps<ServiceCategory>> = (
+const ServiceCategoryUpsertForm: React.FunctionComponent<AdminEditContainerProps<ServiceCategoryAdminResourceModel>> = (
     {
         entity,
         apiError,

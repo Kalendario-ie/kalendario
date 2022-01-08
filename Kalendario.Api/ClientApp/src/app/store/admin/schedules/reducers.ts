@@ -9,7 +9,7 @@ const {
     reducer,
     sagas,
     selectors
-} = kCreateBaseStore<Schedule>(storeName, adminScheduleClient, (state) => state.adminSchedules);
+} = kCreateBaseStore(storeName, adminScheduleClient, (state) => state.adminSchedules);
 
 export {reducer as scheduleReducer}
 export {actions as scheduleActions}

@@ -3,11 +3,11 @@ import {IReadModel} from 'src/app/api/common/models';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import KModal from 'src/app/shared/components/modal/k-modal';
 import {useAppDispatch, useAppSelector} from 'src/app/store';
-import {BaseActions, BaseSelectors} from 'src/app/store/admin/common/adapter';
+import {ExtendedBaseActions, BaseSelectors, BaseActions} from 'src/app/store/admin/common/adapter';
 
-export function useEditModal<TEntity extends IReadModel>(
+export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     baseSelectors: BaseSelectors<TEntity>,
-    baseActions: BaseActions,
+    baseActions: ExtendedBaseActions<TUpsertCommand>,
     EditContainer: React.FunctionComponent<AdminEditContainerProps<TEntity>>
 ): [(entity: TEntity | null) => () => void, JSX.Element, TEntity | undefined] {
     const [selectedEntity, setSelectedEntity] = useState<TEntity | null>(null);
@@ -24,9 +24,9 @@ export function useEditModal<TEntity extends IReadModel>(
 
     const handleSubmit = (entity: any): void => {
         if (!selectedEntity || selectedEntity.id === 0) {
-            dispatch(baseActions.createEntity({entity}));
+            dispatch(baseActions.createEntity({command: entity}));
         } else {
-            dispatch(baseActions.patchEntity({id: selectedEntity.id, entity}));
+            dispatch(baseActions.patchEntity({id: selectedEntity.id.toString(), command: entity})); // todo remove to string later.
         }
     }
 
@@ -47,7 +47,7 @@ export function useEditModal<TEntity extends IReadModel>(
 }
 
 
-export function useSelectAll<TEntity>(baseSelectors: BaseSelectors<TEntity>, baseActions: BaseActions) {
+export function useSelectAll<TEntity, TUpsertCommand>(baseSelectors: BaseSelectors<TEntity>, baseActions: ExtendedBaseActions<TUpsertCommand>) {
     const dispatch = useAppDispatch();
     useEffect(() => {
         dispatch(baseActions.initializeStore());

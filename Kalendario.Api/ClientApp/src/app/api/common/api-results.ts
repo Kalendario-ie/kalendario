@@ -1,6 +1,5 @@
 export interface ApiListResult<R> {
-  count: number;
-  next: string;
-  previous: string;
-  results: R[];
+  filteredCount?: number;
+  totalCount?: number;
+  entities?: R[] | undefined;
 }

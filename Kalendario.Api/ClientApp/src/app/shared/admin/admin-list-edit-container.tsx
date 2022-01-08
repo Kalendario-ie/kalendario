@@ -6,13 +6,13 @@ import {useEditModal} from 'src/app/shared/admin/hooks';
 import {AdminEditContainerProps, AdminTableContainerProps} from 'src/app/shared/admin/interfaces';
 import {useKHistory} from 'src/app/shared/util/router-extensions';
 import {useAppDispatch, useAppSelector} from 'src/app/store';
-import {BaseActions, BaseSelectors} from 'src/app/store/admin/common/adapter';
+import {ExtendedBaseActions, BaseSelectors} from 'src/app/store/admin/common/adapter';
 import {KFlexRow} from '../components/flex';
 import AdminButton from './admin-button';
 
-interface AdminListEditContainerProps<TEntity> {
+interface AdminListEditContainerProps<TEntity, TUpsertCommand> {
     baseSelectors: BaseSelectors<TEntity>;
-    baseActions: BaseActions;
+    baseActions: ExtendedBaseActions<TUpsertCommand>;
     modelType: PermissionModel;
     filter?: (value: string | undefined) => void;
     detailsUrl?: string;
@@ -21,7 +21,7 @@ interface AdminListEditContainerProps<TEntity> {
     ListContainer: React.FunctionComponent<AdminTableContainerProps<TEntity>>;
 }
 
-function AdminListEditContainer<TEntity extends IReadModel>(
+function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
     {
         baseSelectors,
         baseActions,
@@ -31,7 +31,7 @@ function AdminListEditContainer<TEntity extends IReadModel>(
         modelType,
         EditContainer,
         ListContainer
-    }: AdminListEditContainerProps<TEntity>) {
+    }: AdminListEditContainerProps<TEntity, TUpsertCommand>) {
     const dispatch = useAppDispatch();
     const entities = useAppSelector(baseSelectors.selectAll)
     const [openModal, formModal] = useEditModal(baseSelectors, baseActions, EditContainer);

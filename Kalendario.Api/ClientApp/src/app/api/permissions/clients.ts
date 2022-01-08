@@ -1,17 +1,12 @@
-import baseApiAxios from 'src/app/api/common/clients/base-api';
-import baseModelRequest from 'src/app/api/common/clients/base-django-api';
-import {Permission} from 'src/app/api/permissions/models';
-import {permissionGroupParser, permissionParser} from 'src/app/api/permissions/parsers';
-
+import {BaseModelRequest} from 'src/app/api/common/clients/base-django-api';
+import {PermissionGroup} from 'src/app/api/permissions/models';
+import {permissionGroupParser} from 'src/app/api/permissions/parsers';
 
 const baseUrl = 'core/groups/';
 
-export const adminPermissionGroupClient = {
-    ...baseModelRequest(baseUrl, permissionGroupParser),
-    permissions(): Promise<Permission[]> {
-        return baseApiAxios
-            .get<Permission[]>(baseUrl + 'permissions/')
-            .then(result => result.data.map(permissionParser));
-    }
+export const adminPermissionGroupClient : BaseModelRequest<PermissionGroup, PermissionGroup> = {
+    get: search => Promise.resolve({entities: []}),
+    put: (id, command) => Promise.resolve(permissionGroupParser(null)),
+    post: body => Promise.resolve(permissionGroupParser(null))
 }
 

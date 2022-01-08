@@ -16,7 +16,7 @@ const CompanyServicesItem: React.FunctionComponent<CompanyServicesItemProps> = (
     const style = {borderBottom: '1px solid #A1A1A1'};
 
     return (
-        <div className="c-pointer mb-4" style={style} onClick={() => onClick(service.id)}>
+        <div className="c-pointer mb-4" style={style} onClick={() => onClick(+service.id)}> // TODO FIX HERE.
             <KFlexRow>
                 <KFlexRowItem basisPercent={50}>
                     <div className="h6">
@@ -25,7 +25,7 @@ const CompanyServicesItem: React.FunctionComponent<CompanyServicesItemProps> = (
                 </KFlexRowItem>
                 <KFlexRowItem>
                     <div className="c-primary text-right">{service.price}</div>
-                    <div className="tiny light-grey text-right">ETA: {timeToString(service.duration)}</div>
+                    {/*<div className="tiny light-grey text-right">ETA: {timeToString(service.duration)}</div>*/} // TODO: FIX HERE.
                 </KFlexRowItem>
             </KFlexRow>
         </div>
