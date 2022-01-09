@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Kalendario.Application.Authorization;
 using Kalendario.Application.Commands.Admin;
 using Kalendario.Application.Common.Exceptions;
 using Kalendario.Core.Entities;
+using Kalendario.Core.Infrastructure;
 using NUnit.Framework;
 
 namespace Kalendario.Application.IntegrationTests.Commands;
@@ -54,7 +56,30 @@ public class CreateAccountCommandTests : TestBase
         var account = await FindAsync<Account>(result);
         Assert.IsNotNull(account);
         Assert.AreEqual(name, account.Name);
+
     }
+
+    [Test]
+    public async Task CreateAccount_ShouldUpdateUser()
+    {
+        var name = "NameWithNoSpace";
+        var userId = await RunAsAdministratorAsync(typeof(Account), Account.CreateRole);
+
+        var command = new CreateAccountCommand {Name = name};
+        var result = await FluentActions.Invoking(() => SendAsync(command)).Invoke();
+
+        var account = await FindAsync<Account>(result);
+        Assert.IsNotNull(account);
+        Assert.AreEqual(name, account.Name);
+        
+        var user = await FindAsync<ApplicationUser>(userId);
+        Assert.AreEqual(account.Id, user.AccountId);
+        
+        Assert.IsTrue(await IsInRoleAsync(user, AuthorizationHelper.MasterRole));
+
+        Assert.False(await IsInRoleAsync(user, AuthorizationHelper.RoleName(typeof(Account), Account.CreateRole)));
+    }
+
     [Test]
     public async Task Should_ThrowError_OnRepeatedNames()
     {

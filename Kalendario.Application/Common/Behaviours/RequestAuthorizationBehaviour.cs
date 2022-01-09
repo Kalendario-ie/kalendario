@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Kalendario.Application.Authorization;
 using Kalendario.Application.Common.Exceptions;
 using Kalendario.Application.Common.Extensions;
 using Kalendario.Application.Common.Interfaces;
@@ -43,6 +44,7 @@ public class RequestAuthorizationBehaviour<TRequest, TResponse> : IPipelineBehav
         var authorized = await authorizeAttributesWithRoles
             .Select(a => a.Roles)
             .SelectMany(roles => roles)
+            .Append(AuthorizationHelper.MasterRole) // This ensures the user have access to anything when in master role.
             .Select(role => _identityService.IsInRoleAsync(_currentUserService.UserId, role.Trim()))
             .AnyAsync();
 

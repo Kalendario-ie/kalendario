@@ -11,6 +11,7 @@ using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.IntegrationTests.Common;
 using Kalendario.Core.Entities;
 using Kalendario.Core.Infrastructure;
+using Kalendario.Infrastructure.Authorization;
 using Kalendario.Infrastructure.Extensions;
 using Kalendario.Infrastructure.Persistence;
 using MediatR;
@@ -151,6 +152,8 @@ public class Testing
             {
                 await roleManager.CreateAsync(new IdentityRole(role));
             }
+            
+            await AddExtraRoles(roleManager);
 
             await userManager.AddToRolesAsync(user, roles);
         }
@@ -169,6 +172,15 @@ public class Testing
         var errors = string.Join(Environment.NewLine, result.ToApplicationResult().Errors);
 
         throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");
+    }
+
+    public static async Task<bool> IsInRoleAsync(ApplicationUser user, string role)
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+        return await userManager.IsInRoleAsync(user, role);
     }
 
     public static async Task ResetState()
@@ -231,6 +243,7 @@ public class Testing
         await conn.OpenAsync();
         await _checkpoint.Reset(conn);
     }
+
     private static async Task SeedDatabase()
     {
         using var scope = _scopeFactory.CreateScope();
@@ -251,5 +264,11 @@ public class Testing
     {
         string accountsJson = await File.ReadAllTextAsync(@"Seed" + Path.DirectorySeparatorChar + fileName);
         return JsonConvert.DeserializeObject<List<T>>(accountsJson)!;
+    }
+
+    private static async Task AddExtraRoles(RoleManager<IdentityRole> roleManager)
+    {
+        // Any Extra roles that should always exist in the DB goes here.
+        await roleManager.CreateAsync(new IdentityRole(AuthorizationHelper.MasterRole));
     }
 }

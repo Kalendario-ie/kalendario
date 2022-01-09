@@ -41,6 +41,7 @@ public static class DependencyInjection
         services.AddTransient<IIdentityService, IdentityService>();
 
         services.AddScoped<ICurrentUserService, CurrentUserService>()
+            .AddScoped<ICurrentUserManager, CurrentUserManager>()
             .AddScoped<IDomainEventService, DomainEventService>()
             .AddHttpContextAccessor();
 

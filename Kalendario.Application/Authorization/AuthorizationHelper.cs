@@ -9,6 +9,7 @@ namespace Kalendario.Application.Authorization;
 
 public static class AuthorizationHelper
 {
+    public const string MasterRole = "master";
     public static string RoleName(Type entityType, string role)
     {
         return $"{entityType.Name}_{role}";
@@ -20,6 +21,7 @@ public static class AuthorizationHelper
             .GetProperties()
             .Select(p => p.PropertyType.GetGenericArguments()[0])
             .SelectMany(entityType => FindEntityRoles(entityType).Select(role => RoleName(entityType, role)))
+            .Append(MasterRole)
             .ToList();
     }
 
