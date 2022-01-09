@@ -7,23 +7,24 @@ using Kalendario.Core.Infrastructure;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Kalendario.Infrastructure.Persistence
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IKalendarioDbContext
     {
-        private readonly ICurrentUserService _currentUserService;
+        private readonly IServiceProvider _serviceProvider;
         private readonly IDomainEventService _domainEventService;
         private readonly IDateTime _dateTime;
 
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options,
             IOptions<OperationalStoreOptions> operationalStoreOptions,
-            ICurrentUserService currentUserService,
+            IServiceProvider serviceProvider,
             IDomainEventService domainEventService,
             IDateTime dateTime) : base(options, operationalStoreOptions)
         {
-            _currentUserService = currentUserService;
+            _serviceProvider = serviceProvider;
             _domainEventService = domainEventService;
             _dateTime = dateTime;
         } 
@@ -39,20 +40,26 @@ namespace Kalendario.Infrastructure.Persistence
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+            // ICurrentUserService can't be at the constructor
+            // because it will create an instance that has no user id.
+            var currentUserService = _serviceProvider.GetService<ICurrentUserService>();
+            if (currentUserService != null)
             {
-                switch (entry.State)
+                foreach (var entry in ChangeTracker.Entries<BaseEntity>())
                 {
-                    case EntityState.Added:
-                        entry.Entity.UserCreated = _currentUserService.UserId;
-                        entry.Entity.DateCreated = _dateTime.Now;
-                        break;
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            entry.Entity.UserCreated = currentUserService.UserId;
+                            entry.Entity.DateCreated = _dateTime.Now;
+                            break;
 
-                    case EntityState.Modified:
-                        entry.Entity.UserModified = _currentUserService.UserId;
-                        entry.Entity.DateModified = _dateTime.Now;
-                        break;
-                }
+                        case EntityState.Modified:
+                            entry.Entity.UserModified = currentUserService.UserId;
+                            entry.Entity.DateModified = _dateTime.Now;
+                            break;
+                    }
+                }                
             }
 
             var events = ChangeTracker.Entries<IHasDomainEvent>()

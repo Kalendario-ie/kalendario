@@ -10,9 +10,9 @@ public class CurrentUserService : ICurrentUserService
     {
         var user = httpContextAccessor.HttpContext?.User;
 
-        if (user == null) return;
+        if (user?.Identity == null) return;
 
-        IsAuthenticated = true;
+        IsAuthenticated = user.Identity.IsAuthenticated;
         UserId = user.GetUserId();
         AccountId = Guid.TryParse(user.GetAccountId(), out var guid) ? guid : Guid.Empty;
     }
