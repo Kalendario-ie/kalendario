@@ -1,6 +1,8 @@
+import {Profile} from 'oidc-client';
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import {AuthUser, hasPermission, PermissionModel, PermissionType} from 'src/app/api/auth';
+import {hasPermission, PermissionModel, PermissionType} from 'src/app/api/auth';
+import baseApiAxios from 'src/app/api/common/clients/base-api';
 import {useAppSelector} from 'src/app/store';
 import {selectLoadingUser, selectUser, setLoadingUser, setUser} from 'src/app/store/auth';
 import {AuthorizeService} from 'src/components/api-authorization/AuthorizeService';
@@ -19,7 +21,12 @@ const AuthAutoLogin: React.FunctionComponent<AuthAutoLoginProps> = (
         dispatch(setLoadingUser(true));
         authService
             .getUser()
-            .then((result) => dispatch(setUser(result)));
+            .then((user) => {
+                if (!!user) {
+                    dispatch(setUser(user.profile));
+                    baseApiAxios.defaults.headers.common['Authorization'] = `Bearer ${user.access_token}`; // TODO: maybe this shouldn't be set here.
+                }
+            });
     }, [dispatch]);
 
     return (
@@ -32,7 +39,7 @@ const AuthAutoLogin: React.FunctionComponent<AuthAutoLoginProps> = (
 export default AuthAutoLogin;
 
 
-export function useCurrentUser(): [boolean, AuthUser | null] {
+export function useCurrentUser(): [boolean, Profile | null] {
     const user = useAppSelector(selectUser);
     const loading = useAppSelector(selectLoadingUser);
     return [loading, user];

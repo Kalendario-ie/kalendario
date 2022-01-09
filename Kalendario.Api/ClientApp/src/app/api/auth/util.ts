@@ -1,7 +1,7 @@
-import {AuthUser} from 'src/app/api/auth/models';
+import {Profile} from 'oidc-client';
 import {PermissionModel, PermissionType} from 'src/app/api/auth/permissions';
 
-export function hasPermission(user: AuthUser, type: PermissionType, model: PermissionModel) {
+export function hasPermission(user: Profile, type: PermissionType, model: PermissionModel) {
     const app = getAppLabel(model);
     return true;
     // return user.permissions.includes(`${app}.${type}_${model}`); // fix here later.

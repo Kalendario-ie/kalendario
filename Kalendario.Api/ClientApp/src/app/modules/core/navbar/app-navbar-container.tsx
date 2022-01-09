@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {selectUser} from 'src/app/store/auth';
 import {selectCartIsEmpty, selectCompany, selectCurrentRequest} from 'src/app/store/companies';
 import {selectShowDashboardToggle, toggleDashboardSidenav} from 'src/app/store/ui';
+import {ApplicationPaths} from 'src/components/api-authorization/ApiAuthorizationConstants';
 import AppNavbar from './app-navbar';
 
 
@@ -16,6 +17,7 @@ const AppNavbarContainer: React.FunctionComponent = () => {
     const cartIsEmpty = useSelector(selectCartIsEmpty);
     const showDashboardToggle = useSelector(selectShowDashboardToggle);
     const toggleSidenav = () => dispatch(toggleDashboardSidenav());
+    const logoutPath = { pathname: `${ApplicationPaths.LogOut}`, state: { local: true } };
 
     return (
         <AppNavbar
@@ -27,6 +29,7 @@ const AppNavbarContainer: React.FunctionComponent = () => {
             menuOpen={isOpen}
             showSidenavToggle={showDashboardToggle}
             toggleSidenav={toggleSidenav}
+            logoutPath={logoutPath}
         />
     )
 }

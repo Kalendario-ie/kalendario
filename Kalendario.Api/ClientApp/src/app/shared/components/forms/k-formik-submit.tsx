@@ -15,7 +15,6 @@ export const KFormikSubmit: React.FunctionComponent<KFormikSubmitProps> = (
         isBlock = false
     }) => {
     const formik = useFormikContext();
-    className += " btn-primary";
     if (isBlock) {
         className += ' btn-block';
     }

@@ -3,9 +3,9 @@ import {RouteComponentProps} from 'react-router';
 import {Redirect, Route, useHistory, useLocation} from 'react-router-dom';
 import Spinner from 'reactstrap/es/Spinner';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
-import {AUTH_ROUTES} from 'src/app/modules/auth/urls';
 import {KFlexRow} from 'src/app/shared/components/flex';
 import {useCurrentUser, useUserHasPermission} from 'src/app/shared/context-providers/auth-auto-login';
+import {ApplicationPaths} from 'src/components/api-authorization/ApiAuthorizationConstants';
 
 
 export type QueryParams = Record<string, string | number | undefined>;
@@ -62,7 +62,7 @@ export const ProtectedRoute: React.FunctionComponent<ProtectedRouteProps> = (
                 </>
                 }
                 {!user &&
-                <Redirect to={pathWithParams(AUTH_ROUTES.LOGIN, {...params, returnUrl: pathname})}/>
+                <Redirect to={pathWithParams(ApplicationPaths.Login, {...params, returnUrl: pathname})}/>
                 }
             </>
             }

@@ -1,3 +1,4 @@
+import {Profile} from 'oidc-client';
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {Link} from 'react-router-dom';
@@ -14,7 +15,6 @@ import {
     NavLink,
     UncontrolledDropdown,
 } from 'reactstrap';
-import {AuthUser} from 'src/app/api/auth';
 import {CompanyDetails} from 'src/app/api/companies';
 import {RequestModel} from 'src/app/api/requests';
 import {ADMIN_ROUTES} from 'src/app/modules/admin/urls';
@@ -28,11 +28,12 @@ interface AppNavbarProps {
     company: CompanyDetails | null;
     cart: RequestModel | null;
     cartIsEmpty: boolean;
-    user: AuthUser | null;
+    user: Profile | null;
     menuOpen: boolean;
     toggleMenu: () => void;
     showSidenavToggle: boolean;
     toggleSidenav: () => void;
+    logoutPath: { pathname: string, state: { local: boolean } };
 }
 
 const AppNavbar: React.FunctionComponent<AppNavbarProps> = (
@@ -45,6 +46,7 @@ const AppNavbar: React.FunctionComponent<AppNavbarProps> = (
         toggleMenu,
         showSidenavToggle,
         toggleSidenav,
+        logoutPath,
     }) => {
 
     return (
@@ -112,7 +114,7 @@ const AppNavbar: React.FunctionComponent<AppNavbarProps> = (
                                 {/*}*/}
                                 <DropdownItem divider/>
                                 <DropdownItem>
-                                    <NavLink tag={Link} to={ApplicationPaths.LogOut}>
+                                    <NavLink tag={Link} to={logoutPath}>
                                         <FormattedMessage id={'AUTH.LOGOUT'}/>
                                     </NavLink>
                                 </DropdownItem>
