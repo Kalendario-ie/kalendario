@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.Results;
@@ -44,10 +45,11 @@ public class UpsertServiceCommand : BaseUpsertAdminCommand<ServiceAdminResourceM
             domain.ServiceCategoryId = request.ServiceCategoryId;
         }
 
-        protected override async Task AdditionalValidation(UpsertServiceCommand request)
+        protected override async Task AdditionalValidation(UpsertServiceCommand request,
+            CancellationToken cancellationToken)
         {
             var serviceCategory = await Context.ServiceCategories.FindAsync(request.ServiceCategoryId);
-            if (serviceCategory.AccountId != CurrentUserManager.CurrentUserAccountId)
+            if (serviceCategory == null || serviceCategory.AccountId != CurrentUserManager.CurrentUserAccountId)
                 throw new ValidationException(new List<ValidationFailure>()
                 {
                     new(nameof(request.ServiceCategoryId), "Service Category does not exist")

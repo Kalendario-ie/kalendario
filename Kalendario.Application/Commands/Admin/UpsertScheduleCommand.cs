@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Kalendario.Application.Commands.Admin.Common;
@@ -49,7 +50,7 @@ public class UpsertScheduleCommand : BaseUpsertAdminCommand<ScheduleAdminResourc
             domain.Frames = frames;
         }
 
-        protected override Task AdditionalValidation(UpsertScheduleCommand request)
+        protected override Task AdditionalValidation(UpsertScheduleCommand request, CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
         }

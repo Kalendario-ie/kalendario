@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Kalendario.Application.Commands.Admin.Common;
@@ -18,7 +19,8 @@ public class UpsertServiceCategoryCommand : BaseUpsertAdminCommand<ServiceCatego
     public string Colour { get; set; }
 
 
-    public class Handler : BaseUpsertAdminCommandHandler<UpsertServiceCategoryCommand, ServiceCategory, ServiceCategoryAdminResourceModel>
+    public class Handler : BaseUpsertAdminCommandHandler<UpsertServiceCategoryCommand, ServiceCategory,
+        ServiceCategoryAdminResourceModel>
     {
         public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserManager currentUserManager)
             : base(context, mapper, currentUserManager)
@@ -33,7 +35,8 @@ public class UpsertServiceCategoryCommand : BaseUpsertAdminCommand<ServiceCatego
             domain.Colour = Core.ValueObject.Colour.From(request.Colour);
         }
 
-        protected override Task AdditionalValidation(UpsertServiceCategoryCommand request)
+        protected override Task AdditionalValidation(UpsertServiceCategoryCommand request,
+            CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
         }

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Kalendario.Application.Commands.Admin.Common;
@@ -39,7 +40,7 @@ public class UpsertCustomerCommand : BaseUpsertAdminCommand<CustomerAdminResourc
             domain.Warning = request.Warning;
         }
 
-        protected override Task AdditionalValidation(UpsertCustomerCommand request)
+        protected override Task AdditionalValidation(UpsertCustomerCommand request, CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
         }
