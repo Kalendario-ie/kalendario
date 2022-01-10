@@ -15,13 +15,13 @@ public class UpsertServiceCategoryCommand : BaseUpsertAdminCommand<ServiceCatego
 {
     public string Name { get; set; }
 
-    public Colour Colour { get; set; }
+    public string Colour { get; set; }
 
 
     public class Handler : BaseUpsertAdminCommandHandler<UpsertServiceCategoryCommand, ServiceCategory, ServiceCategoryAdminResourceModel>
     {
-        public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserService currentUserService,
-            IIdentityService identityService) : base(context, mapper, currentUserService, identityService)
+        public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserManager currentUserManager)
+            : base(context, mapper, currentUserManager)
         {
         }
 
@@ -30,7 +30,7 @@ public class UpsertServiceCategoryCommand : BaseUpsertAdminCommand<ServiceCatego
         protected override void UpdateDomain(ServiceCategory domain, UpsertServiceCategoryCommand request)
         {
             domain.Name = request.Name;
-            domain.Colour = request.Colour;
+            domain.Colour = Core.ValueObject.Colour.From(request.Colour);
         }
 
         protected override Task AdditionalValidation(UpsertServiceCategoryCommand request)

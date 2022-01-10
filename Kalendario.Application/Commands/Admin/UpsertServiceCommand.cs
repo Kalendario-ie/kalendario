@@ -28,8 +28,8 @@ public class UpsertServiceCommand : BaseUpsertAdminCommand<ServiceAdminResourceM
 
     public class Handler : BaseUpsertAdminCommandHandler<UpsertServiceCommand, Service, ServiceAdminResourceModel>
     {
-        public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserService currentUserService,
-            IIdentityService identityService) : base(context, mapper, currentUserService, identityService)
+        public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserManager currentUserManager)
+            : base(context, mapper, currentUserManager)
         {
         }
 
@@ -47,7 +47,7 @@ public class UpsertServiceCommand : BaseUpsertAdminCommand<ServiceAdminResourceM
         protected override async Task AdditionalValidation(UpsertServiceCommand request)
         {
             var serviceCategory = await Context.ServiceCategories.FindAsync(request.ServiceCategoryId);
-            if (serviceCategory.AccountId != CurrentUserService.AccountId)
+            if (serviceCategory.AccountId != CurrentUserManager.CurrentUserAccountId)
                 throw new ValidationException(new List<ValidationFailure>()
                 {
                     new(nameof(request.ServiceCategoryId), "Service Category does not exist")

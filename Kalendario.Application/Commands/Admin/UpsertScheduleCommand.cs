@@ -26,8 +26,8 @@ public class UpsertScheduleCommand : BaseUpsertAdminCommand<ScheduleAdminResourc
 
     public class Handler : BaseUpsertAdminCommandHandler<UpsertScheduleCommand, Schedule, ScheduleAdminResourceModel>
     {
-        public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserService currentUserService,
-            IIdentityService identityService) : base(context, mapper, currentUserService, identityService)
+        public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserManager currentUserManager) 
+            : base(context, mapper, currentUserManager)
         {
         }
 
@@ -58,7 +58,7 @@ public class UpsertScheduleCommand : BaseUpsertAdminCommand<ScheduleAdminResourc
         {
             return frames.Select((f, i) => new ScheduleFrame
             {
-                Start = f.Start, End = f.End, Order = i, Offset = dayOfWeek, AccountId = CurrentUserService.AccountId
+                Start = f.Start, End = f.End, Order = i, Offset = dayOfWeek, AccountId = CurrentUserManager.CurrentUserAccountId
             });
         }
     }

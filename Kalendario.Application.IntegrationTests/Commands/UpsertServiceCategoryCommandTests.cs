@@ -108,12 +108,12 @@ public class UpsertServiceCategoryCommandTests : TestBase
     private void AssertResultEqualCommand(ServiceCategoryAdminResourceModel result, UpsertServiceCategoryCommand command)
     {
         Assert.AreEqual(command.Name, result.Name);
-        Assert.AreEqual(command.Colour, result.Colour);
+        Assert.AreEqual(command.Colour, result.Colour.ToString());
     }
 
     private void AssertEntityEqualCommand(ServiceCategory service, UpsertServiceCategoryCommand command)
     {
         Assert.AreEqual(command.Name, service.Name);
-        Assert.AreEqual(command.Colour, service.Colour);
+        Assert.AreEqual(command.Colour, service.Colour.ToString());
     }
 }

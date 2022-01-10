@@ -24,8 +24,8 @@ public class UpsertCustomerCommand : BaseUpsertAdminCommand<CustomerAdminResourc
 
     public class Handler : BaseUpsertAdminCommandHandler<UpsertCustomerCommand, Customer, CustomerAdminResourceModel>
     {
-        public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserService currentUserService,
-            IIdentityService identityService) : base(context, mapper, currentUserService, identityService)
+        public Handler(IKalendarioDbContext context, IMapper mapper, ICurrentUserManager currentUserManager)
+            : base(context, mapper, currentUserManager)
         {
         }
 

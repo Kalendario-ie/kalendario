@@ -15,8 +15,7 @@ namespace Kalendario.Application.Commands.Admin.Common;
 
 public abstract class BaseUpsertAdminCommand<TResult> : IKalendarioProtectedCommand<TResult>
 {
-    [JsonIgnore]
-    public Guid? Id { get; set; }
+    [JsonIgnore] public Guid? Id { get; set; }
 
     public abstract class BaseUpsertAdminCommandHandler<TRequest, TDomain, TResourceModel> :
         IRequestHandler<TRequest, TResourceModel>
@@ -25,29 +24,26 @@ public abstract class BaseUpsertAdminCommand<TResult> : IKalendarioProtectedComm
     {
         protected readonly IKalendarioDbContext Context;
         protected readonly IMapper Mapper;
-        protected readonly ICurrentUserService CurrentUserService;
-        protected readonly IIdentityService IdentityService;
+        protected readonly ICurrentUserManager CurrentUserManager;
 
         public BaseUpsertAdminCommandHandler(IKalendarioDbContext context, IMapper mapper,
-            ICurrentUserService currentUserService,
-            IIdentityService identityService)
+            ICurrentUserManager currentUserManager)
         {
             Context = context;
             Mapper = mapper;
-            CurrentUserService = currentUserService;
-            IdentityService = identityService;
+            CurrentUserManager = currentUserManager;
         }
 
         public async Task<TResourceModel> Handle(TRequest request, CancellationToken cancellationToken)
         {
-            if (!(await IdentityService.IsInRoleAsync(CurrentUserService.UserId,
-                    AuthorizationHelper.RoleName(typeof(TDomain), BaseEntity.CreateRole))) && !request.Id.HasValue)
+            if (!(await CurrentUserManager.IsInRoleAsync(AuthorizationHelper.RoleName(typeof(TDomain),
+                    BaseEntity.CreateRole))) && !request.Id.HasValue)
             {
                 throw new ForbiddenAccessException();
             }
 
-            if (!(await IdentityService.IsInRoleAsync(CurrentUserService.UserId,
-                    AuthorizationHelper.RoleName(typeof(TDomain), BaseEntity.UpdateRole))) && request.Id.HasValue)
+            if (!(await CurrentUserManager.IsInRoleAsync(AuthorizationHelper.RoleName(typeof(TDomain),
+                    BaseEntity.UpdateRole))) && request.Id.HasValue)
             {
                 throw new ForbiddenAccessException();
             }
@@ -56,7 +52,7 @@ public abstract class BaseUpsertAdminCommand<TResult> : IKalendarioProtectedComm
 
             var domain = await (request.Id.HasValue
                 ? Entities
-                    .Where(e => e.AccountId == CurrentUserService.AccountId)
+                    .Where(e => e.AccountId == CurrentUserManager.CurrentUserAccountId)
                     .FirstOrDefaultAsync(e => e.Id == request.Id.Value, cancellationToken)
                 : Task.FromResult(new TDomain()));
 
@@ -68,7 +64,7 @@ public abstract class BaseUpsertAdminCommand<TResult> : IKalendarioProtectedComm
             if (domain.Id == Guid.Empty)
             {
                 Context.Set<TDomain>().Add(domain);
-                domain.AccountId = CurrentUserService.AccountId;
+                domain.AccountId = CurrentUserManager.CurrentUserAccountId;
             }
 
             UpdateDomain(domain, request);

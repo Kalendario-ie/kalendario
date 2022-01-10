@@ -1,4 +1,5 @@
-﻿using Kalendario.Application.Common.Interfaces;
+﻿using Kalendario.Application.Authorization;
+using Kalendario.Application.Common.Interfaces;
 using Kalendario.Core.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +8,7 @@ namespace Kalendario.Infrastructure.Identity;
 
 public class IdentityService : IIdentityService
 {
-        private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public IdentityService(UserManager<ApplicationUser> userManager)
     {
@@ -17,7 +18,7 @@ public class IdentityService : IIdentityService
     public async Task<bool> IsInRoleAsync(string userId, string role)
     {
         var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Id == userId);
-        return user != null && await _userManager.IsInRoleAsync(user, role);
+        return user != null && await IsInRoleAsync(user, role);
     }
 
     public async Task<bool> AddToRoleAsync(string userId, string role)
@@ -27,11 +28,11 @@ public class IdentityService : IIdentityService
         {
             return false;
         }
+
         var result = await _userManager.AddToRoleAsync(user, role);
         return result.Succeeded;
     }
-    
-    
+
     public async Task<bool> RemoveFromRoleAsync(string userId, string role)
     {
         var user = await _userManager.Users.SingleOrDefaultAsync(u => u.Id == userId);
@@ -39,10 +40,10 @@ public class IdentityService : IIdentityService
         {
             return false;
         }
+
         var result = await _userManager.RemoveFromRoleAsync(user, role);
         return result.Succeeded;
     }
-
 
     public async Task<bool> AddToAccountAsync(string userId, Guid accountId)
     {
@@ -55,5 +56,11 @@ public class IdentityService : IIdentityService
         user.AccountId = accountId;
         var result = await _userManager.UpdateAsync(user);
         return result.Succeeded;
+    }
+
+    private async Task<bool> IsInRoleAsync(ApplicationUser user, string role)
+    {
+        return await _userManager.IsInRoleAsync(user, role) ||
+               await _userManager.IsInRoleAsync(user, AuthorizationHelper.MasterRole);
     }
 }

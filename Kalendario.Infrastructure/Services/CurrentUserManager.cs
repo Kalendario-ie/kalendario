@@ -12,6 +12,10 @@ public class CurrentUserManager : ICurrentUserManager
         _currentUserService = currentUserService;
         _identityService = identityService;
     }
+
+    public string CurrentUserId => _currentUserService.UserId;
+    public Guid CurrentUserAccountId => _currentUserService.AccountId;
+
     public Task<bool> IsInRoleAsync(string role)
     {
         return _identityService.IsInRoleAsync(_currentUserService.UserId, role);
