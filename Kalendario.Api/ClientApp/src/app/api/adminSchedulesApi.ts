@@ -1,30 +1,72 @@
+import {CancelToken} from 'axios';
 import {Moment} from 'moment';
 import {
+    CreateScheduleFrame,
     ScheduleAdminResourceModel,
     ScheduleFrameAdminResourceModel,
     SchedulesClient,
-    UpsertScheduleCommand
+    UpsertScheduleCommand,
 } from 'src/app/api/api';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
 import {BaseModelRequest} from 'src/app/api/common/clients/base-django-api';
 
-const baseUrl = 'admin/schedules/';
-const client = new SchedulesClient(baseUrl, baseApiAxios);
+const client = new SchedulesClient('', baseApiAxios);
 
 export const adminScheduleClient: BaseModelRequest<ScheduleAdminResourceModel, UpsertScheduleCommand> = {
-    get: client.schedulesGet,
-    post: client.schedulesPost,
-    put: client.schedulesPut
+    post(body: UpsertScheduleCommand | undefined, cancelToken?: CancelToken | undefined) {
+        return client.schedulesPost(body, cancelToken);
+    },
+    get(search: string | undefined, start: number | undefined, length: number | undefined) {
+        return client.schedulesGet(search, start, length);
+    },
+    put(id: string, command: UpsertScheduleCommand | undefined, cancelToken?: CancelToken | undefined) {
+        return client.schedulesPut(id, command, cancelToken);
+    }
+}
+
+
+function framesToCreateScheduleFrame(frames: ScheduleFrameAdminResourceModel[]): CreateScheduleFrame[] {
+    return frames;
+}
+
+export function scheduleCommandParser(schedule: ScheduleAdminResourceModel | null): UpsertScheduleCommand {
+    return schedule ? {
+        name: schedule.name,
+        monday: framesToCreateScheduleFrame(schedule.monday),
+        tuesday: framesToCreateScheduleFrame(schedule.tuesday),
+        wednesday: framesToCreateScheduleFrame(schedule.wednesday),
+        thursday: framesToCreateScheduleFrame(schedule.thursday),
+        friday: framesToCreateScheduleFrame(schedule.friday),
+        saturday: framesToCreateScheduleFrame(schedule.saturday),
+        sunday: framesToCreateScheduleFrame(schedule.sunday)
+
+    } : {
+        name: '',
+        monday: [],
+        tuesday: [],
+        wednesday: [],
+        thursday: [],
+        friday: [],
+        saturday: [],
+        sunday: []
+    }
+}
+
+export const stringToTime = (value: string): { hour: number, minute: number } => {
+    return value ? {hour: +value.substring(0, 1), minute: +value.substring(3, 4)} : {hour: 0, minute: 0};
 }
 
 export const isAvailable = (frame: ScheduleFrameAdminResourceModel, hour: number, minute: number): boolean => {
-    const start = frame.start.hour + frame.start.minute / 60;
-    const end = frame.end.hour + frame.end.minute / 60;
+    const startTime = stringToTime(frame.start);
+    const endTime = stringToTime(frame.end);
+
+    const start = startTime.hour + startTime.minute / 60;
+    const end = endTime.hour + endTime.minute / 60;
     const value = hour + minute / 60;
     return start <= value && end > value;
 }
 
-export function getShift(schedule: ScheduleAdminResourceModel, date: Moment): ScheduleFrameAdminResourceModel[] {
+export function getFramesForDate(schedule: ScheduleAdminResourceModel, date: Moment): ScheduleFrameAdminResourceModel[] {
     switch (date.isoWeekday()) {
         case 1:
             return schedule.monday;
@@ -44,6 +86,6 @@ export function getShift(schedule: ScheduleAdminResourceModel, date: Moment): Sc
     return schedule.sunday;
 }
 
-export function frameName(scheduleFrame: ScheduleFrameAdminResourceModel){
-    return `${scheduleFrame.start.hour}:${scheduleFrame.start.minute} - ${scheduleFrame.end.hour}:${scheduleFrame.end.minute}`;
+export function frameName(scheduleFrame: ScheduleFrameAdminResourceModel) {
+    return `${scheduleFrame.start} - ${scheduleFrame.end}`;
 }

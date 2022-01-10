@@ -1191,8 +1191,8 @@ export interface CreateAccountCommand {
 }
 
 export interface CreateScheduleFrame {
-    start: TimeOnly;
-    end: TimeOnly;
+    start: string;
+    end: string;
 }
 
 export interface CustomerAdminResourceModel {
@@ -1239,8 +1239,8 @@ export interface ScheduleAdminResourceModelGetAllResult {
 }
 
 export interface ScheduleFrameAdminResourceModel {
-    start: TimeOnly;
-    end: TimeOnly;
+    start: string;
+    end: string;
 }
 
 export interface ServiceAdminResourceModel {
@@ -1268,14 +1268,6 @@ export interface ServiceCategoryAdminResourceModelGetAllResult {
     entities: ServiceCategoryAdminResourceModel[] | undefined;
     filteredCount: number;
     totalCount: number;
-}
-
-export interface TimeOnly {
-    hour: number;
-    minute: number;
-    second: number;
-    millisecond: number;
-    ticks: number;
 }
 
 export interface UpsertCustomerCommand {

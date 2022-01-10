@@ -4,8 +4,9 @@ import {scheduleCommandParser} from 'src/app/api/adminSchedulesApi';
 import {ScheduleAdminResourceModel, UpsertScheduleCommand} from 'src/app/api/api';
 import ScheduleFormikInput from 'src/app/modules/admin/schedules/schedule-shift-input/schedule-formik-input';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
-import {KFlexRow} from 'src/app/shared/components/flex';
+import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
+import {KFormikState} from 'src/app/shared/components/forms/k-formik-state';
 
 
 const ScheduleUpsertForm: React.FunctionComponent<AdminEditContainerProps<ScheduleAdminResourceModel, UpsertScheduleCommand>> = (
@@ -24,15 +25,13 @@ const ScheduleUpsertForm: React.FunctionComponent<AdminEditContainerProps<Schedu
                      onCancel={onCancel}>
             <KFormikInput name="name"/>
             <FormGroup>
-                <KFlexRow align={'center'} justify={'center'}>
-                    <ScheduleFormikInput name="monday"/>
-                    <ScheduleFormikInput name="tuesday"/>
-                    <ScheduleFormikInput name="wednesday"/>
-                    <ScheduleFormikInput name="thursday"/>
-                    <ScheduleFormikInput name="friday"/>
-                    <ScheduleFormikInput name="saturday"/>
-                    <ScheduleFormikInput name="sunday"/>
-                </KFlexRow>
+                <ScheduleFormikInput name="monday"/>
+                <ScheduleFormikInput name="tuesday"/>
+                <ScheduleFormikInput name="wednesday"/>
+                <ScheduleFormikInput name="thursday"/>
+                <ScheduleFormikInput name="friday"/>
+                <ScheduleFormikInput name="saturday"/>
+                <ScheduleFormikInput name="sunday"/>
             </FormGroup>
         </KFormikForm>
     )

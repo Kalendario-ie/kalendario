@@ -1,5 +1,5 @@
 import React from 'react';
-import {getShift, isAvailable} from 'src/app/api/adminSchedulesApi';
+import {getFramesForDate, isAvailable} from 'src/app/api/adminSchedulesApi';
 import {Appointment} from 'src/app/api/appointments';
 import {Employee} from 'src/app/api/employees';
 import {useSelectPanelEmployees} from 'src/app/modules/admin/appointments/employee-panel/hooks';
@@ -56,7 +56,7 @@ const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
     }
 
     function backgroundColor(hour: number, minute: number) {
-        return schedule && getShift(schedule, currentDate)
+        return schedule && getFramesForDate(schedule, currentDate)
             .some(frame => isAvailable(frame, hour, minute)) ? '' : styles.unavailableSlot;
     }
 

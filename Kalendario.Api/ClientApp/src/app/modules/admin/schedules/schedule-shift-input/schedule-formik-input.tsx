@@ -1,38 +1,9 @@
 import {useFormikContext} from 'formik';
-import React, {useState} from 'react';
-import {FormattedMessage} from 'react-intl';
-import {UpsertScheduleRequestFrame} from 'src/app/api/schedule/requests';
-import {KFlexColumn} from 'src/app/shared/components/flex';
+import React from 'react';
+import {CreateScheduleFrame} from 'src/app/api/api';
+import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikInput} from 'src/app/shared/components/forms';
-import KModal from 'src/app/shared/components/modal/k-modal';
 import {KIconButton} from 'src/app/shared/components/primitives/buttons';
-import KShowOnHoverContainer from 'src/app/shared/components/primitives/containers/k-show-on-hover-container';
-import styles from './schedule-formik-input.module.scss';
-
-interface ScheduleFrameProps {
-    frame: UpsertScheduleRequestFrame;
-    onClick: () => void;
-}
-
-const ScheduleFrame: React.FunctionComponent<ScheduleFrameProps> = (
-    {
-        frame,
-        onClick
-    }) => {
-    // const [start, end] = [timeFromString(frame.start), timeFromString(frame.end)];
-    // const top = +(start.hours + 1 + start.minutes / 60) * 3
-    // const height = ((end.hours + end.minutes / 60) - (start.hours + start.minutes / 60)) * 3
-
-    return (
-        <></>
-        // <div className={`${styles.frameBox} bg-accent c-pointer`}
-        //      onClick={onClick}
-        //      style={{
-        //          top: `${top}rem`,
-        //          height: `${height}rem`
-        //      }}/>
-    )
-}
 
 interface ScheduleFormikInputProps {
     name: string;
@@ -44,87 +15,33 @@ const ScheduleFormikInput: React.FunctionComponent<ScheduleFormikInputProps> = (
         name
     }) => {
     const formik = useFormikContext();
-    const accessor = `${name}.frames`;
-    const formikValues = formik.getFieldProps<UpsertScheduleRequestFrame[]>(accessor);
-    const formikHelpers = formik.getFieldHelpers(accessor);
-    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const formikValues = formik.getFieldProps<CreateScheduleFrame[]>(name);
+    const formikHelpers = formik.getFieldHelpers(name);
 
-    const isMonday = name === 'mon';
-    const hours = Array.from(Array(24).keys());
-    const className = `${styles.lineCell} ${isMonday ? '' : styles.borderLeft}`;
-
-    const handleAddClick = (hours: number) => () => {
-        // const newFrame = {start: timeToString({...Zero(), hours}), end: timeToString({...Zero(), hours: hours + 1})};
-        // const values = [...formikValues.value, newFrame];
-        // formikHelpers.setValue(values);
-        // setSelectedIndex(values.length - 1);
-        // setIsModalOpen(true); //TODO FIX HERE.
+    const handleAddClick = () => {
+        const newFrame = {start: `00:00`, end: `00:00`};
+        const values = [...formikValues.value, newFrame];
+        formikHelpers.setValue(values);
     }
 
-    const handleFrameClick = (index: number) => () => {
-        setSelectedIndex(index);
-        setIsModalOpen(true);
+    const handleFrameDelete = (indexToRemove: number) => () => {
+        formikHelpers.setValue(formikValues.value.filter((v, index) => index !== indexToRemove));
     }
-
-    const handleModalCancel = () => {
-        setIsModalOpen(false);
-        setSelectedIndex(null);
-    }
-
-    const handleModalDelete = () => {
-        const toDelete = selectedIndex!;
-        setIsModalOpen(false);
-        setSelectedIndex(null);
-        formikValues.value.splice(toDelete, 1);
-    }
-
-    const hourCell = (hours: number) =>
-        <KFlexColumn className="position-relative">
-            {/*{isMonday && <div className={styles.hourBox}>{timeToString({...Zero(), hours})}</div>}*/}
-            <KShowOnHoverContainer className={className}>
-                <KIconButton color="primary" onClick={handleAddClick(hours)} icon="plus-square"/>
-            </KShowOnHoverContainer>
-        </KFlexColumn>
-
-    const modal = <KModal header={<FormattedMessage id="ADMIN.SCHEDULE.EDIT-FRAME-MODAL"/>}
-                          body={
-                              <>
-                                  {accessor &&
-                                  <>
-                                      <KFormikInput placeholder="Start"
-                                                    name={`${accessor}[${selectedIndex}].start`}
-                                                    type="time"/>
-                                      <KFormikInput placeholder="End"
-                                                    name={`${accessor}[${selectedIndex}].end`}
-                                                    type="time"/>
-                                  </>
-                                  }
-                              </>
-                          }
-                          onCancel={handleModalCancel}
-                          isOpen={isModalOpen}
-                          buttons={[
-                              {text: 'confirm', onClick: handleModalCancel, color: 'primary'},
-                              {text: 'delete', onClick: handleModalDelete, color: 'danger'}
-                          ]}
-    />
 
     return (
-        <>
-            <KFlexColumn className="position-relative" align={'center'}>
-                <div className={className}>{name}</div>
-                {formikValues.value.map((frame, i) =>
-                    <ScheduleFrame key={i}
-                                   frame={frame}
-                                   onClick={handleFrameClick(i)}/>
-                )}
-                {hours.map((hour, i) => hourCell(hour))}
-            </KFlexColumn>
-            {modal}
-
-        </>
-
+        <KFlexColumn>
+            <KFlexRow>
+                {name}
+                <KIconButton icon={'plus'} color={'primary'} onClick={handleAddClick}/>
+            </KFlexRow>
+            {formikValues.value.map((frame, i) =>
+                <KFlexRow key={i} align={'center'}>
+                    <KFormikInput placeholder="Start" name={`${name}[${i}].start`} type="time"/>
+                    <KFormikInput placeholder="End" name={`${name}[${i}].end`} type="time"/>
+                    <KIconButton icon={'trash'} color={'danger'} onClick={handleFrameDelete(i)}/>
+                </KFlexRow>
+            )}
+        </KFlexColumn>
     )
 }
 

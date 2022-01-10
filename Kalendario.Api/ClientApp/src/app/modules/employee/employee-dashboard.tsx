@@ -2,7 +2,7 @@ import moment, {Moment} from 'moment';
 import React, {useEffect, useState} from 'react';
 import {isMobile} from 'react-device-detect';
 import {useSelector} from 'react-redux';
-import {getShift} from 'src/app/api/adminSchedulesApi';
+import {getFramesForDate} from 'src/app/api/adminSchedulesApi';
 import {ScheduleAdminResourceModel} from 'src/app/api/api';
 import {Appointment} from 'src/app/api/appointments';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
@@ -94,7 +94,7 @@ interface EmployeeScheduleViewProps {
 }
 
 const EmployeeScheduleView: React.FunctionComponent<EmployeeScheduleViewProps> = ({date, schedule}) => {
-    const frames = getShift(schedule, date);
+    const frames = getFramesForDate(schedule, date);
     return (
         <KFlexRow justify="center">
             {frames.map((frame, index) =>
