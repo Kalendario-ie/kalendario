@@ -17,7 +17,7 @@ interface AdminListEditContainerProps<TEntity, TUpsertCommand> {
     filter?: (value: string | undefined) => void;
     detailsUrl?: string;
     initializeStore?: boolean;
-    EditContainer: React.FunctionComponent<AdminEditContainerProps<TEntity>>;
+    EditContainer: React.FunctionComponent<AdminEditContainerProps<TEntity, TUpsertCommand>>;
     ListContainer: React.FunctionComponent<AdminTableContainerProps<TEntity>>;
 }
 

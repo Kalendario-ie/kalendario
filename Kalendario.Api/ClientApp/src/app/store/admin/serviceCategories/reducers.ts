@@ -1,5 +1,5 @@
 import {ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand} from 'src/app/api/api';
-import {adminServiceCategoryClient, ServiceCategory} from 'src/app/api/services';
+import {adminServiceCategoryClient} from 'src/app/api/serviceCategoryApi';
 import {kCreateBaseStore} from 'src/app/store/admin/common/adapter';
 
 const storeName = 'adminServiceCategories';

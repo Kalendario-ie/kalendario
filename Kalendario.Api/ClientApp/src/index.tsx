@@ -1,11 +1,9 @@
-import {Elements} from '@stripe/react-stripe-js';
 import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
 import {configureBaseApi} from 'src/app/api/common/clients/base-api';
-import {configureStripe} from 'src/app/external-apis/configure-stripe';
 import AuthAutoLogin from 'src/app/shared/context-providers/auth-auto-login';
 import {store} from 'src/app/store/store';
 import App from './app/App';
@@ -18,7 +16,7 @@ const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') ||
 const rootElement = document.getElementById('root');
 
 configureBaseApi();
-const stripePromise = configureStripe();
+// const stripePromise = configureStripe();
 
 ReactDOM.render(
     <React.StrictMode>
@@ -26,9 +24,9 @@ ReactDOM.render(
             {/*<Router history={history}>*/}
                 <Provider store={store}>
                     <AuthAutoLogin>
-                        <Elements stripe={stripePromise}>
+                        {/*<Elements stripe={stripePromise}>*/}
                             <App/>
-                        </Elements>
+                        {/*</Elements>*/}
                     </AuthAutoLogin>
                 </Provider>
             {/*</Router>*/}

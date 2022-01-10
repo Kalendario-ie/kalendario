@@ -156,7 +156,7 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand>(
 
     function* fetchEntities(action: { type: string, payload: { search: string | undefined, start: number | undefined, length: number | undefined } }) {
         try {
-            const result: ApiListResult<TEntity> = yield call(client.get, action.payload.search, action.payload.start, action.payload.length);
+            const result: ApiListResult<TEntity> = yield call(client.get, action.payload?.search, action.payload?.start, action.payload?.length);
             yield put(slice.actions.upsertMany(result.entities));
             yield put(slice.actions.setInitialized(true));
         } catch (error) {

@@ -1,6 +1,11 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {Employee, upsertEmployeeRequestParser, UpsertEmployeeRequestValidation} from 'src/app/api/employees';
+import {
+    Employee,
+    UpsertEmployeeRequest,
+    upsertEmployeeRequestParser,
+    UpsertEmployeeRequestValidation
+} from 'src/app/api/employees';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
@@ -10,7 +15,7 @@ import {scheduleActions, scheduleSelectors} from 'src/app/store/admin/schedules'
 import {serviceCategoryActions} from 'src/app/store/admin/serviceCategories';
 import {serviceActions, serviceSelectors} from 'src/app/store/admin/services';
 
-const EmployeeUpsertForm: React.FunctionComponent<AdminEditContainerProps<Employee>> = (
+const EmployeeUpsertForm: React.FunctionComponent<AdminEditContainerProps<Employee, UpsertEmployeeRequest>> = (
     {
         entity,
         apiError,
@@ -32,7 +37,7 @@ const EmployeeUpsertForm: React.FunctionComponent<AdminEditContainerProps<Employ
     return (
         <KFormikForm initialValues={upsertEmployeeRequestParser(entity)}
                      apiError={apiError}
-                     onSubmit={onSubmit}
+                     onSubmit={(values => onSubmit(values, entity?.id.toString()))}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
                      validationSchema={UpsertEmployeeRequestValidation}

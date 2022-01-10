@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {
-    PermissionGroup,
+    PermissionGroup, UpsertPermissionGroupRequest,
     upsertPermissionGroupRequestParser,
     UpsertPermissionRequestValidation
 } from 'src/app/api/permissions';
@@ -11,7 +11,7 @@ import {useAppDispatch} from 'src/app/store';
 import {permissionsActions, permissionSelectors} from 'src/app/store/admin/permissions';
 
 
-const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps<PermissionGroup>> = (
+const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps<PermissionGroup, UpsertPermissionGroupRequest>> = (
     {
         entity,
         apiError,
@@ -29,7 +29,7 @@ const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps
     return (
         <KFormikForm initialValues={upsertPermissionGroupRequestParser(entity)}
                      apiError={apiError}
-                     onSubmit={onSubmit}
+                     onSubmit={(values => onSubmit(values, entity?.id.toString()))}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
                      validationSchema={UpsertPermissionRequestValidation}

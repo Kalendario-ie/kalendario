@@ -1,5 +1,5 @@
 import {AxiosInstance, AxiosRequestConfig} from 'axios';
-import {authApi} from 'src/app/api/auth';
+import authService from 'src/components/api-authorization/AuthorizeService';
 import {getToken, removeToken} from '../session-storage';
 import {ApiBaseError} from '../api-errors';
 
@@ -23,12 +23,16 @@ export const setupAuthHandlers = (apiAxios: AxiosInstance) => {
             }
             if (!config._retry) {
                 config._retry = true;
-                return authApi.refreshAccessToken(apiAxios)
-                    .then(access_token => {
-                        if (access_token) {
-                            apiAxios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-                            return apiAxios(config);
-                        }
+                return authService.signIn()
+                    .then(res => {
+                        console.log(res)
+                        return authService.getAccessToken()
+                            .then(access_token => {
+                                if (access_token) {
+                                    apiAxios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+                                    return apiAxios(config);
+                                }
+                            });
                     });
             }
         }

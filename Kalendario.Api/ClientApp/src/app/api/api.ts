@@ -1134,7 +1134,7 @@ export class WeatherForecastClient implements IWeatherForecastClient {
      * @return Success
      */
     weatherForecast(  cancelToken?: CancelToken | undefined): Promise<WeatherForecast[]> {
-        let url_ = this.baseUrl + "/WeatherForecast";
+        let url_ = this.baseUrl + "/api/WeatherForecast";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <AxiosRequestConfig>{
@@ -1312,7 +1312,7 @@ export interface UpsertScheduleCommand {
 
 export interface UpsertServiceCategoryCommand {
     name: string | undefined;
-    colour: Colour;
+    colour: string | undefined;
 }
 
 export interface UpsertServiceCommand {

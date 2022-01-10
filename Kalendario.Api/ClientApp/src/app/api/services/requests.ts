@@ -21,12 +21,7 @@ export const UpsertServiceRequestValidation = yup.object().shape({
     color: yup.string().required(),
 });
 
-export interface UpsertServiceCategoryRequest {
-    name: string;
-    color: string;
-}
-
 export const UpsertServiceCategoryRequestValidation = yup.object().shape({
     name: yup.string().required().max(255),
-    color: yup.string().required(),
+    colour: yup.string().required(),
 });

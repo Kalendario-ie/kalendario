@@ -1,9 +1,9 @@
 import {ApiValidationError} from 'src/app/api/common/api-errors';
 
-export interface AdminEditContainerProps<TEntity> {
+export interface AdminEditContainerProps<TEntity, TUpsertCommand> {
     entity: TEntity | null;
     apiError: ApiValidationError | null;
-    onSubmit: (values: any) => void;
+    onSubmit: (values: TUpsertCommand, id: string | undefined) => void;
     isSubmitting: boolean;
     onCancel: () => void;
 }

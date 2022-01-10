@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {
     Appointment,
     CustomerAppointment,
-    EventType,
+    EventType, UpsertCustomerAppointmentRequest,
     upsertCustomerAppointmentRequestParser,
-    UpsertCustomerAppointmentRequestValidation,
+    UpsertCustomerAppointmentRequestValidation, UpsertEmployeeEventRequest,
     upsertEmployeeEventRequestParser,
     UpsertEmployeeEventRequestValidation
 } from 'src/app/api/appointments';
@@ -21,7 +21,7 @@ import {appointmentActions} from 'src/app/store/admin/appointments';
 import {serviceActions} from 'src/app/store/admin/services';
 import CustomerAppointmentUpsertForm from './customer-appointment-upsert-form';
 
-const AppointmentUpsertForm: React.FunctionComponent<AdminEditContainerProps<Appointment>> = (
+const AppointmentUpsertForm: React.FunctionComponent<AdminEditContainerProps<Appointment, UpsertCustomerAppointmentRequest | UpsertEmployeeEventRequest>> = (
     {
         entity,
         apiError,
@@ -45,8 +45,8 @@ const AppointmentUpsertForm: React.FunctionComponent<AdminEditContainerProps<App
 
     return (
         <KFormikForm initialValues={initialValues}
+                     onSubmit={(values => onSubmit(values, entity?.id.toString()))}
                      apiError={apiError}
-                     onSubmit={onSubmit}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
                      validationSchema={validationSchema}

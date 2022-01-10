@@ -1,15 +1,12 @@
 import {
-    Colour,
     ServiceAdminResourceModel,
     ServiceCategoryAdminResourceModel,
     UpsertServiceCategoryCommand,
     UpsertServiceCommand
 } from 'src/app/api/api';
 import {PermissionModel} from 'src/app/api/auth';
-import {timeFromString, timeToISOString, Zero} from 'src/app/api/common/models';
+import {timeFromString, Zero} from 'src/app/api/common/models';
 import {Service, ServiceCategory} from 'src/app/api/services/models';
-import {UpsertServiceCategoryRequest, UpsertServiceRequest} from 'src/app/api/services/requests';
-
 
 export function serviceParser(data?: any): Service {
     return {
@@ -31,7 +28,7 @@ export function createUpsertServiceCommand(service: ServiceAdminResourceModel | 
         description: service.description,
         price: service.price,
         duration: service.duration,
-        serviceCategoryId: timeToISOString(service.duration),
+        serviceCategoryId: undefined,
     } : {
         name: '',
         description: '',
@@ -44,9 +41,9 @@ export function createUpsertServiceCommand(service: ServiceAdminResourceModel | 
 export function createUpsertServiceCategoryRequest(category: ServiceCategoryAdminResourceModel | null | undefined): UpsertServiceCategoryCommand {
     return category ? {
         name: category.name,
-        colour: category.colour || {code: '#FFFFFF'}
+        colour: category.colour.code || '#FFFFFF'
     } : {
         name: '',
-        colour: {code: '#FFFFFF'},
+        colour: '#FFFFFF',
     }
 }

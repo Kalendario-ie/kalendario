@@ -1,12 +1,13 @@
 import React from 'react';
 import {SchedulingPanel} from 'src/app/api/scheduling-panels/models';
 import {upsertSchedulingPanelRequestParser} from 'src/app/api/scheduling-panels/parsers';
+import {UpsertSchedulingPanelRequest} from 'src/app/api/scheduling-panels/requests';
 import {useSelectAll} from 'src/app/shared/admin/hooks';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import {employeeActions, employeeSelectors} from 'src/app/store/admin/employees';
 
-const SchedulingPanelForm: React.FunctionComponent<AdminEditContainerProps<SchedulingPanel>> = (
+const SchedulingPanelForm: React.FunctionComponent<AdminEditContainerProps<SchedulingPanel, UpsertSchedulingPanelRequest>> = (
     {
         entity,
         apiError,
@@ -19,7 +20,7 @@ const SchedulingPanelForm: React.FunctionComponent<AdminEditContainerProps<Sched
     return (
         <KFormikForm initialValues={upsertSchedulingPanelRequestParser(entity)}
                      apiError={apiError}
-                     onSubmit={onSubmit}
+                     onSubmit={(values => onSubmit(values, entity?.id.toString()))}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
         >

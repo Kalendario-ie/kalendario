@@ -18,12 +18,12 @@ export class AuthorizeService {
 
     async getUser() {
         if (this._user && this._user.profile) {
-            return this._user.profile;
+            return this._user;
         }
 
         await this.ensureUserManagerInitialized();
         const user = await this.userManager.getUser();
-        return user && user.profile;
+        return user;
     }
 
     async getAccessToken() {

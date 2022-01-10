@@ -8,7 +8,7 @@ import {ExtendedBaseActions, BaseSelectors, BaseActions} from 'src/app/store/adm
 export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     baseSelectors: BaseSelectors<TEntity>,
     baseActions: ExtendedBaseActions<TUpsertCommand>,
-    EditContainer: React.FunctionComponent<AdminEditContainerProps<TEntity>>
+    EditContainer: React.FunctionComponent<AdminEditContainerProps<TEntity, TUpsertCommand>>
 ): [(entity: TEntity | null) => () => void, JSX.Element, TEntity | undefined] {
     const [selectedEntity, setSelectedEntity] = useState<TEntity | null>(null);
     const apiError = useAppSelector(baseSelectors.selectApiError);
@@ -22,11 +22,11 @@ export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
         dispatch(baseActions.setEditMode(false));
     }
 
-    const handleSubmit = (entity: any): void => {
-        if (!selectedEntity || selectedEntity.id === 0) {
-            dispatch(baseActions.createEntity({command: entity}));
+    const handleSubmit = (command: TUpsertCommand, id: string | undefined): void => {
+        if (!id) {
+            dispatch(baseActions.createEntity({command}));
         } else {
-            dispatch(baseActions.patchEntity({id: selectedEntity.id.toString(), command: entity})); // todo remove to string later.
+            dispatch(baseActions.patchEntity({id, command}));
         }
     }
 

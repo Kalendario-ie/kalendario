@@ -1,11 +1,11 @@
 import React from 'react';
-import {CustomerAdminResourceModel} from 'src/app/api/api';
+import {CustomerAdminResourceModel, UpsertCustomerCommand} from 'src/app/api/api';
 import {Customer, saveCustomerRequestParser} from 'src/app/api/customers';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import * as yup from 'yup';
 
-const CustomerUpsertForm: React.FunctionComponent<AdminEditContainerProps<CustomerAdminResourceModel>> = (
+const CustomerUpsertForm: React.FunctionComponent<AdminEditContainerProps<CustomerAdminResourceModel, UpsertCustomerCommand>> = (
     {
         entity,
         apiError,
@@ -22,7 +22,7 @@ const CustomerUpsertForm: React.FunctionComponent<AdminEditContainerProps<Custom
     return (
         <KFormikForm initialValues={saveCustomerRequestParser(entity)}
                      apiError={apiError}
-                     onSubmit={onSubmit}
+                     onSubmit={(values => onSubmit(values, entity?.id))}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
                      validationSchema={validation}

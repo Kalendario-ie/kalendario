@@ -20,22 +20,22 @@ const AppointmentsContainer: React.FunctionComponent = () => {
     useInitializeEffect(employeeActions);
     useInitializeEffect(scheduleActions);
     useReloadAppointmentsEffect();
-    const [openModal, formModal] = useEditModal<Appointment, Appointment>(appointmentSelectors, appointmentActions, AppointmentUpsertForm);
-
+    // const [openModal, formModal] = useEditModal<Appointment, Appointment>(appointmentSelectors, appointmentActions, AppointmentUpsertForm);
+    //TODO: FIX HERE.
     return (
         <KFlexColumn>
-            {formModal}
-            <KFlexColumn className="sticky-top bg-white-gray">
-                <KFlexRow>
-                    <SchedulingPanelsSelector/>
-                </KFlexRow>
-                <KFlexRow>
-                    <SchedulingDateSelectorContainer/>
-                </KFlexRow>
-                <EmployeePanelHeadersContainer onCreateClick={openModal}/>
-            </KFlexColumn>
-            <TimeLineContainer/>
-            <EmployeePanelsBodyContainer onSelect={openModal}/>
+            {/*{formModal}*/}
+            {/*<KFlexColumn className="sticky-top bg-white-gray">*/}
+            {/*    <KFlexRow>*/}
+            {/*        <SchedulingPanelsSelector/>*/}
+            {/*    </KFlexRow>*/}
+            {/*    <KFlexRow>*/}
+            {/*        <SchedulingDateSelectorContainer/>*/}
+            {/*    </KFlexRow>*/}
+            {/*    <EmployeePanelHeadersContainer onCreateClick={openModal}/>*/}
+            {/*</KFlexColumn>*/}
+            {/*<TimeLineContainer/>*/}
+            {/*<EmployeePanelsBodyContainer onSelect={openModal}/>*/}
         </KFlexColumn>
     )
 }

@@ -26,7 +26,7 @@ const CreateCompanyContainer: React.FunctionComponent = () => {
         <KPageContainer>
             <KFlexRow justify="center">
                 <KCard header="Create Company">
-                    <KFormikForm initialValues={adminCompanyParser(null)}
+                    <KFormikForm initialValues={{name: ''}}
                                  apiError={apiError}
                                  isSubmitting={isSubmitting}
                                  onSubmit={onSubmit}

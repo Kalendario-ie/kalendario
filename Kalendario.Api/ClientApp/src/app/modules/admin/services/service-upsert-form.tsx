@@ -1,5 +1,5 @@
 import React from 'react';
-import {ServiceAdminResourceModel} from 'src/app/api/api';
+import {ServiceAdminResourceModel, UpsertServiceCommand} from 'src/app/api/api';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
 import {createUpsertServiceCommand} from 'src/app/api/services';
 import {UpsertServiceRequestValidation} from 'src/app/api/services/requests';
@@ -12,7 +12,7 @@ import {useAppSelector} from 'src/app/store';
 import {serviceCategoryActions, serviceCategorySelectors} from 'src/app/store/admin/serviceCategories';
 import ServiceCategoryUpsertForm from './service-category-upsert-form';
 
-const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<ServiceAdminResourceModel>> = (
+const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<ServiceAdminResourceModel, UpsertServiceCommand>> = (
     {
         entity,
         apiError,
@@ -28,7 +28,7 @@ const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<Service
     return (
         <KFormikForm initialValues={createUpsertServiceCommand(entity)}
                      apiError={apiError}
-                     onSubmit={onSubmit}
+                     onSubmit={(values => onSubmit(values, entity?.id))}
                      onCancel={onCancel}
                      isSubmitting={isSubmitting}
                      validationSchema={UpsertServiceRequestValidation}
@@ -46,7 +46,7 @@ const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<Service
                                      onClick={openModal(null)}/>
                     </KFlexRow>
                     <KFormikInput name="name"/>
-                    <KFormikInput name="duration" as="duration"/>
+                    {/*<KFormikInput name="duration" as="duration"/>*/}
                     <KFormikInput name="color" as="color"/>
                     <KFormikInput name="description"/>
                     <KFormikInput name="cost" type="number"/>
