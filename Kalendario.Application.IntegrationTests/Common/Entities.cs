@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Kalendario.Core.Entities;
+using Kalendario.Core.ValueObject;
 
 namespace Kalendario.Application.IntegrationTests.Common;
 
@@ -24,7 +25,7 @@ public class Entities
             CreateFrame(DayOfWeek.Saturday, 0, "13:00", "14:00"),
         }
     };
-    
+
     public static Customer TestCustomer(string accountId = Constants.CurrentUserAccountIdString) => new()
     {
         Name = "Example",
@@ -33,7 +34,24 @@ public class Entities
         Email = "teste@test.com",
         Warning = "this is a warning"
     };
-    
+
+    public static Service TestService(Guid serviceCategoryId, string accountId = Constants.CurrentUserAccountIdString) => new()
+    {
+        Name = "Example",
+        AccountId = Guid.Parse(accountId),
+        Description = "Description Example",
+        Price = 20.1,
+        Duration = TimeSpan.FromHours(1),
+        ServiceCategoryId = serviceCategoryId
+    };
+
+    public static ServiceCategory TestServiceCategory(string accountId = Constants.CurrentUserAccountIdString) => new()
+    {
+        Name = "category 1",
+        AccountId = Guid.Parse(accountId),
+        Colour = Colour.Blue
+    };
+
     private static ScheduleFrame CreateFrame(DayOfWeek offset, int order, string start, string end)
     {
         return new ScheduleFrame
