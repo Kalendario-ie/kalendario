@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import {AdminCompany, adminCompanyClient, adminCompanyParser} from 'src/app/api/admin-companies';
+import {adminCompanyClient} from 'src/app/api/admin-companies';
 import {CreateAccountCommand} from 'src/app/api/api';
 import {ApiValidationError} from 'src/app/api/common/api-errors';
 import {ADMIN_ROUTES} from 'src/app/modules/admin/urls';

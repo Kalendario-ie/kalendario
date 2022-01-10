@@ -35,7 +35,7 @@ const Event: React.FunctionComponent<EventProps> = (
     const duration = moment.duration(end.diff(start));
 
     const backgroundColor = customerAppointment ? customerAppointment.service.toString() : '#FFFFFF'; //todo service category color.
-    const title = customerAppointment ? customerAppointment.customer.name : appointment.internalNotes;
+    const title = customerAppointment ? customerAppointment.customer : appointment.internalNotes; //todo: customer.name
     const subTitle = customerAppointment ? customerAppointment.service : ''; //todo service name
 
     const style: React.CSSProperties = {

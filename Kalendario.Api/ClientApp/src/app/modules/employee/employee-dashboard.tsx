@@ -120,7 +120,7 @@ const EmployeeDashboardAppointment: React.FunctionComponent<EmployeeDashboardApp
     const end = stringToMoment(appointment.end).format('HH:mm')
 
     const customerNotes = 'customerNotes' in appointment ? appointment.customerNotes : '';
-    const customerName = 'customer' in appointment ? appointment.customer?.name : '';
+    const customerName = 'customer' in appointment ? appointment.customer : ''; // todo customer?.name
     const serviceName = 'service' in appointment ? appointment.service?.toString() : ''; //todo fix here.
 
     return (

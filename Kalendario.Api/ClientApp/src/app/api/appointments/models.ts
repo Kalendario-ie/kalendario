@@ -2,7 +2,6 @@ import {Moment} from 'moment';
 import {HistoryType} from 'src/app/api/common/HistoryType';
 import {IReadModel} from 'src/app/api/common/models';
 import {Company} from 'src/app/api/companies';
-import {Customer} from 'src/app/api/customers';
 import {Employee} from 'src/app/api/employees/models';
 import {AdminUser} from 'src/app/api/users/models';
 
@@ -28,7 +27,7 @@ export interface CustomerRequestAppointment extends CustomerAppointment {
 }
 
 export interface CustomerAppointment extends BaseAppointment {
-    customer: Customer;
+    customer: null;
     service: number;
 }
 
@@ -38,7 +37,7 @@ export interface EmployeeEvent extends BaseAppointment {
 }
 
 export interface BaseAppointment extends IReadModel {
-    customer: Customer | null;
+    customer: null;
     service: number | null;
     type: EventType;
     start: string;

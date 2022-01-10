@@ -4,9 +4,7 @@ import {scheduleCommandParser} from 'src/app/api/adminSchedulesApi';
 import {ScheduleAdminResourceModel, UpsertScheduleCommand} from 'src/app/api/api';
 import ScheduleFormikInput from 'src/app/modules/admin/schedules/schedule-shift-input/schedule-formik-input';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
-import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
-import {KFormikState} from 'src/app/shared/components/forms/k-formik-state';
 
 
 const ScheduleUpsertForm: React.FunctionComponent<AdminEditContainerProps<ScheduleAdminResourceModel, UpsertScheduleCommand>> = (

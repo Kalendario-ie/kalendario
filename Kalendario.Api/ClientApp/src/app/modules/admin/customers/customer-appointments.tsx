@@ -3,7 +3,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import {CustomerAdminResourceModel} from 'src/app/api/api';
 import {Appointment} from 'src/app/api/appointments';
 import {PermissionModel} from 'src/app/api/auth';
-import {Customer} from 'src/app/api/customers';
 import AppointmentUpsertForm from 'src/app/modules/admin/appointments/forms/appointment-upsert-form';
 import AdminListEditContainer from 'src/app/shared/admin/admin-list-edit-container';
 import {useSelectAll} from 'src/app/shared/admin/hooks';

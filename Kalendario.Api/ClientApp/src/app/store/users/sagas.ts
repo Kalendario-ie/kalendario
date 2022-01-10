@@ -1,8 +1,4 @@
-import {call, put, select, takeEvery} from 'redux-saga/effects';
-import {Appointment, appointmentClient} from 'src/app/api/appointments';
-import {ApiBaseError} from 'src/app/api/common/api-errors';
-import {ApiListResult} from 'src/app/api/common/api-results';
-import {eventsRequestFail, eventsRequestSuccess} from 'src/app/store/users/actions';
+import {select, takeEvery} from 'redux-saga/effects';
 import {selectEnd, selectStart} from 'src/app/store/users/selectors';
 import {ACTION_TYPES} from 'src/app/store/users/types';
 

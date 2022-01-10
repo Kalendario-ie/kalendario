@@ -9,7 +9,6 @@ import {
 } from 'src/app/api/appointments/models';
 import {UpsertCustomerAppointmentRequest, UpsertEmployeeEventRequest} from 'src/app/api/appointments/requests';
 import {PermissionModel} from 'src/app/api/auth';
-import {customerParser} from 'src/app/api/customers';
 import {employeeParser} from 'src/app/api/employees';
 import {userParser} from 'src/app/api/users';
 import {momentToIso} from 'src/app/shared/util/moment-helpers';
@@ -37,20 +36,19 @@ function customerAppointmentParser(data: any): CustomerAppointment {
     return {
         ...employeeEventParser(data),
         type: EventType.CustomerAppointment,
-        customer: customerParser(data.customer),
+        customer: null,
         service: 0,
     }
 }
 
 function employeeEventParser(data: any): EmployeeEvent {
-    const result = {
+    return  {
         ...data,
         permissionModel: PermissionModel.appointment,
         type: EventType.EmployeeEvent,
         name: '',
         employee: employeeParser(data.employee),
     }
-    return result;
 }
 
 export function appointmentHistoryParser(data: any): AppointmentHistory {

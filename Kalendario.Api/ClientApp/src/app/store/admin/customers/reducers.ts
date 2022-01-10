@@ -1,4 +1,4 @@
-import {adminCustomerClient} from 'src/app/api/customers';
+import {adminCustomerClient} from 'src/app/api/adminCustomerApi';
 import {kCreateBaseStore} from 'src/app/store/admin/common/adapter';
 
 const storeName = 'adminCustomers';

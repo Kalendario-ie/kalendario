@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {adminAppointmentClient, AppointmentHistory} from 'src/app/api/appointments';
+import {AppointmentHistory} from 'src/app/api/appointments';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import KModal from 'src/app/shared/components/modal/k-modal';
 import {KCard} from 'src/app/shared/components/primitives/containers';
@@ -40,7 +40,7 @@ const AppointmentHistoryItem: React.FunctionComponent<AppointmentHistoryItemProp
             }
             {appointment.customer &&
             <KFlexRow align="center">
-                <KIcon icon="address-card" color="primary" margin={2}/> {appointment.customer.name}
+                <KIcon icon="address-card" color="primary" margin={2}/> {appointment.customer} //todo: customer.name
             </KFlexRow>
             }
             {appointment.internalNotes &&

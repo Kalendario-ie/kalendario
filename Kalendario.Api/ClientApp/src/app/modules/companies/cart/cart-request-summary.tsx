@@ -1,8 +1,8 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import {RequestModel} from 'src/app/api/requests';
+import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import AvatarImg from 'src/app/shared/components/primitives/avatar-img';
-import { KFlexColumn, KFlexRow } from 'src/app/shared/components/flex';
 import {stringToMoment} from 'src/app/shared/util/moment-helpers';
 
 interface CartRequestSummaryProps {

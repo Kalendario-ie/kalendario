@@ -1,9 +1,8 @@
 import React from 'react';
+import {upsertCustomerCommandParser, upsertCustomerCommandValidation} from 'src/app/api/adminCustomerApi';
 import {CustomerAdminResourceModel, UpsertCustomerCommand} from 'src/app/api/api';
-import {Customer, saveCustomerRequestParser} from 'src/app/api/customers';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
-import * as yup from 'yup';
 
 const CustomerUpsertForm: React.FunctionComponent<AdminEditContainerProps<CustomerAdminResourceModel, UpsertCustomerCommand>> = (
     {
@@ -13,24 +12,18 @@ const CustomerUpsertForm: React.FunctionComponent<AdminEditContainerProps<Custom
         isSubmitting,
         onCancel
     }) => {
-    const validation = yup.object().shape({
-        firstName: yup.string().required(),
-        lastName: yup.string().required(),
-        email: yup.string().required().email(),
-    });
 
     return (
-        <KFormikForm initialValues={saveCustomerRequestParser(entity)}
+        <KFormikForm initialValues={upsertCustomerCommandParser(entity)}
                      apiError={apiError}
                      onSubmit={(values => onSubmit(values, entity?.id))}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
-                     validationSchema={validation}
+                     validationSchema={upsertCustomerCommandValidation}
         >
-            <KFormikInput name="firstName"/>
-            <KFormikInput name="lastName"/>
+            <KFormikInput name="name"/>
             <KFormikInput name="email"/>
-            <KFormikInput name="phone"/>
+            <KFormikInput name="phoneNumber"/>
             <KFormikInput as="textarea" name="warning"/>
         </KFormikForm>
     )

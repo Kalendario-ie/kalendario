@@ -1,7 +1,7 @@
 import {createAction, createSelector, createSlice} from '@reduxjs/toolkit';
-import {call, put, select, takeEvery} from 'redux-saga/effects';
+import {put, select, takeEvery} from 'redux-saga/effects';
 import {ApiBaseError} from 'src/app/api/common/api-errors';
-import {adminPermissionGroupClient, Permission} from 'src/app/api/permissions';
+import {Permission} from 'src/app/api/permissions';
 import {RootState} from 'src/app/store/store';
 import {PayloadAction} from 'typesafe-actions';
 
