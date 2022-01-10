@@ -47,7 +47,7 @@ export class AccountsClient implements IAccountsClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -203,7 +203,7 @@ export class CustomersClient implements ICustomersClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -262,7 +262,7 @@ export class CustomersClient implements ICustomersClient {
             method: "PUT",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -579,7 +579,7 @@ export class SchedulesClient implements ISchedulesClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -638,7 +638,7 @@ export class SchedulesClient implements ISchedulesClient {
             method: "PUT",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -794,7 +794,7 @@ export class ServiceCategoriesClient implements IServiceCategoriesClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -853,7 +853,7 @@ export class ServiceCategoriesClient implements IServiceCategoriesClient {
             method: "PUT",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -1009,7 +1009,7 @@ export class ServicesClient implements IServicesClient {
             method: "POST",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -1068,7 +1068,7 @@ export class ServicesClient implements IServicesClient {
             method: "PUT",
             url: url_,
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/json-patch+json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -1285,11 +1285,6 @@ export interface TimeSpan {
     milliseconds: number;
     minutes: number;
     seconds: number;
-    readonly totalDays: number;
-    readonly totalHours: number;
-    readonly totalMilliseconds: number;
-    readonly totalMinutes: number;
-    readonly totalSeconds: number;
 }
 
 export interface UpsertCustomerCommand {

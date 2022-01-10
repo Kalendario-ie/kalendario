@@ -5,6 +5,8 @@ using Kalendario.Application.Common.Interfaces;
 using Kalendario.Infrastructure;
 using Kalendario.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
 
 namespace Kalendario.Api;
 
@@ -24,7 +26,6 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        
         services.AddInfrastructure(Configuration)
             .AddApplication();
 
@@ -33,11 +34,10 @@ public class Startup
         services.AddHealthChecks()
             .AddDbContextCheck<ApplicationDbContext>();
 
-        services.AddControllers();
-        services.AddControllersWithViews(o =>
-            {
-                o.Filters.Add<ApiExceptionFilterAttribute>();
-            })
+        services.AddControllers()
+            .AddNewtonsoftJson();
+
+        services.AddControllersWithViews(o => { o.Filters.Add<ApiExceptionFilterAttribute>(); })
             .AddFluentValidation(fv =>
             {
                 fv.AutomaticValidationEnabled = true;
@@ -48,9 +48,14 @@ public class Startup
         services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
 
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(s =>
+        services.AddSwaggerGen(options =>
         {
-            s.SupportNonNullableReferenceTypes();
+            options.SupportNonNullableReferenceTypes();
+            options.MapType(typeof(TimeSpan), () => new OpenApiSchema
+            {
+                Type = "string",
+                Example = new OpenApiString("00:00:00")
+            });
         });
     }
 
