@@ -330,13 +330,13 @@ public class UpsertScheduleCommandTests : TestBase
 
     private IEnumerable<CreateScheduleFrame> ConvertFrames(IEnumerable<ScheduleFrame> frames)
     {
-        return frames.Select(f => new CreateScheduleFrame {Start = f.Start, End = f.End});
+        return frames.Select(f => new CreateScheduleFrame {Start = f.Start.ToTimeSpan(), End = f.End.ToTimeSpan()});
     }
 
     private IEnumerable<CreateScheduleFrame> AddFrame(IEnumerable<ScheduleFrame> frames, TimeOnly start, TimeOnly end)
     {
         return ConvertFrames(frames)
-            .Append(new CreateScheduleFrame() {Start = start, End = end});
+            .Append(new CreateScheduleFrame() {Start = start.ToTimeSpan(), End = end.ToTimeSpan()});
     }
 
     private IEnumerable<CreateScheduleFrame> UpdateFrame(List<ScheduleFrame> frames, TimeOnly start, TimeOnly end)
@@ -348,7 +348,7 @@ public class UpsertScheduleCommandTests : TestBase
 
     private void AssertFrameTimes(ScheduleFrameAdminResourceModel resourceModel, TimeOnly start, TimeOnly end)
     {
-        Assert.AreEqual(resourceModel.Start, start);
-        Assert.AreEqual(resourceModel.End, end);
+        Assert.AreEqual(resourceModel.Start, start.ToTimeSpan());
+        Assert.AreEqual(resourceModel.End, end.ToTimeSpan());
     }
 }

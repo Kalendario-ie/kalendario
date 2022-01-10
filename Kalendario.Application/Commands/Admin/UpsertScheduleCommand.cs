@@ -58,7 +58,7 @@ public class UpsertScheduleCommand : BaseUpsertAdminCommand<ScheduleAdminResourc
         {
             return frames.Select((f, i) => new ScheduleFrame
             {
-                Start = f.Start, End = f.End, Order = i, Offset = dayOfWeek, AccountId = CurrentUserManager.CurrentUserAccountId
+                Start = TimeOnly.FromTimeSpan(f.Start), End = TimeOnly.FromTimeSpan(f.End), Order = i, Offset = dayOfWeek, AccountId = CurrentUserManager.CurrentUserAccountId
             });
         }
     }
@@ -66,7 +66,7 @@ public class UpsertScheduleCommand : BaseUpsertAdminCommand<ScheduleAdminResourc
 
 public class CreateScheduleFrame
 {
-    public TimeOnly Start { get; set; }
+    public TimeSpan Start { get; set; }
 
-    public TimeOnly End { get; set; }
+    public TimeSpan End { get; set; }
 }
