@@ -1,14 +1,14 @@
-import React, {ChangeEvent, useState} from 'react';
-import {TimeSpan} from 'src/app/api/api';
-import {timeFromString, TimeOfDay, timeToISOString, Zero} from 'src/app/api/common/models';
-import {KBaseInputProps} from 'src/app/shared/components/primitives/inputs/interfaces';
+import React from 'react';
 import {KFlexRow} from 'src/app/shared/components/flex';
+import {KBaseInputProps} from 'src/app/shared/components/primitives/inputs/interfaces';
 
 interface KFormikDurationInputProps extends KBaseInputProps {
     value: string;
     name: string;
 }
 
+
+//TODO: REMOVE THIS AND USE DEFAULT TIME INPUT INSTEAD.
 export const KDurationInput: React.FunctionComponent<KFormikDurationInputProps> = (
     {
         value,
@@ -18,21 +18,6 @@ export const KDurationInput: React.FunctionComponent<KFormikDurationInputProps> 
         onChange,
         onKeyUp,
     }) => {
-    const [timeOfDay, setTimeOfDay] = useState(timeFromString(value));
-
-    const hourHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        handleChange(e, {...Zero(), hours: +e.target.value, minutes: timeOfDay.minutes});
-    }
-
-    const minuteHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        handleChange(e, {...Zero(), hours: timeOfDay.hours, minutes: +e.target.value})
-    }
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>, newValue: TimeSpan) => {
-        const type = 'string';
-        setTimeOfDay(newValue);
-        onChange && onChange({...e, target: {...e.target, type, value: timeToISOString(newValue)}});
-    }
 
     const style = {
         width: '30%'
@@ -40,25 +25,19 @@ export const KDurationInput: React.FunctionComponent<KFormikDurationInputProps> 
 
     return (
         <KFlexRow className={className} justify={'center'}>
+            <input
+                style={style}
+                className="input-no-border"
+                name={`${name}.hours`}
+                type="number"/>
             <span className="mx-2">hour(s)</span>
             <input
                 style={style}
                 className="input-no-border"
-                name={name}
-                onBlur={onBlur}
-                onChange={hourHandler}
+                name={`${name}.minutes`}
                 type="number"
-                value={timeOfDay.hours}/>
+                max={60}/>
             <span className="mx-2">min(s)</span>
-            <input
-                style={style}
-                className="input-no-border"
-                name={name}
-                onBlur={onBlur}
-                onChange={minuteHandler}
-                type="number"
-                max={60}
-                value={timeOfDay.minutes}/>
         </KFlexRow>
     )
 }

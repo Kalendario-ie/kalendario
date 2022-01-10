@@ -1,5 +1,5 @@
 import {createSelector} from '@reduxjs/toolkit';
-import {adminServiceClient} from 'src/app/api/services';
+import {adminServiceClient} from 'src/app/api/servicesApi';
 import {kCreateBaseStore} from 'src/app/store/admin/common/adapter';
 import {serviceCategorySelectors} from '../serviceCategories';
 

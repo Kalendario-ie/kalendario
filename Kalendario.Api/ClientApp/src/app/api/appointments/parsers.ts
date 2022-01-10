@@ -11,7 +11,6 @@ import {UpsertCustomerAppointmentRequest, UpsertEmployeeEventRequest} from 'src/
 import {PermissionModel} from 'src/app/api/auth';
 import {customerParser} from 'src/app/api/customers';
 import {employeeParser} from 'src/app/api/employees';
-import {serviceParser} from 'src/app/api/services';
 import {userParser} from 'src/app/api/users';
 import {momentToIso} from 'src/app/shared/util/moment-helpers';
 
@@ -39,7 +38,7 @@ function customerAppointmentParser(data: any): CustomerAppointment {
         ...employeeEventParser(data),
         type: EventType.CustomerAppointment,
         customer: customerParser(data.customer),
-        service: serviceParser(data.service),
+        service: 0,
     }
 }
 

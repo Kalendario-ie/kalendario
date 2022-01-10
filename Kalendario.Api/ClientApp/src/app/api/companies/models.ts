@@ -2,7 +2,6 @@ import {Moment} from 'moment';
 import {IReadModel} from '../common/models';
 import {CompanyConfig} from '../company-config/models';
 import {Employee} from '../employees/models';
-import {Service, ServiceCategory} from '../services/models';
 
 export interface Company extends IReadModel {
     id: number;
@@ -19,8 +18,8 @@ export interface Company extends IReadModel {
 
 export interface CompanyDetails extends Company {
     employees: Employee[];
-    services: Service[];
-    serviceCategories: ServiceCategory[];
+    services: number[]; // todo public service RM
+    serviceCategories: number[]; // todo public service cat
     config: CompanyConfig;
 }
 

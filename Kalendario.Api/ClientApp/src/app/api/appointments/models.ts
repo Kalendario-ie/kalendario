@@ -4,7 +4,6 @@ import {IReadModel} from 'src/app/api/common/models';
 import {Company} from 'src/app/api/companies';
 import {Customer} from 'src/app/api/customers';
 import {Employee} from 'src/app/api/employees/models';
-import {Service} from 'src/app/api/services';
 import {AdminUser} from 'src/app/api/users/models';
 
 export enum EventType {
@@ -30,7 +29,7 @@ export interface CustomerRequestAppointment extends CustomerAppointment {
 
 export interface CustomerAppointment extends BaseAppointment {
     customer: Customer;
-    service: Service;
+    service: number;
 }
 
 export interface EmployeeEvent extends BaseAppointment {
@@ -40,7 +39,7 @@ export interface EmployeeEvent extends BaseAppointment {
 
 export interface BaseAppointment extends IReadModel {
     customer: Customer | null;
-    service: Service | null;
+    service: number | null;
     type: EventType;
     start: string;
     end: string;

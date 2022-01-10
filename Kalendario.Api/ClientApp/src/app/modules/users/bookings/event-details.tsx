@@ -31,12 +31,12 @@ const EventDetails: React.FunctionComponent<EventDetailsProps> = (
                 <div>
                     {appointment.employee.name}
                 </div>
-                <KFlexRow>
-                    {appointment.service.name}
-                    <span className="flex-fill c-primary text-right">
-                        {appointment.service.price}
-                        </span>
-                </KFlexRow>
+                {/*<KFlexRow>*/}
+                {/*    {appointment.service.name}*/}
+                {/*    <span className="flex-fill c-primary text-right">*/}
+                {/*        {appointment.service.price}*/}
+                {/*        </span>*/}
+                {/*</KFlexRow>*/}
             </KFlexColumn>
         </KFlexRow>
 

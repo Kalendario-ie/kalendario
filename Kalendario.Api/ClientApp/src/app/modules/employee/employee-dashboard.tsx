@@ -2,14 +2,14 @@ import moment, {Moment} from 'moment';
 import React, {useEffect, useState} from 'react';
 import {isMobile} from 'react-device-detect';
 import {useSelector} from 'react-redux';
+import {getShift} from 'src/app/api/adminSchedulesApi';
 import {ScheduleAdminResourceModel} from 'src/app/api/api';
-import {adminAppointmentClient, Appointment} from 'src/app/api/appointments';
-import {getShift, Schedule} from 'src/app/api/schedule';
+import {Appointment} from 'src/app/api/appointments';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KIconButton, KRoundedButton} from 'src/app/shared/components/primitives/buttons';
 import {KCard} from 'src/app/shared/components/primitives/containers';
 import KIcon from 'src/app/shared/components/primitives/k-icon';
-import {momentToIso, stringToMoment} from 'src/app/shared/util/moment-helpers';
+import {stringToMoment} from 'src/app/shared/util/moment-helpers';
 import {selectUserEmployee} from 'src/app/store/auth';
 
 function dates(startDate: Moment, endDate: Moment): Moment[] {
@@ -121,7 +121,7 @@ const EmployeeDashboardAppointment: React.FunctionComponent<EmployeeDashboardApp
 
     const customerNotes = 'customerNotes' in appointment ? appointment.customerNotes : '';
     const customerName = 'customer' in appointment ? appointment.customer?.name : '';
-    const serviceName = 'service' in appointment ? appointment.service?.name : '';
+    const serviceName = 'service' in appointment ? appointment.service?.toString() : ''; //todo fix here.
 
     return (
         <KFlexColumn key={appointment.id}>

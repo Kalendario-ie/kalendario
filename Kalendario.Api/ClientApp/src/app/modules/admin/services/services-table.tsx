@@ -1,9 +1,6 @@
 import React, {useEffect, useMemo} from 'react';
 import {ServiceAdminResourceModel} from 'src/app/api/api';
-import {timeToString} from 'src/app/api/common/models';
-import {Service} from 'src/app/api/services';
 import {AdminTableContainerProps} from 'src/app/shared/admin/interfaces';
-import KColorBox from 'src/app/shared/components/primitives/KColorBox';
 import {KSelectColumnFilter} from 'src/app/shared/components/tables/k-select-column-filter';
 import KTable from 'src/app/shared/components/tables/k-table';
 import KTextColumnFilter from 'src/app/shared/components/tables/k-text-column-filter';
@@ -29,7 +26,7 @@ const ServicesTable: React.FunctionComponent<AdminTableContainerProps<ServiceAdm
         () => [
             {
                 Header: 'category',
-                accessor: 'category',
+                accessor: 'serviceCategoryId',
                 Filter: (props: any) => <KSelectColumnFilter {...props} options={serviceCategories}/>,
                 Cell: (value: any) => <>{serviceCategoryDict[value.cell.value]?.name}</>
             },
@@ -41,13 +38,6 @@ const ServicesTable: React.FunctionComponent<AdminTableContainerProps<ServiceAdm
             {
                 Header: 'Duration',
                 accessor: 'duration',
-                Cell: (value: any) => timeToString(value.cell.value)
-            },
-            {
-                Header: 'Color',
-                accessor: 'color',
-                Cell: (value: any) => <KColorBox backgroundColor={value.cell.value}/>
-
             },
             {
                 Header: 'Description',

@@ -209,8 +209,10 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand>(
             yield put(slice.actions.upsertOne(entity));
             yield put(slice.actions.setApiError(null));
             yield put(slice.actions.setEditMode(false));
-        } catch (error) {
-            yield put(slice.actions.setApiError(error));
+        } catch (error: any) {
+            if (error?.status == 400) {
+                yield put(slice.actions.setApiError(error.errors));
+            }
             yield put(slice.actions.setIsSubmitting(false));
         }
     }

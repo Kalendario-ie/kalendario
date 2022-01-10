@@ -1,5 +1,4 @@
 import {ScheduleAdminResourceModel} from 'src/app/api/api';
-import {Schedule} from 'src/app/api/schedule';
 import React, {useMemo} from 'react';
 import {AdminTableContainerProps} from 'src/app/shared/admin/interfaces';
 import KTable from 'src/app/shared/components/tables/k-table';
@@ -22,7 +21,7 @@ const SchedulesTable: React.FunctionComponent<AdminTableContainerProps<ScheduleA
                 {
                     Header: day.toUpperCase(),
                     accessor: day,
-                    Cell: (value: any) => <ShiftCell shift={value.cell.value}/>
+                    Cell: (value: any) => <ShiftCell frames={value.cell.value}/>
                 }
             )),
             buttonsColumn

@@ -35,7 +35,7 @@ const AppointmentHistoryItem: React.FunctionComponent<AppointmentHistoryItemProp
             </KFlexRow>
             {appointment.service &&
             <KFlexRow align="center">
-                <KIcon icon="magic" color="primary" margin={2}/> {appointment.service.name}
+                <KIcon icon="magic" color="primary" margin={2}/> {appointment.service} // TODO SERVICE.NAME
             </KFlexRow>
             }
             {appointment.customer &&

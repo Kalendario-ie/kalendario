@@ -1,6 +1,5 @@
 import moment from 'moment';
 import {companyConfigParser} from 'src/app/api/company-config/parsers';
-import {otherCategory, serviceCategoryParser, serviceParser} from 'src/app/api/services';
 import {employeeParser} from '../employees';
 import {Company, CompanyDetails, Slot} from './models';
 
@@ -12,11 +11,11 @@ export function companyDetailsParser(data: any): CompanyDetails {
         if (!service.category) {
             hasOtherCategory = true;
         }
-        return serviceParser(service);
+        return service;
     });
-    const serviceCategories = data.serviceCategories.map((cat: any) => serviceCategoryParser(cat));
+    const serviceCategories = data.serviceCategories.map((cat: any) => cat);
     if (hasOtherCategory) {
-        serviceCategories.push(otherCategory());
+        // serviceCategories.push(otherCategory()); // todo: fix here.
     }
     return {
         ...data,

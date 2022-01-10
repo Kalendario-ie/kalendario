@@ -1,4 +1,4 @@
-import {adminScheduleClient, Schedule} from 'src/app/api/schedule';
+import {adminScheduleClient} from 'src/app/api/adminSchedulesApi';
 import {kCreateBaseStore} from 'src/app/store/admin/common/adapter';
 
 const storeName = 'adminSchedules';

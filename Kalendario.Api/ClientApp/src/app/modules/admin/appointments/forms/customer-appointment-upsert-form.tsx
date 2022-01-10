@@ -3,9 +3,8 @@ import moment, {Moment} from 'moment';
 import React, {ChangeEvent, useEffect, useState} from 'react';
 import {FormGroup, Input, Label} from 'reactstrap';
 import {CustomerAppointment} from 'src/app/api/appointments';
-import {timeToString} from 'src/app/api/common/models';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
-import {KFormikCustomerInput, KFormikInput} from 'src/app/shared/components/forms';
+import {KFormikInput} from 'src/app/shared/components/forms';
 import {KDateInput} from 'src/app/shared/components/primitives/inputs';
 import {compareByName} from 'src/app/shared/util/comparers';
 import {stringToMoment} from 'src/app/shared/util/moment-helpers';
@@ -111,7 +110,7 @@ function useUpdateEndTimeOnServiceChangeEffect() {
         if (service && (serviceId !== initialId || start !== initialStart)) {
             setInitialId(serviceId);
             setInitialStart(start);
-            setValue(addHours(stringToMoment(start), timeToString(service.duration)))
+            setValue(addHours(stringToMoment(start), service.duration))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [initialId, start, service, serviceId, initialStart]);

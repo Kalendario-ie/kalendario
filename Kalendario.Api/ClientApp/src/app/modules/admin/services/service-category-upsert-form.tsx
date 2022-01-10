@@ -1,6 +1,9 @@
 import React from 'react';
 import {ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand} from 'src/app/api/api';
-import {createUpsertServiceCategoryRequest, UpsertServiceCategoryRequestValidation} from 'src/app/api/services';
+import {
+    createUpsertServiceCategoryRequest,
+    UpsertServiceCategoryRequestValidation
+} from 'src/app/api/serviceCategoryApi';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 

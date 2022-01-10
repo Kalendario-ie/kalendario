@@ -54,7 +54,7 @@ const selectServices = createSelector(
 export const selectService = createSelector(
     [selectServices, selectSelectedServiceId],
     (services, id) =>
-        services && services.find(service => service.id === id)
+        services && services.find(service => service === id) // todo service.id === id
 )
 
 export const selectIsStoreReady = createSelector(

@@ -29,12 +29,12 @@ const CartRequestSummary: React.FunctionComponent<CartRequestSummaryProps> = (
                             {requestItem.appointments.map((appointment, key) => (
                                     <KFlexRow className="m-2" key={key} justify={'between'}>
                                         <KFlexColumn>
-                                            <h6>{appointment.service.name}</h6>
+                                            <h6>{appointment.service}</h6> // todo: service name
                                             {stringToMoment(appointment.start).format('DD/MM/YYYY - HH:mm')}
-                                            (duration: {appointment.service.duration.minute})
+                                            (duration: {appointment.service}) // todo: service duration
                                         </KFlexColumn>
                                         <KFlexColumn className="text-right">
-                                            <h6 className="c-primary">{appointment.service.price}</h6>
+                                            <h6 className="c-primary">{appointment.service}</h6> // todo service price.
                                             {showDelete &&
                                             <button className="btn btn-sm btn-outline-danger"
                                                     onClick={() => deleteClick(+appointment.id)} // todo fix here.

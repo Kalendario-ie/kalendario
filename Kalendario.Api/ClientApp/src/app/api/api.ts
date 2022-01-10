@@ -1248,7 +1248,7 @@ export interface ServiceAdminResourceModel {
     name: string;
     description: string | undefined;
     price: number;
-    duration: TimeSpan;
+    duration: string;
     serviceCategoryId: string | undefined;
 }
 
@@ -1278,15 +1278,6 @@ export interface TimeOnly {
     ticks: number;
 }
 
-export interface TimeSpan {
-    ticks: number;
-    days: number;
-    hours: number;
-    milliseconds: number;
-    minutes: number;
-    seconds: number;
-}
-
 export interface UpsertCustomerCommand {
     name: string | undefined;
     phoneNumber: string | undefined;
@@ -1314,7 +1305,7 @@ export interface UpsertServiceCommand {
     name: string | undefined;
     description: string | undefined;
     price: number;
-    duration: TimeSpan;
+    duration: string;
     serviceCategoryId: string | undefined;
 }
 

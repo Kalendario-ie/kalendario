@@ -1,18 +1,19 @@
 import React from 'react';
-import {Shift} from 'src/app/api/shifts';
+import {frameName} from 'src/app/api/adminSchedulesApi';
+import {ScheduleFrameAdminResourceModel} from 'src/app/api/api';
 import {KFlexColumn} from 'src/app/shared/components/flex';
 
 interface ShiftCellProps {
-    shift: Shift;
+    frames: ScheduleFrameAdminResourceModel[];
 }
 
 const ShiftCell: React.FunctionComponent<ShiftCellProps> = (
     {
-        shift
+        frames
     }) => {
     return (
         <KFlexColumn>
-            {shift.frames.map((frame, key) => <div key={key}>{frame.name}</div>)}
+            {frames.map((frame, key) => <div key={key}>{frameName(frame)}</div>)}
         </KFlexColumn>
     )
 }

@@ -1,13 +1,13 @@
 import React from 'react';
 import {ServiceAdminResourceModel, UpsertServiceCommand} from 'src/app/api/api';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
-import {createUpsertServiceCommand} from 'src/app/api/services';
-import {UpsertServiceRequestValidation} from 'src/app/api/services/requests';
+import {createUpsertServiceCommand, upsertServiceCommandValidation} from 'src/app/api/servicesApi';
 import AdminButton from 'src/app/shared/admin/admin-button';
 import {useEditModal} from 'src/app/shared/admin/hooks';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
+import {KFormikState} from 'src/app/shared/components/forms/k-formik-state';
 import {useAppSelector} from 'src/app/store';
 import {serviceCategoryActions, serviceCategorySelectors} from 'src/app/store/admin/serviceCategories';
 import ServiceCategoryUpsertForm from './service-category-upsert-form';
@@ -31,13 +31,13 @@ const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<Service
                      onSubmit={(values => onSubmit(values, entity?.id))}
                      onCancel={onCancel}
                      isSubmitting={isSubmitting}
-                     validationSchema={UpsertServiceRequestValidation}
+                     validationSchema={upsertServiceCommandValidation}
         >
             {(formik) =>
                 <>
                     {modal}
                     <KFlexRow align={'center'} justify={'center'}>
-                        <KFormikInput className="flex-fill" name="category" as={'select'} options={serviceCategories}/>
+                        <KFormikInput className="flex-fill" name="serviceCategoryId" as={'select'} options={serviceCategories}/>
                         <AdminButton type={PermissionType.change}
                                      model={PermissionModel.servicecategory}
                                      onClick={openModal(serviceCategory(formik.getFieldProps('category').value))}/>
@@ -46,10 +46,9 @@ const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<Service
                                      onClick={openModal(null)}/>
                     </KFlexRow>
                     <KFormikInput name="name"/>
-                    {/*<KFormikInput name="duration" as="duration"/>*/}
-                    <KFormikInput name="color" as="color"/>
+                    <KFormikInput name="duration" type="time"/>
                     <KFormikInput name="description"/>
-                    <KFormikInput name="cost" type="number"/>
+                    <KFormikInput name="price" type="number"/>
                 </>
             }
 

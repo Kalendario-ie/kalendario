@@ -1,7 +1,6 @@
 import {useFormikContext} from 'formik';
 import React, {useState} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {timeFromString, timeToString, Zero} from 'src/app/api/common/models';
 import {UpsertScheduleRequestFrame} from 'src/app/api/schedule/requests';
 import {KFlexColumn} from 'src/app/shared/components/flex';
 import {KFormikInput} from 'src/app/shared/components/forms';
@@ -20,17 +19,18 @@ const ScheduleFrame: React.FunctionComponent<ScheduleFrameProps> = (
         frame,
         onClick
     }) => {
-    const [start, end] = [timeFromString(frame.start), timeFromString(frame.end)];
-    const top = +(start.hours + 1 + start.minutes / 60) * 3
-    const height = ((end.hours + end.minutes / 60) - (start.hours + start.minutes / 60)) * 3
+    // const [start, end] = [timeFromString(frame.start), timeFromString(frame.end)];
+    // const top = +(start.hours + 1 + start.minutes / 60) * 3
+    // const height = ((end.hours + end.minutes / 60) - (start.hours + start.minutes / 60)) * 3
 
     return (
-        <div className={`${styles.frameBox} bg-accent c-pointer`}
-             onClick={onClick}
-             style={{
-                 top: `${top}rem`,
-                 height: `${height}rem`
-             }}/>
+        <></>
+        // <div className={`${styles.frameBox} bg-accent c-pointer`}
+        //      onClick={onClick}
+        //      style={{
+        //          top: `${top}rem`,
+        //          height: `${height}rem`
+        //      }}/>
     )
 }
 
@@ -55,11 +55,11 @@ const ScheduleFormikInput: React.FunctionComponent<ScheduleFormikInputProps> = (
     const className = `${styles.lineCell} ${isMonday ? '' : styles.borderLeft}`;
 
     const handleAddClick = (hours: number) => () => {
-        const newFrame = {start: timeToString({...Zero(), hours}), end: timeToString({...Zero(), hours: hours + 1})};
-        const values = [...formikValues.value, newFrame];
-        formikHelpers.setValue(values);
-        setSelectedIndex(values.length - 1);
-        setIsModalOpen(true);
+        // const newFrame = {start: timeToString({...Zero(), hours}), end: timeToString({...Zero(), hours: hours + 1})};
+        // const values = [...formikValues.value, newFrame];
+        // formikHelpers.setValue(values);
+        // setSelectedIndex(values.length - 1);
+        // setIsModalOpen(true); //TODO FIX HERE.
     }
 
     const handleFrameClick = (index: number) => () => {
@@ -81,7 +81,7 @@ const ScheduleFormikInput: React.FunctionComponent<ScheduleFormikInputProps> = (
 
     const hourCell = (hours: number) =>
         <KFlexColumn className="position-relative">
-            {isMonday && <div className={styles.hourBox}>{timeToString({...Zero(), hours})}</div>}
+            {/*{isMonday && <div className={styles.hourBox}>{timeToString({...Zero(), hours})}</div>}*/}
             <KShowOnHoverContainer className={className}>
                 <KIconButton color="primary" onClick={handleAddClick(hours)} icon="plus-square"/>
             </KShowOnHoverContainer>

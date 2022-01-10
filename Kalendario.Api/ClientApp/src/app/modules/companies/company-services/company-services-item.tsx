@@ -1,10 +1,8 @@
 import React from 'react';
-import {timeToString} from 'src/app/api/common/models';
-import {Service} from 'src/app/api/services';
 import {KFlexRow, KFlexRowItem} from 'src/app/shared/components/flex';
 
 interface CompanyServicesItemProps {
-    service: Service;
+    service: number; // todo public service resource model.
     onClick: (id: number) => void;
 }
 
@@ -16,15 +14,15 @@ const CompanyServicesItem: React.FunctionComponent<CompanyServicesItemProps> = (
     const style = {borderBottom: '1px solid #A1A1A1'};
 
     return (
-        <div className="c-pointer mb-4" style={style} onClick={() => onClick(+service.id)}> // TODO FIX HERE.
+        <div className="c-pointer mb-4" style={style} onClick={() => onClick(service)}> // TODO service id.
             <KFlexRow>
                 <KFlexRowItem basisPercent={50}>
                     <div className="h6">
-                        {service.name}
+                        {service} // todo service name
                     </div>
                 </KFlexRowItem>
                 <KFlexRowItem>
-                    <div className="c-primary text-right">{service.price}</div>
+                    <div className="c-primary text-right">{service}</div> // todo service price
                     {/*<div className="tiny light-grey text-right">ETA: {timeToString(service.duration)}</div>*/} // TODO: FIX HERE.
                 </KFlexRowItem>
             </KFlexRow>

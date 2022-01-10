@@ -1,9 +1,7 @@
 import React from 'react';
+import {getShift, isAvailable} from 'src/app/api/adminSchedulesApi';
 import {Appointment} from 'src/app/api/appointments';
-import {timeToString, Zero} from 'src/app/api/common/models';
 import {Employee} from 'src/app/api/employees';
-import {getShift} from 'src/app/api/schedule';
-import {isAvailable} from 'src/app/api/shifts';
 import {useSelectPanelEmployees} from 'src/app/modules/admin/appointments/employee-panel/hooks';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import KShowOnHoverContainer from 'src/app/shared/components/primitives/containers/k-show-on-hover-container';
@@ -30,7 +28,7 @@ const PanelHours: React.FunctionComponent = () => {
             {hours.map((hour, i) =>
                 <React.Fragment key={i}>
                     <div style={style} className={styles.sideItem}>
-                        {timeToString(Zero())}
+                        {hour}
                     </div>
                     <div style={style}/>
                 </React.Fragment>
