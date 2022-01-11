@@ -17,7 +17,7 @@ namespace Kalendario.Infrastructure.Configurations
                 .HasForeignKey(a => a.EmployeeId);
                         
             builder.HasOne(a => a.Service)
-                .WithMany()
+                .WithMany(s => s.Appointments)
                 .HasForeignKey(a => a.ServiceId);
         }
     }

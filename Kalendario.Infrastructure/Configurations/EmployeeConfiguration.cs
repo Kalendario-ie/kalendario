@@ -12,12 +12,17 @@ namespace Kalendario.Infrastructure.Configurations
                 .WithMany(s => s.Employees)
                 .UsingEntity<EmployeeService>(
                     eb => eb.HasOne(es => es.Service)
-                            .WithMany()
+                            .WithMany(service => service.EmployeeServices)
                             .HasForeignKey(es => es.ServiceId),
                     eb => eb.HasOne(es => es.Employee)
-                        .WithMany()
+                        .WithMany(employee => employee.EmployeeServices)
                         .HasForeignKey(es => es.EmployeeId)
                 ).HasKey(s => s.Id);
+
+            builder.HasOne(e => e.Schedule)
+                .WithMany(s => s.Employees)
+                .HasForeignKey(employee => employee.ScheduleId)
+                .IsRequired(false);
         }
     }
 }

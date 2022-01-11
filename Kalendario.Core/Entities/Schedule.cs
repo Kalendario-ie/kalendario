@@ -24,6 +24,8 @@ public class Schedule : AccountEntity
 
     public List<ScheduleFrame> Saturday => FramesOf(DayOfWeek.Saturday);
 
+    public ICollection<Employee> Employees { get; set; }
+
     private List<ScheduleFrame> FramesOf(DayOfWeek dayOfWeek)
     {
         return Frames

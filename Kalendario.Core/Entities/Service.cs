@@ -19,6 +19,8 @@ namespace Kalendario.Core.Entities
         
         public List<Employee> Employees { get; set; } = new();
 
+        public List<EmployeeService> EmployeeServices { get; set; } = new();
+
         public List<Appointment> Appointments { get; set; } = new();
     }
 }
