@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Kalendario.Core.Entities;
 using Kalendario.Core.ValueObject;
 
@@ -35,7 +36,7 @@ public class Entities
         Warning = "this is a warning"
     };
 
-    public static Service TestService(Guid serviceCategoryId, string accountId = Constants.CurrentUserAccountIdString) => new()
+    public static Service TestService(Guid? serviceCategoryId = null, string accountId = Constants.CurrentUserAccountIdString) => new()
     {
         Name = "Example",
         AccountId = Guid.Parse(accountId),
@@ -60,4 +61,16 @@ public class Entities
             Start = TimeOnly.Parse(start), End = TimeOnly.Parse(end)
         };
     }
+
+    public static Employee TestEmployee(IEnumerable<Guid> services, Guid? scheduleId = null,
+        string accountId = Constants.CurrentUserAccountIdString) => new()
+    {
+        AccountId = Guid.Parse(accountId),
+        Name = "Employee Name",
+        Email = "employee@email.com",
+        PhoneNumber = "088 877 0000",
+        ScheduleId = scheduleId,
+        EmployeeServices = services.Select(s => new EmployeeService {ServiceId = s, AccountId = Guid.Parse(accountId)})
+            .ToList()
+    };
 }

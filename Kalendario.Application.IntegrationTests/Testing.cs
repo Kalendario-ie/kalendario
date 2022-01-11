@@ -152,7 +152,7 @@ public class Testing
             {
                 await roleManager.CreateAsync(new IdentityRole(role));
             }
-            
+
             await AddExtraRoles(roleManager);
 
             await userManager.AddToRolesAsync(user, roles);
@@ -200,6 +200,17 @@ public class Testing
         return await context.FindAsync<TEntity>(keyValues);
     }
 
+    public static async Task<TEntity?> FirstOrDefaultAsync<TEntity, TProperty>(Guid id,
+        Expression<Func<TEntity, TProperty>> navigationPropertyPath)
+        where TEntity : BaseEntity
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        return await context.Set<TEntity>().Include(navigationPropertyPath).FirstOrDefaultAsync(e => e.Id == id);
+    }
+
     public static async Task<Guid> AddAsync<TEntity>(TEntity entity)
         where TEntity : BaseEntity
     {
@@ -223,7 +234,8 @@ public class Testing
         return await context.Set<TEntity>().CountAsync();
     }
 
-    public static async Task<List<TEntity>> WhereAsync<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
+    public static async Task<List<TEntity>> WhereAsync<TEntity>(Expression<Func<TEntity, bool>> predicate)
+        where TEntity : class
     {
         using var scope = _scopeFactory.CreateScope();
 
