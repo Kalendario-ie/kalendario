@@ -5,6 +5,7 @@ using Kalendario.Application.Common.Security;
 using Kalendario.Application.Queries.Admin.Common;
 using Kalendario.Application.ResourceModels.Admin;
 using Kalendario.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kalendario.Application.Queries.Admin;
 
@@ -18,7 +19,7 @@ public class GetEmployeesQuery : BaseGetAllQuery<EmployeeAdminResourceModel>
         {
         }
 
-        protected override IQueryable<Employee> Entities => Context.Employees;
+        protected override IQueryable<Employee> Entities => Context.Employees.Include(e => e.EmployeeServices);
 
         protected override IQueryable<Employee> FilterEntities(IQueryable<Employee> entities, GetEmployeesQuery query)
         {
