@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React from 'react';
 import {Spinner} from 'reactstrap';
+import {EmployeeAdminResourceModel} from 'src/app/api/api';
 import {Appointment, BaseAppointment, CustomerAppointment} from 'src/app/api/appointments';
 import {Employee} from 'src/app/api/employees';
 import styles from 'src/app/modules/admin/appointments/employee-panel/employee-panel.module.scss';
@@ -62,7 +63,7 @@ const Event: React.FunctionComponent<EventProps> = (
 }
 
 interface EventsContainerProps {
-    employee: Employee;
+    employee: EmployeeAdminResourceModel;
     onSelect: (entity: Appointment | null) => () => void
 }
 
@@ -74,26 +75,26 @@ const EventsContainer: React.FunctionComponent<EventsContainerProps> = (
     const appointments = useAppSelector(appointmentSelectors.selectAll);
     const isLoading = useAppSelector(appointmentSelectors.selectIsLoading);
 
-    const employeeAppointments = React.useMemo(() =>
-            appointments
-                .filter(appointment => appointment.employee.id === employee.id)
-                .sort(compareByStartDate)
-        , [appointments, employee.id]
-    )
+    // const employeeAppointments = React.useMemo(() =>
+    //         appointments
+    //             .filter(appointment => appointment.employee.id === employee.id)
+    //             .sort(compareByStartDate)
+    //     , [appointments, employee.id]
+    // )
 
     return (
         <div className="position-relative">
             {isLoading &&
             <Spinner className="position-absolute"/>
             }
-            {employeeAppointments.map((appointment, index) =>
-                <Event key={appointment.id}
-                       isOverlapping={index > 0 ? isOverlapping(appointment, employeeAppointments[index - 1]) : false}
-                       order={index}
-                       appointment={appointment}
-                       onClick={onSelect(appointment)}
-                />
-            )}
+            {/*{employeeAppointments.map((appointment, index) =>*/}
+            {/*    <Event key={appointment.id}*/}
+            {/*           isOverlapping={index > 0 ? isOverlapping(appointment, employeeAppointments[index - 1]) : false}*/}
+            {/*           order={index}*/}
+            {/*           appointment={appointment}*/}
+            {/*           onClick={onSelect(appointment)}*/}
+            {/*    />*/}
+            {/*)}*/}
         </div>
     )
 }

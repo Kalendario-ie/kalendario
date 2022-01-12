@@ -82,8 +82,8 @@ const FormikStartEndTimeInput: React.FunctionComponent = () => {
 
 function useEmployeeServices() {
     const formik = useFormikContext();
-    const employeeId = formik.getFieldProps<number>('employee').value;
-    const [employeeServices, setEmployeeServices] = useState<number[]>([]);
+    const employeeId = formik.getFieldProps<string>('employeeId').value;
+    const [employeeServices, setEmployeeServices] = useState<string[]>([]);
     const employeeEntities = useAppSelector(employeeSelectors.selectEntities);
 
     useEffect(() => {
@@ -128,7 +128,7 @@ const CustomerAppointmentUpsertForm: React.FunctionComponent<CustomerAppointment
     return (
         <>
             <FormikStartEndTimeInput/>
-            <KFormikInput name="employee" as={'select'} options={employees}/>
+            {/*<KFormikInput name="employee" as={'select'} options={employees}/>*/}
             <KFormikInput name="service" as={'select'} options={services}/>
             {/*<KFormikCustomerInput initialCustomer={appointment?.customer || null}/>*/} //TODO: Fix Here
             <KFormikInput name="internalNotes" as={'textarea'}/>

@@ -9,7 +9,6 @@ import {
 } from 'src/app/api/appointments/models';
 import {UpsertCustomerAppointmentRequest, UpsertEmployeeEventRequest} from 'src/app/api/appointments/requests';
 import {PermissionModel} from 'src/app/api/auth';
-import {employeeParser} from 'src/app/api/employees';
 import {userParser} from 'src/app/api/users';
 import {momentToIso} from 'src/app/shared/util/moment-helpers';
 
@@ -47,7 +46,7 @@ function employeeEventParser(data: any): EmployeeEvent {
         permissionModel: PermissionModel.appointment,
         type: EventType.EmployeeEvent,
         name: '',
-        employee: employeeParser(data.employee),
+        // employee: employeeParser(data.employee),
     }
 }
 

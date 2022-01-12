@@ -1,5 +1,6 @@
 import React from 'react';
 import {getFramesForDate, isAvailable} from 'src/app/api/adminSchedulesApi';
+import {EmployeeAdminResourceModel} from 'src/app/api/api';
 import {Appointment} from 'src/app/api/appointments';
 import {Employee} from 'src/app/api/employees';
 import {useSelectPanelEmployees} from 'src/app/modules/admin/appointments/employee-panel/hooks';
@@ -38,7 +39,7 @@ const PanelHours: React.FunctionComponent = () => {
 }
 
 interface EmployeePanelProps {
-    employee: Employee;
+    employee: EmployeeAdminResourceModel;
     onCreateClick: (entity: Appointment | null) => () => void;
 }
 
@@ -48,7 +49,7 @@ const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
         onCreateClick
     }) => {
     const currentDate = useAppSelector(adminDashboardSelectors.selectCurrentDate);
-    const schedule = useAppSelector(state => scheduleSelectors.selectById(state, employee.schedule));
+    const schedule = useAppSelector(state => scheduleSelectors.selectById(state, employee.scheduleId || ''));
     const hours = useAppSelector(adminDashboardSelectors.selectPanelHours);
     const slotSize = useAppSelector(adminDashboardSelectors.selectSlotSize);
     const style = {

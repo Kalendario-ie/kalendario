@@ -1,21 +1,16 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {
-    Employee,
-    UpsertEmployeeRequest,
-    upsertEmployeeRequestParser,
-    UpsertEmployeeRequestValidation
-} from 'src/app/api/employees';
+import {upsertEmployeeCommandParser, upsertEmployeeCommandValidation} from 'src/app/api/adminEmployeesApi';
+import {EmployeeAdminResourceModel, UpsertEmployeeCommand} from 'src/app/api/api';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
-import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
-import AvatarImg from 'src/app/shared/components/primitives/avatar-img';
+import {KFormikState} from 'src/app/shared/components/forms/k-formik-state';
 import {useAppDispatch} from 'src/app/store';
 import {scheduleActions, scheduleSelectors} from 'src/app/store/admin/schedules';
 import {serviceCategoryActions} from 'src/app/store/admin/serviceCategories';
 import {serviceActions, serviceSelectors} from 'src/app/store/admin/services';
 
-const EmployeeUpsertForm: React.FunctionComponent<AdminEditContainerProps<Employee, UpsertEmployeeRequest>> = (
+const EmployeeUpsertForm: React.FunctionComponent<AdminEditContainerProps<EmployeeAdminResourceModel, UpsertEmployeeCommand>> = (
     {
         entity,
         apiError,
@@ -35,28 +30,18 @@ const EmployeeUpsertForm: React.FunctionComponent<AdminEditContainerProps<Employ
     }, [dispatch]);
 
     return (
-        <KFormikForm initialValues={upsertEmployeeRequestParser(entity)}
+        <KFormikForm initialValues={upsertEmployeeCommandParser(entity)}
                      apiError={apiError}
                      onSubmit={(values => onSubmit(values, entity?.id.toString()))}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
-                     validationSchema={UpsertEmployeeRequestValidation}
+                     validationSchema={upsertEmployeeCommandValidation}
         >
-            {entity?.photoUrl &&
-            <KFlexRow className="mb-2" justify={'between'} align={'center'}>
-                <KFlexRow className="flex-fill mr-2" justify={'center'} align={'center'}>
-                    <AvatarImg size={5} src={entity.photoUrl}/>
-                </KFlexRow>
-                <KFlexColumn>
-                    <KFormikInput name="firstName"/>
-                    <KFormikInput name="lastName"/>
-                </KFlexColumn>
-            </KFlexRow>
-            }
+            <KFormikState/>
+            <KFormikInput name="name"/>
             <KFormikInput name="email"/>
-            <KFormikInput name="phone"/>
-            <KFormikInput name="instagram"/>
-            <KFormikInput name="schedule" as={'select'} options={schedules}/>
+            <KFormikInput name="phoneNumber"/>
+            <KFormikInput name="scheduleId" as={'select'} options={schedules}/>
             <KFormikInput name="services" as={'multi-select'} options={services}/>
         </KFormikForm>
     )

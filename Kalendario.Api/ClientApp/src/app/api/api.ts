@@ -311,7 +311,17 @@ export interface IEmployeesClient {
      * @param length (optional)
      * @return Success
      */
-    employees(search: string | undefined, start: number | undefined, length: number | undefined): Promise<EmployeeAdminResourceModelGetAllResult>;
+    employeesGet(search: string | undefined, start: number | undefined, length: number | undefined): Promise<EmployeeAdminResourceModelGetAllResult>;
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    employeesPost(body: UpsertEmployeeCommand | undefined): Promise<EmployeeAdminResourceModel>;
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    employeesPut(id: string, body: UpsertEmployeeCommand | undefined): Promise<EmployeeAdminResourceModel>;
 }
 
 export class EmployeesClient implements IEmployeesClient {
@@ -333,7 +343,7 @@ export class EmployeesClient implements IEmployeesClient {
      * @param length (optional)
      * @return Success
      */
-    employees(search: string | undefined, start: number | undefined, length: number | undefined , cancelToken?: CancelToken | undefined): Promise<EmployeeAdminResourceModelGetAllResult> {
+    employeesGet(search: string | undefined, start: number | undefined, length: number | undefined , cancelToken?: CancelToken | undefined): Promise<EmployeeAdminResourceModelGetAllResult> {
         let url_ = this.baseUrl + "/api/Employees?";
         if (search === null)
             throw new Error("The parameter 'search' cannot be null.");
@@ -365,11 +375,11 @@ export class EmployeesClient implements IEmployeesClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processEmployees(_response);
+            return this.processEmployeesGet(_response);
         });
     }
 
-    protected processEmployees(response: AxiosResponse): Promise<EmployeeAdminResourceModelGetAllResult> {
+    protected processEmployeesGet(response: AxiosResponse): Promise<EmployeeAdminResourceModelGetAllResult> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -391,6 +401,121 @@ export class EmployeesClient implements IEmployeesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<EmployeeAdminResourceModelGetAllResult>(<any>null);
+    }
+
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    employeesPost(body: UpsertEmployeeCommand | undefined , cancelToken?: CancelToken | undefined): Promise<EmployeeAdminResourceModel> {
+        let url_ = this.baseUrl + "/api/Employees";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processEmployeesPost(_response);
+        });
+    }
+
+    protected processEmployeesPost(response: AxiosResponse): Promise<EmployeeAdminResourceModel> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<EmployeeAdminResourceModel>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<EmployeeAdminResourceModel>(<any>null);
+    }
+
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    employeesPut(id: string, body: UpsertEmployeeCommand | undefined , cancelToken?: CancelToken | undefined): Promise<EmployeeAdminResourceModel> {
+        let url_ = this.baseUrl + "/api/Employees/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processEmployeesPut(_response);
+        });
+    }
+
+    protected processEmployeesPut(response: AxiosResponse): Promise<EmployeeAdminResourceModel> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<EmployeeAdminResourceModel>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<EmployeeAdminResourceModel>(<any>null);
     }
 }
 
@@ -1211,7 +1336,11 @@ export interface CustomerAdminResourceModelGetAllResult {
 
 export interface EmployeeAdminResourceModel {
     id: string;
-    accountId: string;
+    name: string;
+    email: string | undefined;
+    phoneNumber: string | undefined;
+    scheduleId: string | undefined;
+    services: string[] | undefined;
 }
 
 export interface EmployeeAdminResourceModelGetAllResult {
@@ -1275,6 +1404,14 @@ export interface UpsertCustomerCommand {
     phoneNumber: string | undefined;
     email: string | undefined;
     warning: string | undefined;
+}
+
+export interface UpsertEmployeeCommand {
+    name: string | undefined;
+    email: string | undefined;
+    phoneNumber: string | undefined;
+    scheduleId: string | undefined;
+    services: string[] | undefined;
 }
 
 export interface UpsertScheduleCommand {

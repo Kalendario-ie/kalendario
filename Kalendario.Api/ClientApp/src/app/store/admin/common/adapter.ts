@@ -28,7 +28,7 @@ interface BaseState<TEntity> extends EntityState<TEntity> {
 }
 
 export interface BaseSelectors<TEntity> extends EntitySelectors<TEntity, any> {
-    selectByIds: OutputParametricSelector<any, number[], NonNullable<TEntity>[], (res1: Dictionary<TEntity>, res2: number[]) => NonNullable<TEntity>[]>
+    selectByIds: OutputParametricSelector<any, number[] | string[], NonNullable<TEntity>[], (res1: Dictionary<TEntity>, res2: number[]) => NonNullable<TEntity>[]> // TODO: number[] | string[]
     selectIsInitialized: (state: any) => boolean;
     selectApiError: (state: any) => ApiBaseError | null;
     selectEditMode: (state: any) => boolean;
@@ -136,8 +136,8 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand>(
         ...adapterSelectors,
         selectByIds: createSelector(
             adapterSelectors.selectEntities,
-            (state: any, ids: number[]) => ids,
-            (entities, ids: number[]) => ids.map(id => entities[id]!).filter(service => !!service)
+            (state: any, ids: number[] | string[]) => ids,
+            (entities, ids: number[] | string[]) => ids.map(id => entities[id]!).filter(service => !!service)
         ),
         selectIsInitialized: createSelector(selector, store => store.isInitialized),
         selectApiError: createSelector(selector, store => store.apiError),

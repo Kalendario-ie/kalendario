@@ -1,16 +1,15 @@
 import moment, {Moment} from 'moment';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {isMobile} from 'react-device-detect';
-import {useSelector} from 'react-redux';
 import {getFramesForDate} from 'src/app/api/adminSchedulesApi';
 import {ScheduleAdminResourceModel} from 'src/app/api/api';
 import {Appointment} from 'src/app/api/appointments';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KIconButton, KRoundedButton} from 'src/app/shared/components/primitives/buttons';
-import {KCard} from 'src/app/shared/components/primitives/containers';
 import KIcon from 'src/app/shared/components/primitives/k-icon';
 import {stringToMoment} from 'src/app/shared/util/moment-helpers';
-import {selectUserEmployee} from 'src/app/store/auth';
+
+// import {selectUserEmployee} from 'src/app/store/auth';
 
 function dates(startDate: Moment, endDate: Moment): Moment[] {
     const dates = [];
@@ -153,44 +152,44 @@ const EmployeeDashboardAppointment: React.FunctionComponent<EmployeeDashboardApp
 const EmployeeDashboard: React.FunctionComponent = () => {
     const [currentDate, setCurrentDate] = useState(moment.utc());
     const [appointments, setAppointments] = useState<Appointment[]>([]);
-    const employee = useSelector(selectUserEmployee);
+    // const employee = useSelector(selectUserEmployee);
 
-    useEffect(() => {
-        // adminAppointmentClient.get(
-        //     {
-        //         employee: employee?.id,
-        //         from_date: momentToIso(currentDate.clone().startOf('day')),
-        //         to_date: momentToIso(currentDate.clone().endOf('day')),
-        //     }).then(res => setAppointments(res.results));  TODO: FIX HERE.
-    }, [currentDate, employee?.id]);
+    // useEffect(() => {
+    //     // adminAppointmentClient.get(
+    //     //     {
+    //     //         employee: employee?.id,
+    //     //         from_date: momentToIso(currentDate.clone().startOf('day')),
+    //     //         to_date: momentToIso(currentDate.clone().endOf('day')),
+    //     //     }).then(res => setAppointments(res.results));  TODO: FIX HERE.
+    // }, [currentDate, employee?.id]);
 
 
     return (
         <KFlexColumn className="h-100vh pt-2" align="center" justify="center">
-            {employee &&
-            <KCard className="h-100" maxWidth={600} hasShadow={!isMobile} hasBorder={!isMobile}>
-                <KFlexColumn className="h-100">
-                    <KFlexRow justify="center" className="mb-3">
-                        {employee.name}
-                    </KFlexRow>
-                    <EmployeeDashboardDatePicker currentDate={currentDate} dateChange={setCurrentDate}/>
-                    <div>
-                        <hr/>
-                    </div>
-                    {/*<EmployeeScheduleView schedule={employee.schedule} date={currentDate}/>*/}  // todo Fix here.
-                    <div>
-                        <hr/>
-                    </div>
-                    <div className="flex-fill overflow-auto">
-                        {appointments.map(appointment => <React.Fragment key={appointment.id}>
-                                <EmployeeDashboardAppointment appointment={appointment}/>
-                                <hr/>
-                            </React.Fragment>
-                        )}
-                    </div>
-                </KFlexColumn>
-            </KCard>
-            }
+            {/*{employee &&*/}
+            {/*<KCard className="h-100" maxWidth={600} hasShadow={!isMobile} hasBorder={!isMobile}>*/}
+            {/*    <KFlexColumn className="h-100">*/}
+            {/*        <KFlexRow justify="center" className="mb-3">*/}
+            {/*            {employee.name}*/}
+            {/*        </KFlexRow>*/}
+            {/*        <EmployeeDashboardDatePicker currentDate={currentDate} dateChange={setCurrentDate}/>*/}
+            {/*        <div>*/}
+            {/*            <hr/>*/}
+            {/*        </div>*/}
+            {/*        /!*<EmployeeScheduleView schedule={employee.schedule} date={currentDate}/>*!/  // todo Fix here.*/}
+            {/*        <div>*/}
+            {/*            <hr/>*/}
+            {/*        </div>*/}
+            {/*        <div className="flex-fill overflow-auto">*/}
+            {/*            {appointments.map(appointment => <React.Fragment key={appointment.id}>*/}
+            {/*                    <EmployeeDashboardAppointment appointment={appointment}/>*/}
+            {/*                    <hr/>*/}
+            {/*                </React.Fragment>*/}
+            {/*            )}*/}
+            {/*        </div>*/}
+            {/*    </KFlexColumn>*/}
+            {/*</KCard>*/}
+            {/*}*/}
         </KFlexColumn>
     )
 }

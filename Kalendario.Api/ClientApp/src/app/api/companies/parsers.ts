@@ -1,6 +1,5 @@
 import moment from 'moment';
 import {companyConfigParser} from 'src/app/api/company-config/parsers';
-import {employeeParser} from '../employees';
 import {Company, CompanyDetails, Slot} from './models';
 
 const imageStorage = process.env.REACT_APP_IMAGE_API_URL || 'https://res.cloudinary.com/gchahm/';
@@ -20,7 +19,7 @@ export function companyDetailsParser(data: any): CompanyDetails {
     return {
         ...data,
         avatar: imageStorage + data.avatar,
-        employees: data.employees.map((employee: any) => employeeParser(employee)),
+        // employees: data.employees.map((employee: any) => employeeParser(employee)),
         services: services,
         serviceCategories: serviceCategories,
         config: companyConfigParser(data.config)
