@@ -5,14 +5,15 @@ namespace Kalendario.Core.Entities
     public class Appointment : AccountEntity
     {
 
-        public Guid CustomerId { get; set; }
+        public Guid? CustomerId { get; set; }
+
         public Customer Customer { get; set; }
 
         public Guid EmployeeId { get; set; }
         
         public Employee Employee { get; set; }
 
-        public Guid ServiceId { get; set; }
+        public Guid? ServiceId { get; set; }
         
         public Service Service { get; set; }
 
