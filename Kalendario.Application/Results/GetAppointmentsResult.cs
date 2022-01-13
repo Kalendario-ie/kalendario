@@ -5,5 +5,5 @@ namespace Kalendario.Application.Results;
 
 public class GetAppointmentsResult
 {
-    public List<AppointmentAdminResourceModel> Appointments { get; set; }
+    public List<AppointmentAdminResourceModel> Entities { get; set; }
 }

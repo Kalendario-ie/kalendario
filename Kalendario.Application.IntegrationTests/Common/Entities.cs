@@ -20,7 +20,7 @@ public class Entities
             CreateFrame(DayOfWeek.Monday, 2, "16:00", "17:00"),
             CreateFrame(DayOfWeek.Tuesday, 0, "09:00", "14:00"),
             CreateFrame(DayOfWeek.Tuesday, 1, "14:00", "17:00"),
-            CreateFrame(DayOfWeek.Wednesday, 0, "10:00", "11:00"),
+            CreateFrame(DayOfWeek.Wednesday, 0, "9:00", "11:00"),
             CreateFrame(DayOfWeek.Thursday, 0, "11:00", "12:00"),
             CreateFrame(DayOfWeek.Friday, 0, "12:00", "13:00"),
             CreateFrame(DayOfWeek.Saturday, 0, "13:00", "14:00"),
@@ -36,7 +36,8 @@ public class Entities
         Warning = "this is a warning"
     };
 
-    public static Service TestService(Guid? serviceCategoryId = null, string accountId = Constants.CurrentUserAccountIdString) => new()
+    public static Service TestService(Guid? serviceCategoryId = null,
+        string accountId = Constants.CurrentUserAccountIdString) => new()
     {
         Name = "Example",
         AccountId = Guid.Parse(accountId),
@@ -72,5 +73,16 @@ public class Entities
         ScheduleId = scheduleId,
         EmployeeServices = services.Select(s => new EmployeeService {ServiceId = s, AccountId = Guid.Parse(accountId)})
             .ToList()
+    };
+
+    public static Appointment TestAppointment(Guid serviceId, Guid employeeId, Guid customerId,
+        string accountId = Constants.CurrentUserAccountIdString) => new()
+    {
+        AccountId = Guid.Parse(accountId),
+        Start = DateTime.UtcNow,
+        End = DateTime.UtcNow.AddHours(1),
+        ServiceId = serviceId,
+        CustomerId = customerId,
+        EmployeeId = employeeId,
     };
 }

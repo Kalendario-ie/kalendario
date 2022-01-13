@@ -6,11 +6,13 @@ namespace Kalendario.Application.ResourceModels.Admin;
 
 public class AppointmentAdminResourceModel : IMapFrom<Appointment>
 {
-    public CustomerAdminResourceModel CustomerAdmin { get; set; }
+    public Guid Id { get; set; }
+    
+    public CustomerAdminResourceModel Customer { get; set; }
 
-    public EmployeeAdminResourceModel EmployeeAdmin { get; set; }
+    public EmployeeAdminResourceModel Employee { get; set; }
 
-    public ServiceAdminResourceModel ServiceAdmin { get; set; }
+    public ServiceAdminResourceModel Service { get; set; }
 
     public DateTime Start { get; set; }
 

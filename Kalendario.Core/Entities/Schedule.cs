@@ -26,6 +26,12 @@ public class Schedule : AccountEntity
 
     public ICollection<Employee> Employees { get; set; }
 
+    public bool HasAvailability(DateTime start, DateTime end)
+    {
+        //TODO: Create unit tests for this method.
+        return FramesOf(start.DayOfWeek)
+            .Any(frame => frame.Start <= TimeOnly.FromDateTime(start) && frame.End >= TimeOnly.FromDateTime(end));
+    }
     private List<ScheduleFrame> FramesOf(DayOfWeek dayOfWeek)
     {
         return Frames
