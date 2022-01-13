@@ -11,7 +11,6 @@ using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.IntegrationTests.Common;
 using Kalendario.Core.Entities;
 using Kalendario.Core.Infrastructure;
-using Kalendario.Infrastructure.Authorization;
 using Kalendario.Infrastructure.Extensions;
 using Kalendario.Infrastructure.Persistence;
 using MediatR;
@@ -200,15 +199,19 @@ public class Testing
         return await context.FindAsync<TEntity>(keyValues);
     }
 
-    public static async Task<TEntity?> FirstOrDefaultAsync<TEntity, TProperty>(Guid id,
-        Expression<Func<TEntity, TProperty>> navigationPropertyPath)
+    public static async Task<TEntity?> FirstOrDefaultAsync<TEntity>(Guid id,
+        IEnumerable<Expression<Func<TEntity, object>>> navigationPropertyPaths)
         where TEntity : BaseEntity
     {
         using var scope = _scopeFactory.CreateScope();
 
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        return await context.Set<TEntity>().Include(navigationPropertyPath).FirstOrDefaultAsync(e => e.Id == id);
+        IQueryable<TEntity> set = context.Set<TEntity>();
+
+        set = navigationPropertyPaths.Aggregate(set, (current, navigationPropertyPath) => current.Include(navigationPropertyPath));
+
+        return await set.FirstOrDefaultAsync(e => e.Id == id);
     }
 
     public static async Task<Guid> AddAsync<TEntity>(TEntity entity)

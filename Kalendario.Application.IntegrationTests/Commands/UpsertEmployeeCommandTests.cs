@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Kalendario.Application.Commands.Admin;
@@ -31,6 +32,14 @@ public class UpsertEmployeeCommandTests : TestBase
         ScheduleId = scheduleId,
         Services = services
     };
+    
+    private static async Task<Employee?> FindEmployeeById(Guid id)
+    {
+        var entity = await FirstOrDefaultAsync<Employee>(id,
+            new List<Expression<Func<Employee, object>>> {employee => employee.Services});
+        return entity;
+    }
+
 
     [SetUp]
     public new async Task TestSetUp()
@@ -113,12 +122,11 @@ public class UpsertEmployeeCommandTests : TestBase
 
         var result = await FluentActions.Invoking(() => SendAsync(command)).Invoke();
 
-        var entity = await FirstOrDefaultAsync<Employee, ICollection<Service>>(result.Id,
-            employee => employee.Services);
+        var entity = await FindEmployeeById(result.Id);
         AssertResultEqualCommand(result, command);
         AssertEntityEqualCommand(entity, command);
     }
-
+    
     [Test]
     public async Task Create_CorrectAccount_Schedule_ShouldCreate()
     {
@@ -128,8 +136,7 @@ public class UpsertEmployeeCommandTests : TestBase
 
         var result = await FluentActions.Invoking(() => SendAsync(command)).Invoke();
 
-        var entity = await FirstOrDefaultAsync<Employee, ICollection<Service>>(result.Id,
-            employee => employee.Services);
+        var entity = await FindEmployeeById(result.Id);
         AssertResultEqualCommand(result, command);
         AssertEntityEqualCommand(entity, command);
     }
@@ -143,12 +150,11 @@ public class UpsertEmployeeCommandTests : TestBase
 
         var result = await FluentActions.Invoking(() => SendAsync(command)).Invoke();
 
-        var entity = await FirstOrDefaultAsync<Employee, ICollection<Service>>(result.Id,
-            employee => employee.Services);
+        var entity = await FindEmployeeById(result.Id);
         AssertResultEqualCommand(result, command);
         AssertEntityEqualCommand(entity, command);
     }
-    
+
     [Test]
     public async Task Create_InvalidServiceId_ShouldThrowValidationError()
     {
@@ -158,7 +164,7 @@ public class UpsertEmployeeCommandTests : TestBase
 
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
-    
+
     [Test]
     public async Task Create_DifferentAccountService_ShouldThrowValidationError()
     {
@@ -169,7 +175,7 @@ public class UpsertEmployeeCommandTests : TestBase
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
 
-    
+
     [Test]
     public async Task Update_DifferentAccount_Schedule_ThrowsValidationError()
     {
