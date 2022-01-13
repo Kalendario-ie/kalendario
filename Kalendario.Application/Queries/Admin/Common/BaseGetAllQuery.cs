@@ -53,7 +53,7 @@ namespace Kalendario.Application.Queries.Admin.Common
 
             result.FilteredCount = await entities.CountAsync(cancellationToken);
 
-            entities = entities.Skip(request.Start).Take(request.Length).OrderBy(domain => domain.Id);
+            entities = entities.OrderBy(domain => domain.Id).Skip(request.Start).Take(request.Length);
 
             result.Entities = await entities
                 .Select(domain => _mapper.Map<TResourceModel>(domain))
