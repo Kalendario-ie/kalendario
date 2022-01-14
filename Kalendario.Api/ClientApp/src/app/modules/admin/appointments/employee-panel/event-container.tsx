@@ -1,20 +1,16 @@
 import moment from 'moment';
 import React from 'react';
 import {Spinner} from 'reactstrap';
-import {EmployeeAdminResourceModel} from 'src/app/api/api';
-import {Appointment, BaseAppointment, CustomerAppointment} from 'src/app/api/appointments';
-import {Employee} from 'src/app/api/employees';
+import {AppointmentAdminResourceModel, EmployeeAdminResourceModel} from 'src/app/api/api';
 import styles from 'src/app/modules/admin/appointments/employee-panel/employee-panel.module.scss';
 import {useHoursConverter} from 'src/app/modules/admin/appointments/employee-panel/hooks';
-import {compareByStartDate} from 'src/app/shared/util/comparers';
-import {stringToMoment} from 'src/app/shared/util/moment-helpers';
 import {useAppSelector} from 'src/app/store';
 import {appointmentSelectors} from 'src/app/store/admin/appointments';
 
 interface EventProps {
     order: number;
     isOverlapping: boolean;
-    appointment: Appointment;
+    appointment: AppointmentAdminResourceModel;
     onClick: () => void;
 }
 
@@ -30,14 +26,12 @@ const Event: React.FunctionComponent<EventProps> = (
     const start = moment.utc(appointment.start);
     const end = moment.utc(appointment.end);
 
-    const customerAppointment = 'customer' in appointment && appointment.customer ? appointment as CustomerAppointment : null;
-
 
     const duration = moment.duration(end.diff(start));
 
-    const backgroundColor = customerAppointment ? customerAppointment.service.toString() : '#FFFFFF'; //todo service category color.
-    const title = customerAppointment ? customerAppointment.customer : appointment.internalNotes; //todo: customer.name
-    const subTitle = customerAppointment ? customerAppointment.service : ''; //todo service name
+    const backgroundColor = appointment.customer ? appointment.service.toString() : '#FFFFFF'; //todo service category color.
+    const title = appointment.customer ? appointment.customer : appointment.internalNotes; //todo: customer.name
+    const subTitle = appointment.customer ? appointment.service : ''; //todo service name
 
     const style: React.CSSProperties = {
         width: `${BASE_WIDTH - 0.25 - 3 * +isOverlapping}rem`,
@@ -64,7 +58,7 @@ const Event: React.FunctionComponent<EventProps> = (
 
 interface EventsContainerProps {
     employee: EmployeeAdminResourceModel;
-    onSelect: (entity: Appointment | null) => () => void
+    onSelect: (entity: AppointmentAdminResourceModel | null) => () => void
 }
 
 const EventsContainer: React.FunctionComponent<EventsContainerProps> = (
@@ -99,8 +93,8 @@ const EventsContainer: React.FunctionComponent<EventsContainerProps> = (
     )
 }
 
-const isOverlapping = (currentAppointment: BaseAppointment, previousAppointment: BaseAppointment): boolean => {
-    return stringToMoment(currentAppointment.start).isBefore(stringToMoment(previousAppointment.end));
+const isOverlapping = (currentAppointment: AppointmentAdminResourceModel, previousAppointment: AppointmentAdminResourceModel): boolean => {
+    return currentAppointment.start.isBefore(previousAppointment.end);
 }
 
 export default EventsContainer;

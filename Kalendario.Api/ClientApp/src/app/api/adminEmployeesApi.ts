@@ -1,17 +1,17 @@
 import {CancelToken} from 'axios';
 import {EmployeeAdminResourceModel, EmployeesClient, UpsertEmployeeCommand} from 'src/app/api/api';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
-import {BaseModelRequest} from 'src/app/api/common/clients/base-django-api';
+import {BaseModelRequest, BaseQueryParams} from 'src/app/api/common/clients/base-django-api';
 import * as yup from 'yup';
 
 const client = new EmployeesClient('', baseApiAxios);
 
-export const adminEmployeeClient: BaseModelRequest<EmployeeAdminResourceModel, UpsertEmployeeCommand> = {
+export const adminEmployeeClient: BaseModelRequest<EmployeeAdminResourceModel, UpsertEmployeeCommand, BaseQueryParams> = {
+    get(params) {
+        return client.employeesGet(params.search, params.start, params.length, params.cancelToken);
+    },
     post(body: UpsertEmployeeCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.employeesPost(body, cancelToken);
-    },
-    get(search: string | undefined, start: number | undefined, length: number | undefined) {
-        return client.employeesGet(search, start, length);
     },
     put(id: string, command: UpsertEmployeeCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.employeesPut(id, command, cancelToken);

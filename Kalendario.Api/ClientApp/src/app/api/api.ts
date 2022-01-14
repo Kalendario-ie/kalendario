@@ -89,6 +89,227 @@ export class AccountsClient implements IAccountsClient {
     }
 }
 
+export interface IAppointmentsClient {
+    /**
+     * @param fromDate (optional)
+     * @param toDate (optional)
+     * @param customerId (optional)
+     * @param employeeIds (optional)
+     * @return Success
+     */
+    appointmentsGet(fromDate: moment.Moment | undefined, toDate: moment.Moment | undefined, customerId: string | undefined, employeeIds: string[] | undefined): Promise<GetAppointmentsResult>;
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    appointmentsPost(body: UpsertAppointmentCommand | undefined): Promise<AppointmentAdminResourceModel>;
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    appointmentsPut(id: string, body: UpsertAppointmentCommand | undefined): Promise<AppointmentAdminResourceModel>;
+}
+
+export class AppointmentsClient implements IAppointmentsClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+
+    }
+
+    /**
+     * @param fromDate (optional)
+     * @param toDate (optional)
+     * @param customerId (optional)
+     * @param employeeIds (optional)
+     * @return Success
+     */
+    appointmentsGet(fromDate: moment.Moment | undefined, toDate: moment.Moment | undefined, customerId: string | undefined, employeeIds: string[] | undefined , cancelToken?: CancelToken | undefined): Promise<GetAppointmentsResult> {
+        let url_ = this.baseUrl + "/api/Appointments?";
+        if (fromDate === null)
+            throw new Error("The parameter 'fromDate' cannot be null.");
+        else if (fromDate !== undefined)
+            url_ += "FromDate=" + encodeURIComponent(fromDate ? "" + fromDate.toJSON() : "") + "&";
+        if (toDate === null)
+            throw new Error("The parameter 'toDate' cannot be null.");
+        else if (toDate !== undefined)
+            url_ += "ToDate=" + encodeURIComponent(toDate ? "" + toDate.toJSON() : "") + "&";
+        if (customerId === null)
+            throw new Error("The parameter 'customerId' cannot be null.");
+        else if (customerId !== undefined)
+            url_ += "CustomerId=" + encodeURIComponent("" + customerId) + "&";
+        if (employeeIds === null)
+            throw new Error("The parameter 'employeeIds' cannot be null.");
+        else if (employeeIds !== undefined)
+            employeeIds && employeeIds.forEach(item => { url_ += "EmployeeIds=" + encodeURIComponent("" + item) + "&"; });
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processAppointmentsGet(_response);
+        });
+    }
+
+    protected processAppointmentsGet(response: AxiosResponse): Promise<GetAppointmentsResult> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<GetAppointmentsResult>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<GetAppointmentsResult>(<any>null);
+    }
+
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    appointmentsPost(body: UpsertAppointmentCommand | undefined , cancelToken?: CancelToken | undefined): Promise<AppointmentAdminResourceModel> {
+        let url_ = this.baseUrl + "/api/Appointments";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processAppointmentsPost(_response);
+        });
+    }
+
+    protected processAppointmentsPost(response: AxiosResponse): Promise<AppointmentAdminResourceModel> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<AppointmentAdminResourceModel>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<AppointmentAdminResourceModel>(<any>null);
+    }
+
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    appointmentsPut(id: string, body: UpsertAppointmentCommand | undefined , cancelToken?: CancelToken | undefined): Promise<AppointmentAdminResourceModel> {
+        let url_ = this.baseUrl + "/api/Appointments/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processAppointmentsPut(_response);
+        });
+    }
+
+    protected processAppointmentsPut(response: AxiosResponse): Promise<AppointmentAdminResourceModel> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<AppointmentAdminResourceModel>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<AppointmentAdminResourceModel>(<any>null);
+    }
+}
+
 export interface ICustomersClient {
     /**
      * @param search (optional)
@@ -1307,6 +1528,17 @@ export class WeatherForecastClient implements IWeatherForecastClient {
     }
 }
 
+export interface AppointmentAdminResourceModel {
+    id: string;
+    customer: CustomerAdminResourceModel;
+    employee: EmployeeAdminResourceModel;
+    service: ServiceAdminResourceModel;
+    start: moment.Moment;
+    end: moment.Moment;
+    price: number;
+    internalNotes: string | undefined;
+}
+
 export interface Colour {
     readonly code: string | undefined;
 }
@@ -1347,6 +1579,10 @@ export interface EmployeeAdminResourceModelGetAllResult {
     entities: EmployeeAdminResourceModel[] | undefined;
     filteredCount: number;
     totalCount: number;
+}
+
+export interface GetAppointmentsResult {
+    entities: AppointmentAdminResourceModel[] | undefined;
 }
 
 export interface ScheduleAdminResourceModel {
@@ -1397,6 +1633,16 @@ export interface ServiceCategoryAdminResourceModelGetAllResult {
     entities: ServiceCategoryAdminResourceModel[] | undefined;
     filteredCount: number;
     totalCount: number;
+}
+
+export interface UpsertAppointmentCommand {
+    start: moment.Moment;
+    end: moment.Moment | undefined;
+    internalNotes: string | undefined;
+    customerId: string;
+    employeeId: string;
+    serviceId: string;
+    ignoreTimeClashes: boolean;
 }
 
 export interface UpsertCustomerCommand {

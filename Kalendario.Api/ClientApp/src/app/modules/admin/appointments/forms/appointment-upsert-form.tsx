@@ -1,27 +1,128 @@
-import React, {useState} from 'react';
-import {
-    Appointment,
-    CustomerAppointment,
-    EventType, UpsertCustomerAppointmentRequest,
-    upsertCustomerAppointmentRequestParser,
-    UpsertCustomerAppointmentRequestValidation, UpsertEmployeeEventRequest,
-    upsertEmployeeEventRequestParser,
-    UpsertEmployeeEventRequestValidation
-} from 'src/app/api/appointments';
-import {PermissionModel} from 'src/app/api/auth';
-import AppointmentHistoryContainer from 'src/app/modules/admin/appointments/appointment-history-container';
-import DeleteButton from 'src/app/shared/admin/delete-button';
-import {useInitializeEffect} from 'src/app/shared/admin/hooks';
+import {useFormikContext} from 'formik';
+import moment, {Moment} from 'moment';
+import React, {ChangeEvent, useEffect, useState} from 'react';
+import {FormGroup, Input, Label} from 'reactstrap';
+import {upsertAppointmentCommandParser, upsertAppointmentCommandValidation} from 'src/app/api/adminAppointments';
+import {AppointmentAdminResourceModel, UpsertAppointmentCommand} from 'src/app/api/api';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
-import {KFlexRow} from 'src/app/shared/components/flex';
+import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
-import KFormikDatetimeInput from 'src/app/shared/components/forms/k-formik-datetime-input';
-import {KIconButton} from 'src/app/shared/components/primitives/buttons';
-import {appointmentActions} from 'src/app/store/admin/appointments';
-import {serviceActions} from 'src/app/store/admin/services';
-import CustomerAppointmentUpsertForm from './customer-appointment-upsert-form';
+import {KDateInput} from 'src/app/shared/components/primitives/inputs';
+import {compareByName} from 'src/app/shared/util/comparers';
+import {stringToMoment} from 'src/app/shared/util/moment-helpers';
+import {useAppSelector} from 'src/app/store';
+import {employeeSelectors} from 'src/app/store/admin/employees';
+import {serviceSelectors} from 'src/app/store/admin/services';
 
-const AppointmentUpsertForm: React.FunctionComponent<AdminEditContainerProps<Appointment, UpsertCustomerAppointmentRequest | UpsertEmployeeEventRequest>> = (
+function addHours(date: Moment, time: string): string {
+    const momentTime = moment.utc(time, 'HH:mm')
+    return date.clone()
+        .add(momentTime.hour(), 'hour')
+        .add(momentTime.minutes(), 'minutes')
+        .toISOString();
+}
+
+function useDateHelper(name: string): [Moment, (value: Moment) => void, string, (event: ChangeEvent<HTMLInputElement>) => void] {
+    const formik = useFormikContext();
+    const {value} = formik.getFieldMeta<string>(name);
+    const {setValue} = formik.getFieldHelpers(name);
+
+    const momentValue = stringToMoment(value);
+    const [time, setTime] = useState(momentValue.format('HH:mm'));
+
+    useEffect(() => {
+        const momentValue = stringToMoment(value);
+        setTime(momentValue.format('HH:mm'))
+    }, [value]);
+
+    const handleDateChange = (value: Moment) => {
+        setValue((addHours(value.startOf('day'), time)));
+
+    }
+    const handleTimeChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setTime(e.target.value);
+        setValue((addHours(momentValue.startOf('day'), e.target.value)));
+
+    }
+
+
+    return [momentValue, handleDateChange, time, handleTimeChange]
+}
+
+const FormikStartEndTimeInput: React.FunctionComponent = () => {
+    const [start, handleDateChange, startTime, handleStartTimeChange] = useDateHelper('start');
+    const [, handleEndDateChange, endTime, handleEndTimeChange] = useDateHelper('end');
+
+    return (
+        <>
+            <FormGroup>
+                <KFlexColumn>
+                    <Label>Date</Label>
+                    <KDateInput value={start}
+                                onChange={(e) => {
+                                    handleDateChange(e);
+                                    handleEndDateChange(e);
+                                }}/>
+                </KFlexColumn>
+            </FormGroup>
+            <FormGroup>
+                <KFlexRow align={'center'} justify={'center'}>
+                    <KFlexColumn className="w-100">
+                        Start
+                        <Input value={startTime} onChange={handleStartTimeChange} type={'time'}/>
+                    </KFlexColumn>
+                    <KFlexColumn className="w-100">
+                        Finish
+                        <Input value={endTime} onChange={handleEndTimeChange} type={'time'}/>
+                    </KFlexColumn>
+                </KFlexRow>
+            </FormGroup>
+        </>
+    )
+}
+
+
+function useEmployeeServices() {
+    const formik = useFormikContext();
+    const employeeId = formik.getFieldProps<string>('employeeId').value;
+    const [employeeServices, setEmployeeServices] = useState<string[]>([]);
+    const employeeEntities = useAppSelector(employeeSelectors.selectEntities);
+
+    useEffect(() => {
+        setEmployeeServices(employeeEntities[employeeId]?.services || [])
+    }, [employeeEntities, employeeId]);
+
+    return useAppSelector((state) => serviceSelectors
+        .selectByIds(state, employeeServices))
+        .sort(compareByName);
+}
+
+function useUpdateEndTimeOnServiceChangeEffect() {
+    const formik = useFormikContext();
+    const serviceId = formik.getFieldProps<number>('service').value;
+    const start = formik.getFieldProps('start').value;
+    const {setValue} = formik.getFieldHelpers('end');
+
+    const [initialId, setInitialId] = useState(serviceId);
+    const [initialStart, setInitialStart] = useState(start);
+
+    const service = useAppSelector((state) => serviceSelectors.selectById(state, serviceId));
+
+    useEffect(() => {
+        if (service && (serviceId !== initialId || start !== initialStart)) {
+            setInitialId(serviceId);
+            setInitialStart(start);
+            setValue(addHours(stringToMoment(start), service.duration))
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [initialId, start, service, serviceId, initialStart]);
+}
+
+interface CustomerAppointmentUpsertFormProps {
+    entity: AppointmentAdminResourceModel | null;
+}
+
+const AppointmentUpsertForm: React.FunctionComponent<AdminEditContainerProps<AppointmentAdminResourceModel, UpsertAppointmentCommand>> = (
     {
         entity,
         apiError,
@@ -29,50 +130,25 @@ const AppointmentUpsertForm: React.FunctionComponent<AdminEditContainerProps<App
         onSubmit,
         onCancel
     }) => {
-    const isAppointment = entity?.type === EventType.CustomerAppointment;
-    const validationSchema = isAppointment ? UpsertCustomerAppointmentRequestValidation : UpsertEmployeeEventRequestValidation;
-    const initialValues = isAppointment ? upsertCustomerAppointmentRequestParser(entity) : upsertEmployeeEventRequestParser(entity);
-    const [showHistory, setShowHistory] = useState(false);
-    useInitializeEffect(serviceActions);
-
-    const handleHistoryClick = () => {
-        setShowHistory(true);
-    };
-
-    const handleHistoryCloseClick = () => {
-        setShowHistory(false);
-    };
+    const employees = useAppSelector(employeeSelectors.selectAll);
+    const services = useEmployeeServices();
+    useUpdateEndTimeOnServiceChangeEffect();
 
     return (
-        <KFormikForm initialValues={initialValues}
+        <KFormikForm initialValues={upsertAppointmentCommandParser(entity)}
                      onSubmit={(values => onSubmit(values, entity?.id.toString()))}
                      apiError={apiError}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
-                     validationSchema={validationSchema}
+                     validationSchema={upsertAppointmentCommandValidation}
         >
-            {entity && entity.id !== 0 &&
-            <KFlexRow justify="end">
-                <DeleteButton entity={entity}
-                              modelType={PermissionModel.appointment}
-                              baseActions={appointmentActions}/>
-                <KIconButton icon="history"
-                             color="primary"
-                             onClick={handleHistoryClick}/>
-                <AppointmentHistoryContainer id={entity.id} isOpen={showHistory} onClose={handleHistoryCloseClick}/>
-            </KFlexRow>
-            }
-            {isAppointment &&
-            <CustomerAppointmentUpsertForm appointment={entity as CustomerAppointment}/>
-            }
-            {!isAppointment &&
-            <>
-                <KFormikDatetimeInput name="start"/>
-                <KFormikDatetimeInput name="end"/>
-                <KFormikInput name="internalNotes" as={'textarea'}/>
-                <KFormikInput placeholder="Allow Overlapping" name="ignoreAvailability" as={'checkbox'}/>
-            </>
-            }
+
+            <FormikStartEndTimeInput/>
+            {/*<KFormikInput name="employee" as={'select'} options={employees}/>*/}
+            <KFormikInput name="service" as={'select'} options={services}/>
+            {/*<KFormikCustomerInput initialCustomer={appointment?.customer || null}/>*/} //TODO: Fix Here
+            <KFormikInput name="internalNotes" as={'textarea'}/>
+            <KFormikInput placeholder="Allow Overlapping" name="ignoreAvailability" as={'checkbox'}/>
         </KFormikForm>
     )
 }

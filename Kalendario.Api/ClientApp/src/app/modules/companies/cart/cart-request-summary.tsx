@@ -20,41 +20,42 @@ const CartRequestSummary: React.FunctionComponent<CartRequestSummaryProps> = (
     }) => {
     const isEmpty = !request || (request && request.itemsCount === 0);
     return (
-        <KFlexColumn>
-            {request.items.map((requestItem, key) => (
-                    <KFlexRow align="center" key={key}>
-                        <AvatarImg className="mr-4" src={requestItem.employee.photoUrl}/>
-                        <KFlexColumn className="w-100">
-                            <h4 className="border-bottom border-dark">{requestItem.employee.name}</h4>
-                            {requestItem.appointments.map((appointment, key) => (
-                                    <KFlexRow className="m-2" key={key} justify={'between'}>
-                                        <KFlexColumn>
-                                            <h6>{appointment.service}</h6> // todo: service name
-                                            {stringToMoment(appointment.start).format('DD/MM/YYYY - HH:mm')}
-                                            (duration: {appointment.service}) // todo: service duration
-                                        </KFlexColumn>
-                                        <KFlexColumn className="text-right">
-                                            <h6 className="c-primary">{appointment.service}</h6> // todo service price.
-                                            {showDelete &&
-                                            <button className="btn btn-sm btn-outline-danger"
-                                                    onClick={() => deleteClick(+appointment.id)} // todo fix here.
-                                            >
-                                                <i className="fa fa-trash"/>
-                                            </button>
-                                            }
-                                        </KFlexColumn>
-                                    </KFlexRow>
-                                )
-                            )}
-                        </KFlexColumn>
-                    </KFlexRow>
-                )
-            )}
-            <div className="text-right font-weight-bold m-2 c-primary">
-                Total: {request.total.toFixed(2)}
-            </div>
-            {isEmpty && <FormattedMessage id="COMPANY.EMPTY-CART"/>}
-        </KFlexColumn>
+        <></>
+        // <KFlexColumn>
+        //     {request.items.map((requestItem, key) => (
+        //             <KFlexRow align="center" key={key}>
+        //                 <AvatarImg className="mr-4" src={requestItem.employee.photoUrl}/>
+        //                 <KFlexColumn className="w-100">
+        //                     <h4 className="border-bottom border-dark">{requestItem.employee.name}</h4>
+        //                     {requestItem.appointments.map((appointment, key) => (
+        //                             <KFlexRow className="m-2" key={key} justify={'between'}>
+        //                                 <KFlexColumn>
+        //                                     <h6>{appointment.service}</h6> // todo: service name
+        //                                     {stringToMoment(appointment.start).format('DD/MM/YYYY - HH:mm')}
+        //                                     (duration: {appointment.service}) // todo: service duration
+        //                                 </KFlexColumn>
+        //                                 <KFlexColumn className="text-right">
+        //                                     <h6 className="c-primary">{appointment.service}</h6> // todo service price.
+        //                                     {showDelete &&
+        //                                     <button className="btn btn-sm btn-outline-danger"
+        //                                             onClick={() => deleteClick(+appointment.id)} // todo fix here.
+        //                                     >
+        //                                         <i className="fa fa-trash"/>
+        //                                     </button>
+        //                                     }
+        //                                 </KFlexColumn>
+        //                             </KFlexRow>
+        //                         )
+        //                     )}
+        //                 </KFlexColumn>
+        //             </KFlexRow>
+        //         )
+        //     )}
+        //     <div className="text-right font-weight-bold m-2 c-primary">
+        //         Total: {request.total.toFixed(2)}
+        //     </div>
+        //     {isEmpty && <FormattedMessage id="COMPANY.EMPTY-CART"/>}
+        // </KFlexColumn>
     )
 }
 

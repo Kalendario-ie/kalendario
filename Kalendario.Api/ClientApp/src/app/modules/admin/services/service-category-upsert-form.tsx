@@ -3,7 +3,7 @@ import {ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand} from 's
 import {
     createUpsertServiceCategoryRequest,
     UpsertServiceCategoryRequestValidation
-} from 'src/app/api/serviceCategoryApi';
+} from 'src/app/api/adminServiceCategoryApi';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 

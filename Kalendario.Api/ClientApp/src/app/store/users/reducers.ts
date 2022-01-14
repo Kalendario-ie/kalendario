@@ -1,7 +1,9 @@
 import {Reducer} from 'redux';
-import {CustomerEvent} from 'src/app/api/appointments';
 import {ACTION_TYPES} from './types';
 
+
+class CustomerEvent {
+} //todo: fix here
 
 export interface UsersState {
     events: CustomerEvent[] | null;

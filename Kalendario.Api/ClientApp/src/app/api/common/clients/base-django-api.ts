@@ -4,11 +4,18 @@ import {ApiListResult} from '../api-results';
 import {convertMoment} from '../helpers';
 import baseApiAxios from './base-api';
 
-export interface BaseModelRequest<TResourceModel, TUpsertCommand> {
-    get: (search: string | undefined, start: number | undefined, length: number | undefined) => Promise<ApiListResult<TResourceModel>>;
+export interface BaseQueryParams {
+    search: string | undefined;
+    start: number | undefined;
+    length: number | undefined;
+    cancelToken?: CancelToken | undefined;
+}
+
+export interface BaseModelRequest<TResourceModel, TUpsertCommand, TGetQueryParams> {
+    get: (params: TGetQueryParams) => Promise<ApiListResult<TResourceModel>>;
     // detail: (id: number, params?: {}) => Promise<TResourceModel>;
-    post: (body: TUpsertCommand | undefined , cancelToken?: CancelToken | undefined) => Promise<TResourceModel>;
-    put: (id: string, command: TUpsertCommand | undefined , cancelToken?: CancelToken | undefined) => Promise<TResourceModel>;
+    post: (body: TUpsertCommand | undefined, cancelToken?: CancelToken | undefined) => Promise<TResourceModel>;
+    put: (id: string, command: TUpsertCommand | undefined, cancelToken?: CancelToken | undefined) => Promise<TResourceModel>;
     // delete: (id: string) => Promise<AxiosResponse>;
 }
 

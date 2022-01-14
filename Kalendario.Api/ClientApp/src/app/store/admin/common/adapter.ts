@@ -63,9 +63,9 @@ export interface BaseActions {
 
 
 
-export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand>(
+export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGetQueryParams>(
     sliceName: string,
-    client: BaseModelRequest<TEntity, TUpsertCommand>,
+    client: BaseModelRequest<TEntity, TUpsertCommand, TGetQueryParams>,
     selector: (state: any) => BaseState<TEntity>
 ) {
 
@@ -154,9 +154,9 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand>(
         yield put(actions.fetchEntities(action.payload))
     }
 
-    function* fetchEntities(action: { type: string, payload: { search: string | undefined, start: number | undefined, length: number | undefined } }) {
+    function* fetchEntities(action: { type: string, payload: TGetQueryParams }) {
         try {
-            const result: ApiListResult<TEntity> = yield call(client.get, action.payload?.search, action.payload?.start, action.payload?.length);
+            const result: ApiListResult<TEntity> = yield call(client.get, action.payload);
             yield put(slice.actions.upsertMany(result.entities));
             yield put(slice.actions.setInitialized(true));
         } catch (error) {

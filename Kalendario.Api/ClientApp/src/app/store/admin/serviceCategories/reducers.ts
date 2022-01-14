@@ -1,5 +1,6 @@
 import {ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand} from 'src/app/api/api';
-import {adminServiceCategoryClient} from 'src/app/api/serviceCategoryApi';
+import {adminServiceCategoryClient} from 'src/app/api/adminServiceCategoryApi';
+import {BaseQueryParams} from 'src/app/api/common/clients/base-django-api';
 import {kCreateBaseStore} from 'src/app/store/admin/common/adapter';
 
 const storeName = 'adminServiceCategories';
@@ -10,7 +11,7 @@ const {
     reducer,
     sagas,
     selectors
-} = kCreateBaseStore<ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand>(storeName, adminServiceCategoryClient, (state) => state.adminServiceCategories);
+} = kCreateBaseStore<ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand, BaseQueryParams>(storeName, adminServiceCategoryClient, (state) => state.adminServiceCategories);
 
 export {reducer as serviceCategoryReducer}
 export {actions as serviceCategoryActions}

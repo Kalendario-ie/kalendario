@@ -1,15 +1,13 @@
 import moment, {Moment} from 'moment';
 import React, {useState} from 'react';
 import {isMobile} from 'react-device-detect';
+import {useSelector} from 'react-redux';
 import {getFramesForDate} from 'src/app/api/adminSchedulesApi';
-import {ScheduleAdminResourceModel} from 'src/app/api/api';
-import {Appointment} from 'src/app/api/appointments';
+import {AppointmentAdminResourceModel, ScheduleAdminResourceModel} from 'src/app/api/api';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KIconButton, KRoundedButton} from 'src/app/shared/components/primitives/buttons';
 import KIcon from 'src/app/shared/components/primitives/k-icon';
-import {stringToMoment} from 'src/app/shared/util/moment-helpers';
 
-// import {selectUserEmployee} from 'src/app/store/auth';
 
 function dates(startDate: Moment, endDate: Moment): Moment[] {
     const dates = [];
@@ -111,14 +109,14 @@ const EmployeeScheduleView: React.FunctionComponent<EmployeeScheduleViewProps> =
 }
 
 interface EmployeeDashboardAppointmentsProps {
-    appointment: Appointment;
+    appointment: AppointmentAdminResourceModel;
 }
 
 const EmployeeDashboardAppointment: React.FunctionComponent<EmployeeDashboardAppointmentsProps> = ({appointment}) => {
-    const start = stringToMoment(appointment.start).format('HH:mm')
-    const end = stringToMoment(appointment.end).format('HH:mm')
+    const start = appointment.start.format('HH:mm')
+    const end = appointment.end.format('HH:mm')
 
-    const customerNotes = 'customerNotes' in appointment ? appointment.customerNotes : '';
+    // const customerNotes = 'customerNotes' in appointment ? appointment.customerNotes : '';
     const customerName = 'customer' in appointment ? appointment.customer : ''; // todo customer?.name
     const serviceName = 'service' in appointment ? appointment.service?.toString() : ''; //todo fix here.
 
@@ -140,27 +138,28 @@ const EmployeeDashboardAppointment: React.FunctionComponent<EmployeeDashboardApp
                 <KIcon icon="sticky-note" color="primary" margin={2}/> {appointment.internalNotes}
             </KFlexRow>
             }
-            {customerNotes &&
-            <KFlexRow align="center" className="mb-2">
-                <KIcon icon="comment-alt" color="primary" margin={2}/> {customerNotes}
-            </KFlexRow>
-            }
+            {/*{customerNotes &&*/}
+            {/*<KFlexRow align="center" className="mb-2">*/}
+            {/*    <KIcon icon="comment-alt" color="primary" margin={2}/> {customerNotes}*/}
+            {/*</KFlexRow>*/}
+            {/*}*/}
         </KFlexColumn>
     )
 }
 
 const EmployeeDashboard: React.FunctionComponent = () => {
     const [currentDate, setCurrentDate] = useState(moment.utc());
-    const [appointments, setAppointments] = useState<Appointment[]>([]);
+    const [appointments, setAppointments] = useState<AppointmentAdminResourceModel[]>([]);
     // const employee = useSelector(selectUserEmployee);
 
     // useEffect(() => {
-    //     // adminAppointmentClient.get(
-    //     //     {
-    //     //         employee: employee?.id,
-    //     //         from_date: momentToIso(currentDate.clone().startOf('day')),
-    //     //         to_date: momentToIso(currentDate.clone().endOf('day')),
-    //     //     }).then(res => setAppointments(res.results));  TODO: FIX HERE.
+    //     adminAppointmentClient.get(
+    //         {
+    //             customerId: undefined,
+    //             employeeIds: [employee?.id],
+    //             fromDate: currentDate.clone().startOf('day'),
+    //             toDate: currentDate.clone().endOf('day')
+    //         }).then(res => setAppointments(res.entities || []));
     // }, [currentDate, employee?.id]);
 
 

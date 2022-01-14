@@ -1,13 +1,10 @@
 import {Moment} from 'moment';
 import React from 'react';
-import {EmployeeAdminResourceModel} from 'src/app/api/api';
-import {Appointment, blankCustomerAppointment, blankEmployeeEvent} from 'src/app/api/appointments';
-import {Employee} from 'src/app/api/employees';
-import {KIconButton} from 'src/app/shared/components/primitives/buttons';
+import {AppointmentAdminResourceModel, EmployeeAdminResourceModel} from 'src/app/api/api';
 
 interface CreateAppointmentButtonsProps {
     employee: EmployeeAdminResourceModel;
-    onCreateClick: (entity: Appointment | null) => () => void;
+    onCreateClick: (entity: AppointmentAdminResourceModel | null) => () => void;
     currentDate: Moment;
     hour: number;
     minute: number;

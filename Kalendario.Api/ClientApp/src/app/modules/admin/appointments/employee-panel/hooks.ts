@@ -1,8 +1,7 @@
 import {Duration, Moment} from 'moment';
 import {useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {AppointmentQueryParams} from 'src/app/api/appointments';
-import {momentToIso} from 'src/app/shared/util/moment-helpers';
+import {AppointmentsGetParams} from 'src/app/api/adminAppointments';
 import {useAppDispatch, useAppSelector} from 'src/app/store';
 import {appointmentActions} from 'src/app/store/admin/appointments';
 import {adminDashboardSelectors} from 'src/app/store/admin/dashboard';
@@ -21,10 +20,11 @@ export function useReloadAppointmentsEffect() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        const params: AppointmentQueryParams = {
-            from_date: momentToIso(currentDate),
-            to_date: momentToIso(currentDate.clone().add(1, 'day')),
-            employees: selectedPanel?.employees || []
+        const params: AppointmentsGetParams = {
+            fromDate: currentDate,
+            toDate: currentDate.clone().add(1, 'day'),
+            employeeIds: selectedPanel?.employees || [],
+            customerId: undefined,
         };
         dispatch(appointmentActions.fetchEntitiesWithSetAll(params));
 

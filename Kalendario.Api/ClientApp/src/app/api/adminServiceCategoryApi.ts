@@ -5,18 +5,18 @@ import {
     UpsertServiceCategoryCommand
 } from 'src/app/api/api';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
-import {BaseModelRequest} from 'src/app/api/common/clients/base-django-api';
+import {BaseModelRequest, BaseQueryParams} from 'src/app/api/common/clients/base-django-api';
 import * as yup from 'yup';
 
 
 const client = new ServiceCategoriesClient('', baseApiAxios);
 
-export const adminServiceCategoryClient: BaseModelRequest<ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand> = {
+export const adminServiceCategoryClient: BaseModelRequest<ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand, BaseQueryParams> = {
+    get(params) {
+        return client.serviceCategoriesGet(params.search, params.start, params.length, params.cancelToken);
+    },
     post(body: UpsertServiceCategoryCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.serviceCategoriesPost(body, cancelToken);
-    },
-    get(search: string | undefined, start: number | undefined, length: number | undefined) {
-        return client.serviceCategoriesGet(search, start, length);
     },
     put(id: string, command: UpsertServiceCategoryCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.serviceCategoriesPut(id, command, cancelToken);

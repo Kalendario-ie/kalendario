@@ -1,4 +1,3 @@
-import {CustomerRequestAppointment} from 'src/app/api/appointments';
 import {IReadModel} from 'src/app/api/common/models';
 import {Company} from 'src/app/api/companies';
 import {Employee} from 'src/app/api/employees';
@@ -6,7 +5,7 @@ import {AdminUser} from 'src/app/api/users';
 
 export interface RequestItem {
   employee: Employee;
-  appointments: CustomerRequestAppointment[];
+  // appointments: CustomerRequestAppointment[];
 }
 
 export interface RequestModel extends IReadModel {

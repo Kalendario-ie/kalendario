@@ -8,16 +8,16 @@ import {
     UpsertScheduleCommand,
 } from 'src/app/api/api';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
-import {BaseModelRequest} from 'src/app/api/common/clients/base-django-api';
+import {BaseModelRequest, BaseQueryParams} from 'src/app/api/common/clients/base-django-api';
 
 const client = new SchedulesClient('', baseApiAxios);
 
-export const adminScheduleClient: BaseModelRequest<ScheduleAdminResourceModel, UpsertScheduleCommand> = {
+export const adminScheduleClient: BaseModelRequest<ScheduleAdminResourceModel, UpsertScheduleCommand, BaseQueryParams> = {
+    get(params) {
+        return client.schedulesGet(params.search, params.start, params.length, params.cancelToken);
+    },
     post(body: UpsertScheduleCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.schedulesPost(body, cancelToken);
-    },
-    get(search: string | undefined, start: number | undefined, length: number | undefined) {
-        return client.schedulesGet(search, start, length);
     },
     put(id: string, command: UpsertScheduleCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.schedulesPut(id, command, cancelToken);

@@ -1,10 +1,7 @@
-import moment from 'moment'
 import React, {useEffect} from 'react';
-import {Calendar, momentLocalizer, stringOrDate} from 'react-big-calendar'
+import {stringOrDate} from 'react-big-calendar'
 import {useDispatch, useSelector} from 'react-redux';
-import {Appointment} from 'src/app/api/appointments';
 import {RequestModelGetParams} from 'src/app/api/companies';
-import EventModal from 'src/app/modules/users/bookings/event-modal';
 import {KCard, KPageContainer} from 'src/app/shared/components/primitives/containers';
 import {stringToMoment, validOrToday} from 'src/app/shared/util/moment-helpers';
 import {useQueryParams} from 'src/app/shared/util/router-extensions';
@@ -12,8 +9,8 @@ import {eventsRequest, selectEvents, selectSelectedEvent, setSelectedEvent} from
 
 
 const BookingsContainer: React.FunctionComponent = () => {
-    const events = useSelector(selectEvents)
-        ?.map(a => ({...a, title: a.companyName}));
+    // const events = useSelector(selectEvents)
+    //     ?.map(a => ({...a, title: a.companyName}));
     const selectedEvent = useSelector(selectSelectedEvent);
     const dispatch = useDispatch();
     const {date} = useQueryParams();
@@ -32,25 +29,25 @@ const BookingsContainer: React.FunctionComponent = () => {
         dispatch(eventsRequest(request));
     }
 
-    const selectEvent = (appointment: Appointment) => dispatch(setSelectedEvent(appointment))
+    // const selectEvent = (appointment: Appointment) => dispatch(setSelectedEvent(appointment))
     const closeModal = () => dispatch(setSelectedEvent(null));
 
     return (
         <KPageContainer>
             <KCard>
-                <Calendar
-                    date={initialDate.toDate()}
-                    localizer={momentLocalizer(moment)}
-                    events={events || []}
-                    startAccessor="start"
-                    endAccessor="end"
-                    style={{height: 500}}
-                    onRangeChange={updateEvents}
-                    onSelectEvent={selectEvent}
-                />
+                {/*<Calendar*/}
+                {/*    date={initialDate.toDate()}*/}
+                {/*    localizer={momentLocalizer(moment)}*/}
+                {/*    events={events || []}*/}
+                {/*    startAccessor="start"*/}
+                {/*    endAccessor="end"*/}
+                {/*    style={{height: 500}}*/}
+                {/*    onRangeChange={updateEvents}*/}
+                {/*    onSelectEvent={selectEvent}*/}
+                {/*/>*/}
             </KCard>
-            <EventModal appointment={selectedEvent}
-                        closeClick={closeModal}/>
+            {/*<EventModal appointment={selectedEvent}*/}
+            {/*            closeClick={closeModal}/>*/}
         </KPageContainer>
     )
 }

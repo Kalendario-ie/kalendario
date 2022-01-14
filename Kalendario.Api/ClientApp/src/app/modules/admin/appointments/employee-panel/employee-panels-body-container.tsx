@@ -1,8 +1,6 @@
 import React from 'react';
 import {getFramesForDate, isAvailable} from 'src/app/api/adminSchedulesApi';
-import {EmployeeAdminResourceModel} from 'src/app/api/api';
-import {Appointment} from 'src/app/api/appointments';
-import {Employee} from 'src/app/api/employees';
+import {AppointmentAdminResourceModel, EmployeeAdminResourceModel} from 'src/app/api/api';
 import {useSelectPanelEmployees} from 'src/app/modules/admin/appointments/employee-panel/hooks';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import KShowOnHoverContainer from 'src/app/shared/components/primitives/containers/k-show-on-hover-container';
@@ -40,7 +38,7 @@ const PanelHours: React.FunctionComponent = () => {
 
 interface EmployeePanelProps {
     employee: EmployeeAdminResourceModel;
-    onCreateClick: (entity: Appointment | null) => () => void;
+    onCreateClick: (entity: AppointmentAdminResourceModel | null) => () => void;
 }
 
 const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
@@ -90,7 +88,7 @@ const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
 }
 
 export interface EmployeePanelsBodyContainerProps {
-    onSelect: (entity: Appointment | null) => () => void
+    onSelect: (entity: AppointmentAdminResourceModel | null) => () => void
 }
 
 export const EmployeePanelsBodyContainer: React.FunctionComponent<EmployeePanelsBodyContainerProps> = ({onSelect}) => {

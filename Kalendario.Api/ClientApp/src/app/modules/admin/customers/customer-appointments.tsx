@@ -1,7 +1,6 @@
 import moment from 'moment';
 import React, {useContext, useEffect, useState} from 'react';
-import {CustomerAdminResourceModel} from 'src/app/api/api';
-import {Appointment} from 'src/app/api/appointments';
+import {AppointmentAdminResourceModel, CustomerAdminResourceModel} from 'src/app/api/api';
 import {PermissionModel} from 'src/app/api/auth';
 import AppointmentUpsertForm from 'src/app/modules/admin/appointments/forms/appointment-upsert-form';
 import AdminListEditContainer from 'src/app/shared/admin/admin-list-edit-container';
@@ -17,7 +16,7 @@ import {employeeActions, employeeSelectors} from 'src/app/store/admin/employees'
 import {serviceActions, serviceSelectors} from 'src/app/store/admin/services';
 
 
-const CustomerAppointmentsTable: React.FunctionComponent<AdminTableContainerProps<Appointment>> = (
+const CustomerAppointmentsTable: React.FunctionComponent<AdminTableContainerProps<AppointmentAdminResourceModel>> = (
     {
         entities,
         buttonsColumn,

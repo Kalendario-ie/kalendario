@@ -1,7 +1,7 @@
 import React from 'react';
 import {ServiceAdminResourceModel, UpsertServiceCommand} from 'src/app/api/api';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
-import {createUpsertServiceCommand, upsertServiceCommandValidation} from 'src/app/api/servicesApi';
+import {createUpsertServiceCommand, upsertServiceCommandValidation} from 'src/app/api/adminServicesApi';
 import AdminButton from 'src/app/shared/admin/admin-button';
 import {useEditModal} from 'src/app/shared/admin/hooks';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';

@@ -31,7 +31,11 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
     //     // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [createdCustomer]);
 
-    const promiseOptions = (search: string) => adminCustomerClient.get(search, 0, 200).then(res => res.entities!);
+    const promiseOptions = (search: string) => adminCustomerClient.get({
+        search,
+        start: 0,
+        length: 200
+    }).then(res => res.entities!);
 
     const navigateToPage = (selectedCustomer: CustomerAdminResourceModel | null) => {
         setCustomer(selectedCustomer);
