@@ -10,7 +10,7 @@ export const reducer = createReducer(
         builder.addCase(actions.setCurrentDate.type, (state, action: PayloadAction<any, string>) => {
             state.currentDate = action.payload;
         });
-        builder.addCase(actions.setSelectedPanelId.type, (state, action: PayloadAction<any, number>) => {
+        builder.addCase(actions.setSelectedPanelId.type, (state, action: PayloadAction<any, string>) => {
             state.selectedPanelId = action.payload;
         });
     }

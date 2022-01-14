@@ -177,12 +177,12 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         yield put(slice.actions.setIsLoading(false));
     }
 
-    function* fetchEntitiesWithSetAll(action: { type: string, payload: object }) {
+    function* fetchEntitiesWithSetAll(action: { type: string, payload: TGetQueryParams }) {
         yield put(slice.actions.setIsLoading(true));
         yield put(slice.actions.removeAll([]));
         try {
-            // const result: ApiListResult<TEntity> = yield call(client.get, action.payload);
-            // yield put(slice.actions.setAll(result.results));
+            const result: ApiListResult<TEntity> = yield call(client.get, action.payload);
+            yield put(slice.actions.setAll(result.entities));
         } catch (error) {
             yield put(slice.actions.setApiError(error));
         }

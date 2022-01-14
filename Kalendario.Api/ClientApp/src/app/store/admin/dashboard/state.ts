@@ -4,7 +4,7 @@ export const adminDashboard = 'adminDashboard';
 
 export interface AdminDashboardState {
     currentDate: string;
-    selectedPanelId: number | null,
+    selectedPanelId: string | null,
     panelHours: number[];
     slotSize: number;
 }
