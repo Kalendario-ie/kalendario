@@ -25,6 +25,10 @@ riderModule.iml
 **/.idea/**/contentModel.xml
 **/.idea/**/modules.xml
 
+
+## webstorm
+**/.idea/vcs.xml
+
 *.suo
 *.user
 .vs/
