@@ -5,6 +5,7 @@ using Kalendario.Application.Common.Security;
 using Kalendario.Application.Queries.Admin.Common;
 using Kalendario.Application.ResourceModels.Admin;
 using Kalendario.Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Kalendario.Application.Queries.Admin;
 
@@ -18,7 +19,7 @@ public class GetSchedulingPanelsQuery : BaseGetAllQuery<SchedulingPanelAdminReso
         {
         }
 
-        protected override IQueryable<SchedulingPanel> Entities => Context.SchedulingPanels;
+        protected override IQueryable<SchedulingPanel> Entities => Context.SchedulingPanels.Include(s => s.Employees);
 
         protected override IQueryable<SchedulingPanel> FilterEntities(IQueryable<SchedulingPanel> entities,
             GetSchedulingPanelsQuery query)
