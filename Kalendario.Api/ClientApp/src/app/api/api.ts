@@ -1026,6 +1026,221 @@ export class SchedulesClient implements ISchedulesClient {
     }
 }
 
+export interface ISchedulingPanelsClient {
+    /**
+     * @param search (optional)
+     * @param start (optional)
+     * @param length (optional)
+     * @return Success
+     */
+    schedulingPanelsGet(search: string | undefined, start: number | undefined, length: number | undefined): Promise<SchedulingPanelAdminResourceModelGetAllResult>;
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    schedulingPanelsPost(body: UpsertSchedulingPanelCommand | undefined): Promise<SchedulingPanelAdminResourceModel>;
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    schedulingPanelsPut(id: string, body: UpsertSchedulingPanelCommand | undefined): Promise<SchedulingPanelAdminResourceModel>;
+}
+
+export class SchedulingPanelsClient implements ISchedulingPanelsClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+
+    }
+
+    /**
+     * @param search (optional)
+     * @param start (optional)
+     * @param length (optional)
+     * @return Success
+     */
+    schedulingPanelsGet(search: string | undefined, start: number | undefined, length: number | undefined , cancelToken?: CancelToken | undefined): Promise<SchedulingPanelAdminResourceModelGetAllResult> {
+        let url_ = this.baseUrl + "/api/SchedulingPanels?";
+        if (search === null)
+            throw new Error("The parameter 'search' cannot be null.");
+        else if (search !== undefined)
+            url_ += "Search=" + encodeURIComponent("" + search) + "&";
+        if (start === null)
+            throw new Error("The parameter 'start' cannot be null.");
+        else if (start !== undefined)
+            url_ += "Start=" + encodeURIComponent("" + start) + "&";
+        if (length === null)
+            throw new Error("The parameter 'length' cannot be null.");
+        else if (length !== undefined)
+            url_ += "Length=" + encodeURIComponent("" + length) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSchedulingPanelsGet(_response);
+        });
+    }
+
+    protected processSchedulingPanelsGet(response: AxiosResponse): Promise<SchedulingPanelAdminResourceModelGetAllResult> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<SchedulingPanelAdminResourceModelGetAllResult>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<SchedulingPanelAdminResourceModelGetAllResult>(<any>null);
+    }
+
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    schedulingPanelsPost(body: UpsertSchedulingPanelCommand | undefined , cancelToken?: CancelToken | undefined): Promise<SchedulingPanelAdminResourceModel> {
+        let url_ = this.baseUrl + "/api/SchedulingPanels";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSchedulingPanelsPost(_response);
+        });
+    }
+
+    protected processSchedulingPanelsPost(response: AxiosResponse): Promise<SchedulingPanelAdminResourceModel> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<SchedulingPanelAdminResourceModel>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<SchedulingPanelAdminResourceModel>(<any>null);
+    }
+
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    schedulingPanelsPut(id: string, body: UpsertSchedulingPanelCommand | undefined , cancelToken?: CancelToken | undefined): Promise<SchedulingPanelAdminResourceModel> {
+        let url_ = this.baseUrl + "/api/SchedulingPanels/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSchedulingPanelsPut(_response);
+        });
+    }
+
+    protected processSchedulingPanelsPut(response: AxiosResponse): Promise<SchedulingPanelAdminResourceModel> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<SchedulingPanelAdminResourceModel>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<SchedulingPanelAdminResourceModel>(<any>null);
+    }
+}
+
 export interface IServiceCategoriesClient {
     /**
      * @param search (optional)
@@ -1480,7 +1695,7 @@ export class WeatherForecastClient implements IWeatherForecastClient {
      * @return Success
      */
     weatherForecast(  cancelToken?: CancelToken | undefined): Promise<WeatherForecast[]> {
-        let url_ = this.baseUrl + "/api/WeatherForecast";
+        let url_ = this.baseUrl + "/WeatherForecast";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <AxiosRequestConfig>{
@@ -1608,6 +1823,18 @@ export interface ScheduleFrameAdminResourceModel {
     end: string;
 }
 
+export interface SchedulingPanelAdminResourceModel {
+    id: string;
+    name: string;
+    employeeIds: string[] | undefined;
+}
+
+export interface SchedulingPanelAdminResourceModelGetAllResult {
+    entities: SchedulingPanelAdminResourceModel[] | undefined;
+    filteredCount: number;
+    totalCount: number;
+}
+
 export interface ServiceAdminResourceModel {
     id: string;
     name: string;
@@ -1669,6 +1896,11 @@ export interface UpsertScheduleCommand {
     thursday: CreateScheduleFrame[] | undefined;
     friday: CreateScheduleFrame[] | undefined;
     saturday: CreateScheduleFrame[] | undefined;
+}
+
+export interface UpsertSchedulingPanelCommand {
+    name: string | undefined;
+    employeeIds: string[] | undefined;
 }
 
 export interface UpsertServiceCategoryCommand {

@@ -43,8 +43,8 @@ const DeleteConfirmationModal: React.FunctionComponent<ConfirmationModalProps> =
 }
 
 
-export function useConfirmationModal(onConfirm: (id: number) => void): [(id: number) => void, JSX.Element] {
-    const [id, setId] = useState<number | null>(null);
+export function useConfirmationModal(onConfirm: (id: string) => void): [(id: string) => void, JSX.Element] {
+    const [id, setId] = useState<string | null>(null);
 
     const handleConfirm = () => {
         onConfirm(id!);
@@ -62,9 +62,9 @@ export function useConfirmationModal(onConfirm: (id: number) => void): [(id: num
     return [setId, modal]
 }
 
-export function UseConfirmationModalWithDispatch(onConfirm: (id: number) => AnyAction): [(id: number) => void, JSX.Element] {
+export function UseConfirmationModalWithDispatch(onConfirm: (id: string) => AnyAction): [(id: string) => void, JSX.Element] {
     const dispatch = useAppDispatch();
-    const handleConfirmClick = (id: number) => dispatch(onConfirm(id));
+    const handleConfirmClick = (id: string) => dispatch(onConfirm(id));
     return useConfirmationModal(handleConfirmClick);
 }
 

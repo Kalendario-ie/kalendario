@@ -1,4 +1,4 @@
-import {adminSchedulingPanelsClient} from 'src/app/api/scheduling-panels/clients';
+import {adminSchedulingPanelsClient} from 'src/app/api/adminSchedulingPanels';
 import {kCreateBaseStore} from 'src/app/store/admin/common/adapter';
 
 const storeName = 'adminSchedulingPanels';

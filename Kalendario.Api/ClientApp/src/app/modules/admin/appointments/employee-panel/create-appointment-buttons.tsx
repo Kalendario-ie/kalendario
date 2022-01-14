@@ -1,6 +1,8 @@
 import {Moment} from 'moment';
 import React from 'react';
+import {blankEmployeeEvent, upsertAppointmentCommandParser} from 'src/app/api/adminAppointments';
 import {AppointmentAdminResourceModel, EmployeeAdminResourceModel} from 'src/app/api/api';
+import {KIconButton} from 'src/app/shared/components/primitives/buttons';
 
 interface CreateAppointmentButtonsProps {
     employee: EmployeeAdminResourceModel;
@@ -20,14 +22,13 @@ const CreateAppointmentButtons: React.FunctionComponent<CreateAppointmentButtons
     }) => {
     const employeeId = employee.id;
     const selectedTime = () => currentDate.clone().add(hour, 'hour').add(minute, 'minute');
-    // const handleAddClick = () =>
-    //     onCreateClick(blankCustomerAppointment(employeeId, selectedTime()))();
+    const handleAddClick = () => onCreateClick(blankEmployeeEvent(employeeId, selectedTime()))();
     // const handleLockClick = () =>
     //     onCreateClick(blankEmployeeEvent(employeeId, selectedTime().add(minute, 'minute')))();
 
     return (
         <>
-            {/*<KIconButton color="primary" icon={'plus'} onClick={handleAddClick}/>*/}
+            <KIconButton color="primary" icon={'plus'} onClick={handleAddClick}/>
             {/*<KIconButton color="accent" icon={'lock'} onClick={handleLockClick}/>*/}
         </>
     )

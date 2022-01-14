@@ -1,13 +1,12 @@
 import React from 'react';
-import {SchedulingPanel} from 'src/app/api/scheduling-panels/models';
-import {upsertSchedulingPanelRequestParser} from 'src/app/api/scheduling-panels/parsers';
-import {UpsertSchedulingPanelRequest} from 'src/app/api/scheduling-panels/requests';
+import {upsertSchedulingPanelCommandParser} from 'src/app/api/adminSchedulingPanels';
+import {SchedulingPanelAdminResourceModel, UpsertSchedulingPanelCommand} from 'src/app/api/api';
 import {useSelectAll} from 'src/app/shared/admin/hooks';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import {employeeActions, employeeSelectors} from 'src/app/store/admin/employees';
 
-const SchedulingPanelForm: React.FunctionComponent<AdminEditContainerProps<SchedulingPanel, UpsertSchedulingPanelRequest>> = (
+const SchedulingPanelForm: React.FunctionComponent<AdminEditContainerProps<SchedulingPanelAdminResourceModel, UpsertSchedulingPanelCommand>> = (
     {
         entity,
         apiError,
@@ -18,14 +17,14 @@ const SchedulingPanelForm: React.FunctionComponent<AdminEditContainerProps<Sched
     const employees = useSelectAll(employeeSelectors, employeeActions);
 
     return (
-        <KFormikForm initialValues={upsertSchedulingPanelRequestParser(entity)}
+        <KFormikForm initialValues={upsertSchedulingPanelCommandParser(entity)}
                      apiError={apiError}
                      onSubmit={(values => onSubmit(values, entity?.id.toString()))}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
         >
             <KFormikInput name="name"/>
-            <KFormikInput name="employees" as="multi-select" options={employees}/>
+            <KFormikInput name="employeeIds" as="multi-select" options={employees}/>
         </KFormikForm>
     )
 }

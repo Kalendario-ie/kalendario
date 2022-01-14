@@ -13,7 +13,7 @@ const client = new ServiceCategoriesClient('', baseApiAxios);
 
 export const adminServiceCategoryClient: BaseModelRequest<ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand, BaseQueryParams> = {
     get(params) {
-        return client.serviceCategoriesGet(params.search, params.start, params.length, params.cancelToken);
+        return client.serviceCategoriesGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
     post(body: UpsertServiceCategoryCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.serviceCategoriesPost(body, cancelToken);

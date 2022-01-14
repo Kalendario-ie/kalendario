@@ -14,7 +14,7 @@ const client = new SchedulesClient('', baseApiAxios);
 
 export const adminScheduleClient: BaseModelRequest<ScheduleAdminResourceModel, UpsertScheduleCommand, BaseQueryParams> = {
     get(params) {
-        return client.schedulesGet(params.search, params.start, params.length, params.cancelToken);
+        return client.schedulesGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
     post(body: UpsertScheduleCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.schedulesPost(body, cancelToken);
@@ -53,7 +53,7 @@ export function scheduleCommandParser(schedule: ScheduleAdminResourceModel | nul
 }
 
 export const stringToTime = (value: string): { hour: number, minute: number } => {
-    return value ? {hour: +value.substring(0, 1), minute: +value.substring(3, 4)} : {hour: 0, minute: 0};
+    return value ? {hour: +value.substring(0, 2), minute: +value.substring(3, 5)} : {hour: 0, minute: 0};
 }
 
 export const isAvailable = (frame: ScheduleFrameAdminResourceModel, hour: number, minute: number): boolean => {

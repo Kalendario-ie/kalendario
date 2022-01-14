@@ -4,7 +4,7 @@ import {CompanyConfig} from '../company-config/models';
 import {Employee} from '../employees/models';
 
 export interface Company extends IReadModel {
-    id: number;
+    id: string;
     name: string;
     address: string;
     avatar: string;

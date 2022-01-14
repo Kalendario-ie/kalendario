@@ -7,7 +7,7 @@ export interface PermissionGroup extends IReadModel {
 }
 
 export interface Permission extends IReadModel {
-  id: number;
+  id: string;
   name: string;
   codename: string;
 }

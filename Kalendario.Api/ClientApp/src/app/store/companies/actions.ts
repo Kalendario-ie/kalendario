@@ -81,7 +81,7 @@ export const setSelectedDateToToday = () =>
     action(ACTION_TYPES.SELECTED_DATE_TODAY);
 
 
-export const currentCartRequest = (companyId: number) =>
+export const currentCartRequest = (companyId: string) =>
     action(ACTION_TYPES.CURRENT_CART_REQUEST, companyId);
 
 
@@ -119,7 +119,7 @@ export const addNotesRequestFail = (error: ApiBaseError) =>
     action(ACTION_TYPES.ADD_NOTES_REQUEST_FAIL, error);
 
 
-export const confirmCartRequest = (id: number) =>
+export const confirmCartRequest = (id: string) =>
     action(ACTION_TYPES.CONFIRM_CART_REQUEST, id);
 
 

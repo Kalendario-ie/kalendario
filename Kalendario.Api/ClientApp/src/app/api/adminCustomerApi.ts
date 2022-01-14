@@ -8,7 +8,7 @@ const client = new CustomersClient('', baseApiAxios);
 
 export const adminCustomerClient: BaseModelRequest<CustomerAdminResourceModel, UpsertCustomerCommand, BaseQueryParams> = {
     get(params) {
-        return client.customersGet(params.search, params.start, params.length, params.cancelToken);
+        return client.customersGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
     post(body: UpsertCustomerCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.customersPost(body, cancelToken);

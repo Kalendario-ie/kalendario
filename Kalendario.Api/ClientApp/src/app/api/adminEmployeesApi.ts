@@ -8,7 +8,7 @@ const client = new EmployeesClient('', baseApiAxios);
 
 export const adminEmployeeClient: BaseModelRequest<EmployeeAdminResourceModel, UpsertEmployeeCommand, BaseQueryParams> = {
     get(params) {
-        return client.employeesGet(params.search, params.start, params.length, params.cancelToken);
+        return client.employeesGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
     post(body: UpsertEmployeeCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.employeesPost(body, cancelToken);

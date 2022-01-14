@@ -33,7 +33,7 @@ export interface CreateAppointmentRequest {
 
 
 export interface AddNotesRequest {
-    id: number;
+    id: string;
     notes: string;
 }
 

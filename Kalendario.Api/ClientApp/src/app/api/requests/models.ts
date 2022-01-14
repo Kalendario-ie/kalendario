@@ -9,7 +9,7 @@ export interface RequestItem {
 }
 
 export interface RequestModel extends IReadModel {
-  id: number;
+  id: string;
   owner: Company;
   name: string;
   scheduledDate: string;

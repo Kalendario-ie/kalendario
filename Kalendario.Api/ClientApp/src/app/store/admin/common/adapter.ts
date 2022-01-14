@@ -56,7 +56,7 @@ export interface BaseActions {
     fetchEntities: ActionCreatorWithPayload<object>;
     fetchEntity: ActionCreatorWithPayload<number>;
     fetchEntitiesWithSetAll: ActionCreatorWithPayload<object>;
-    deleteEntity: ActionCreatorWithPayload<number>;
+    deleteEntity: ActionCreatorWithPayload<string>;
     setEditMode: ActionCreatorWithPayload<boolean>;
     setIsSubmitting: ActionCreatorWithPayload<boolean>;
 }
@@ -81,7 +81,7 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         fetchEntitiesWithSetAll: createAction<object>(`${sliceName}/fetchEntitiesWithSetAll`),
         createEntity: createAction<CreateActionPayload<TUpsertCommand>>(`${sliceName}/createEntity`),
         patchEntity: createAction<PatchActionPayload<TUpsertCommand>>(`${sliceName}/patchEntity`),
-        deleteEntity: createAction<number>(`${sliceName}/deleteEntity`),
+        deleteEntity: createAction<string>(`${sliceName}/deleteEntity`),
         setEditMode: createAction<any>(`${sliceName}/setEditMode`),
         setIsSubmitting: createAction<any>(`${sliceName}/setIsSubmitting`),
     }
@@ -160,6 +160,7 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
             yield put(slice.actions.upsertMany(result.entities));
             yield put(slice.actions.setInitialized(true));
         } catch (error) {
+            console.log(error);
             yield put(slice.actions.setApiError(error));
             yield put(slice.actions.setInitialized(false));
         }

@@ -4,8 +4,10 @@ import {Spinner} from 'reactstrap';
 import {AppointmentAdminResourceModel, EmployeeAdminResourceModel} from 'src/app/api/api';
 import styles from 'src/app/modules/admin/appointments/employee-panel/employee-panel.module.scss';
 import {useHoursConverter} from 'src/app/modules/admin/appointments/employee-panel/hooks';
+import {compareByStartDate} from 'src/app/shared/util/comparers';
 import {useAppSelector} from 'src/app/store';
 import {appointmentSelectors} from 'src/app/store/admin/appointments';
+import {serviceCategorySelectors} from 'src/app/store/admin/serviceCategories';
 
 interface EventProps {
     order: number;
@@ -25,13 +27,13 @@ const Event: React.FunctionComponent<EventProps> = (
     }) => {
     const start = moment.utc(appointment.start);
     const end = moment.utc(appointment.end);
-
+    const serviceCategory = useAppSelector(state => serviceCategorySelectors.selectById(state, appointment.service?.serviceCategoryId || ''));
 
     const duration = moment.duration(end.diff(start));
 
-    const backgroundColor = appointment.customer ? appointment.service.toString() : '#FFFFFF'; //todo service category color.
-    const title = appointment.customer ? appointment.customer : appointment.internalNotes; //todo: customer.name
-    const subTitle = appointment.customer ? appointment.service : ''; //todo service name
+    const backgroundColor = serviceCategory ? serviceCategory.colour.code : '#FFFFFF';
+    const title = appointment.customer ? appointment.customer.name : appointment.internalNotes;
+    const subTitle = appointment.customer ? appointment.service.name : '';
 
     const style: React.CSSProperties = {
         width: `${BASE_WIDTH - 0.25 - 3 * +isOverlapping}rem`,
@@ -69,26 +71,26 @@ const EventsContainer: React.FunctionComponent<EventsContainerProps> = (
     const appointments = useAppSelector(appointmentSelectors.selectAll);
     const isLoading = useAppSelector(appointmentSelectors.selectIsLoading);
 
-    // const employeeAppointments = React.useMemo(() =>
-    //         appointments
-    //             .filter(appointment => appointment.employee.id === employee.id)
-    //             .sort(compareByStartDate)
-    //     , [appointments, employee.id]
-    // )
+    const employeeAppointments = React.useMemo(() =>
+            appointments
+                .filter(appointment => appointment.employee.id === employee.id)
+                .sort(compareByStartDate)
+        , [appointments, employee.id]
+    )
 
     return (
         <div className="position-relative">
             {isLoading &&
             <Spinner className="position-absolute"/>
             }
-            {/*{employeeAppointments.map((appointment, index) =>*/}
-            {/*    <Event key={appointment.id}*/}
-            {/*           isOverlapping={index > 0 ? isOverlapping(appointment, employeeAppointments[index - 1]) : false}*/}
-            {/*           order={index}*/}
-            {/*           appointment={appointment}*/}
-            {/*           onClick={onSelect(appointment)}*/}
-            {/*    />*/}
-            {/*)}*/}
+            {employeeAppointments.map((appointment, index) =>
+                <Event key={appointment.id}
+                       isOverlapping={index > 0 ? isOverlapping(appointment, employeeAppointments[index - 1]) : false}
+                       order={index}
+                       appointment={appointment}
+                       onClick={onSelect(appointment)}
+                />
+            )}
         </div>
     )
 }

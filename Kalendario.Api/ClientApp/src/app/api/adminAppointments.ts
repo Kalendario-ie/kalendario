@@ -1,4 +1,5 @@
 import {CancelToken} from 'axios';
+import {Moment} from 'moment';
 import * as moment from 'moment';
 import {AppointmentAdminResourceModel, AppointmentsClient, UpsertAppointmentCommand} from 'src/app/api/api';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
@@ -17,7 +18,7 @@ export interface AppointmentsGetParams {
 
 export const adminAppointmentClient: BaseModelRequest<AppointmentAdminResourceModel, UpsertAppointmentCommand, AppointmentsGetParams> = {
     get(params) {
-        return client.appointmentsGet(params.fromDate, params.toDate, params.customerId, params.employeeIds, params.cancelToken);
+        return client.appointmentsGet(params?.fromDate, params?.toDate, params?.customerId, params?.employeeIds, params?.cancelToken);
     },
     post(body: UpsertAppointmentCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.appointmentsPost(body, cancelToken);
@@ -76,4 +77,14 @@ export const upsertAppointmentCommandValidation = yup.object().shape({
 
 export const appointmentClient = {
 //     ...baseModelRequest(userUrl, customerRequestAppointmentParser),
+}
+
+
+export function blankEmployeeEvent(employeeId: string, start: Moment): AppointmentAdminResourceModel {
+    return {
+        start,
+        end: start.clone(),
+        employee: {id: employeeId},
+        internalNotes: '',
+    }
 }

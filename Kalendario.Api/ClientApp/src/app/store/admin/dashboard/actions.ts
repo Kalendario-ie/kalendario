@@ -8,7 +8,7 @@ const setCurrentDate = createAction(
     (value: Moment) => ({payload: momentToIso(value.startOf('day'))})
 );
 
-const setSelectedPanelId = createAction<number>(`${adminDashboard}/setCurrentPanel`);
+const setSelectedPanelId = createAction<string>(`${adminDashboard}/setCurrentPanel`);
 
 export const actions = {
     setCurrentDate,

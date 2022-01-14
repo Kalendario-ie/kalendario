@@ -2,7 +2,7 @@ import {Person} from 'src/app/api/common/models';
 
 
 export interface Employee extends Person {
-    id: number;
+    id: string;
     private: boolean;
     firstName: string;
     lastName: string;

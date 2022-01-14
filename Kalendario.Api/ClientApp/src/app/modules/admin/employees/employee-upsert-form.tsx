@@ -4,7 +4,6 @@ import {upsertEmployeeCommandParser, upsertEmployeeCommandValidation} from 'src/
 import {EmployeeAdminResourceModel, UpsertEmployeeCommand} from 'src/app/api/api';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
-import {KFormikState} from 'src/app/shared/components/forms/k-formik-state';
 import {useAppDispatch} from 'src/app/store';
 import {scheduleActions, scheduleSelectors} from 'src/app/store/admin/schedules';
 import {serviceCategoryActions} from 'src/app/store/admin/serviceCategories';
@@ -37,7 +36,6 @@ const EmployeeUpsertForm: React.FunctionComponent<AdminEditContainerProps<Employ
                      onCancel={onCancel}
                      validationSchema={upsertEmployeeCommandValidation}
         >
-            <KFormikState/>
             <KFormikInput name="name"/>
             <KFormikInput name="email"/>
             <KFormikInput name="phoneNumber"/>

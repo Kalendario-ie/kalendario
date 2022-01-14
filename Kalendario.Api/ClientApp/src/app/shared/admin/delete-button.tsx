@@ -19,8 +19,8 @@ const DeleteButton: React.FunctionComponent<DeleteButtonProps> = (
     }) => {
     const [setDeleteId, confirmDeleteModal] = UseConfirmationModalWithDispatch(baseActions.deleteEntity);
 
-    const handleDeleteClick = (id: number | string) => () => { // todo string only
-        setDeleteId(+id); // todo remove +
+    const handleDeleteClick = (id: string) => () => {
+        setDeleteId(id);
     }
     return (
         <>

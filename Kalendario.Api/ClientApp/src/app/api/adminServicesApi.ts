@@ -9,7 +9,7 @@ const client = new ServicesClient('', baseApiAxios);
 
 export const adminServiceClient: BaseModelRequest<ServiceAdminResourceModel, UpsertServiceCommand, BaseQueryParams> = {
     get(params) {
-        return client.servicesGet(params.search, params.start, params.length, params.cancelToken);
+        return client.servicesGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
     post(body: UpsertServiceCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.servicesPost(body, cancelToken);

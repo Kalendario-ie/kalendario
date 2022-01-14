@@ -34,7 +34,7 @@ const CheckoutContainer: React.FunctionComponent = () => {
         history.push(USER_ROUTES.BOOKING(request.scheduledDate));
     }
 
-    const toggleStripePaymentOpen = (id: number) => () => {
+    const toggleStripePaymentOpen = (id: string) => () => {
         billingClient.payment(id)
             .then(res => {
                 setStripeSecret(res.clientSecret);

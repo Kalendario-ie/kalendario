@@ -1,6 +1,6 @@
 
 export interface IReadModel {
-    id: number | string; // todo: change to string only
+    id: string;
 }
 
 export interface Person extends IReadModel {
