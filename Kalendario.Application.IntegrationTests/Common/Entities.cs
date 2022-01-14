@@ -26,6 +26,17 @@ public class Entities
             CreateFrame(DayOfWeek.Saturday, 0, "13:00", "14:00"),
         }
     };
+    
+    public static SchedulingPanel TestSchedulingPanel(string accountId = Constants.CurrentUserAccountIdString) => new()
+    {
+        Name = "Example",
+        AccountId = Guid.Parse(accountId),
+        Employees = new List<Employee>
+        {
+            Entities.TestEmployee(new List<Guid>()),
+            Entities.TestEmployee(new List<Guid>()),
+        }
+    };
 
     public static Customer TestCustomer(string accountId = Constants.CurrentUserAccountIdString) => new()
     {

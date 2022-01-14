@@ -25,6 +25,8 @@ public class EmployeeAdminResourceModel : IMapFrom<Employee>
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Employee, EmployeeAdminResourceModel>()
-            .ForMember(m => m.Services, e => e.MapFrom(e => e.EmployeeServices.Select(s => s.ServiceId)));
+            .ForMember(m => m.Services,
+                e => e
+                    .MapFrom(e => e.EmployeeServices.Select(s => s.ServiceId)));
     }
 }

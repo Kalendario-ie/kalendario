@@ -17,5 +17,7 @@ namespace Kalendario.Core.Entities
         public ICollection<Service> Services { get; set; }
 
         public ICollection<EmployeeService> EmployeeServices { get; set; }
+
+        public ICollection<SchedulingPanel> SchedulingPanels { get; set; }
     }
 }
