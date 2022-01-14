@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ public class GetAppointmentsQuery : IKalendarioProtectedQuery<GetAppointmentsRes
 
     public Guid? CustomerId { get; set; }
 
-    public Guid? EmployeeId { get; set; }
+    public IEnumerable<Guid> EmployeeIds { get; set; }
 
     public class Handler : IRequestHandler<GetAppointmentsQuery, GetAppointmentsResult>
     {
@@ -47,9 +48,9 @@ public class GetAppointmentsQuery : IKalendarioProtectedQuery<GetAppointmentsRes
                 appointments = appointments.Where(a => a.CustomerId == query.CustomerId);
             }
 
-            if (query.EmployeeId.HasValue && query.EmployeeId != Guid.Empty)
+            if (query.EmployeeIds.Any())
             {
-                appointments = appointments.Where(a => a.EmployeeId == query.EmployeeId);
+                appointments = appointments.Where(a => query.EmployeeIds.Contains(a.EmployeeId));
             }
 
             return new GetAppointmentsResult
