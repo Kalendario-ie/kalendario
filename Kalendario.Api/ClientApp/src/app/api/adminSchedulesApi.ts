@@ -29,7 +29,7 @@ function framesToCreateScheduleFrame(frames: ScheduleFrameAdminResourceModel[]):
     return frames;
 }
 
-export function scheduleCommandParser(schedule: ScheduleAdminResourceModel | null): UpsertScheduleCommand {
+export function upsertScheduleCommandParser(schedule: ScheduleAdminResourceModel | null): UpsertScheduleCommand {
     return schedule ? {
         name: schedule.name,
         monday: framesToCreateScheduleFrame(schedule.monday),

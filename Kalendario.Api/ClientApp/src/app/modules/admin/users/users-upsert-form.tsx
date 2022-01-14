@@ -8,9 +8,10 @@ import {employeeActions, employeeSelectors} from 'src/app/store/admin/employees'
 import {permissionGroupActions, permissionGroupSelectors} from 'src/app/store/admin/permissionGroups';
 
 
-const UsersUpsertForm: React.FunctionComponent<AdminEditContainerProps<AdminUser, UpsertUserRequest>> = (
+const UsersUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertUserRequest>> = (
     {
-        entity,
+        id,
+        command,
         apiError,
         onSubmit,
         isSubmitting,
@@ -20,15 +21,15 @@ const UsersUpsertForm: React.FunctionComponent<AdminEditContainerProps<AdminUser
     const groups = useSelectAll(permissionGroupSelectors, permissionGroupActions);
 
     return (
-        <KFormikForm initialValues={upsertUserRequestParser(entity)}
+        <KFormikForm initialValues={command}
                      apiError={apiError}
-                     onSubmit={(values => onSubmit(values, entity?.id.toString()))}
+                     onSubmit={(values => onSubmit(values, id))}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
                      validationSchema={UpsertUserRequestValidation}
         >
-            {entity?.id &&
-            <ChangePasswordForm id={+entity.id}/>
+            {id &&
+            <ChangePasswordForm id={id}/>
             }
             <KFormikInput name="firstName"/>
             <KFormikInput name="lastName"/>

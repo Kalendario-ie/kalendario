@@ -8,9 +8,10 @@ import {ExtendedBaseActions, BaseSelectors, BaseActions} from 'src/app/store/adm
 export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     baseSelectors: BaseSelectors<TEntity>,
     baseActions: ExtendedBaseActions<TUpsertCommand>,
-    EditContainer: React.FunctionComponent<AdminEditContainerProps<TEntity, TUpsertCommand>>
-): [(entity: TEntity | null) => () => void, JSX.Element, TEntity | undefined] {
-    const [selectedEntity, setSelectedEntity] = useState<TEntity | null>(null);
+    EditContainer: React.FunctionComponent<AdminEditContainerProps<TUpsertCommand>>
+): [(command: TUpsertCommand, id?: string | undefined) => () => void, JSX.Element, TEntity | undefined] {
+    const [selectedEntityId, setSelectedEntityId] = useState<string | undefined>();
+    const [selectedEntity, setSelectedEntity] = useState<TUpsertCommand | null>(null);
     const apiError = useAppSelector(baseSelectors.selectApiError);
     const editMode = useAppSelector(baseSelectors.selectEditMode);
     const createdEntity = useAppSelector(baseSelectors.selectCreatedEntity);
@@ -31,12 +32,14 @@ export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     }
 
     const openModal = React.useMemo(() =>
-        (entity: TEntity | null) => () => {
+        (entity: TUpsertCommand, id?: string | undefined) => () => {
             setSelectedEntity(entity);
+            setSelectedEntityId(id);
             dispatch(baseActions.setEditMode(true));
         }, [baseActions, dispatch])
 
-    const modal = <KModal body={<EditContainer entity={selectedEntity}
+    const modal = <KModal body={<EditContainer id={selectedEntityId}
+                                               command={selectedEntity!}
                                                apiError={apiError}
                                                onSubmit={handleSubmit}
                                                isSubmitting={isSubmitting}

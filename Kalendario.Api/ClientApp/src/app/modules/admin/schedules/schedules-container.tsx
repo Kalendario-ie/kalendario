@@ -1,4 +1,5 @@
 import React from 'react';
+import {upsertScheduleCommandParser} from 'src/app/api/adminSchedulesApi';
 import {PermissionModel} from 'src/app/api/auth';
 import SchedulesTable from 'src/app/modules/admin/schedules/schedules-table';
 import ScheduleUpsertForm from 'src/app/modules/admin/schedules/schedule-upsert-form';
@@ -13,6 +14,7 @@ const SchedulesContainer: React.FunctionComponent<SchedulesContainerProps> = () 
     return (
             <AdminListEditContainer baseSelectors={scheduleSelectors}
                                     baseActions={scheduleActions}
+                                    parser={upsertScheduleCommandParser}
                                     modelType={PermissionModel.schedule}
                                     EditContainer={ScheduleUpsertForm}
                                     ListContainer={SchedulesTable}/>

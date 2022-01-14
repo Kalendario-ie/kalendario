@@ -1,24 +1,22 @@
 import React from 'react';
-import {ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand} from 'src/app/api/api';
-import {
-    createUpsertServiceCategoryRequest,
-    UpsertServiceCategoryRequestValidation
-} from 'src/app/api/adminServiceCategoryApi';
+import {UpsertServiceCategoryRequestValidation} from 'src/app/api/adminServiceCategoryApi';
+import {UpsertServiceCategoryCommand} from 'src/app/api/api';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 
-const ServiceCategoryUpsertForm: React.FunctionComponent<AdminEditContainerProps<ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand>> = (
+const ServiceCategoryUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertServiceCategoryCommand>> = (
     {
-        entity,
+        id,
+        command,
         apiError,
         isSubmitting,
         onSubmit,
         onCancel
     }) => {
     return (
-        <KFormikForm initialValues={createUpsertServiceCategoryRequest(entity)}
+        <KFormikForm initialValues={command}
                      apiError={apiError}
-                     onSubmit={(values => onSubmit(values, entity?.id))}
+                     onSubmit={(values => onSubmit(values, id))}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
                      validationSchema={UpsertServiceCategoryRequestValidation}

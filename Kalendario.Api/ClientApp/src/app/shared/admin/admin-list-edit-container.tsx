@@ -17,8 +17,9 @@ interface AdminListEditContainerProps<TEntity, TUpsertCommand> {
     filter?: (value: string | undefined) => void;
     detailsUrl?: string;
     initializeStore?: boolean;
-    EditContainer: React.FunctionComponent<AdminEditContainerProps<TEntity, TUpsertCommand>>;
+    EditContainer: React.FunctionComponent<AdminEditContainerProps<TUpsertCommand>>;
     ListContainer: React.FunctionComponent<AdminTableContainerProps<TEntity>>;
+    parser: (entity:  TEntity | null) => TUpsertCommand;
 }
 
 function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
@@ -30,7 +31,8 @@ function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
         initializeStore = true,
         modelType,
         EditContainer,
-        ListContainer
+        ListContainer,
+        parser,
     }: AdminListEditContainerProps<TEntity, TUpsertCommand>) {
     const dispatch = useAppDispatch();
     const entities = useAppSelector(baseSelectors.selectAll)
@@ -50,7 +52,7 @@ function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
                 <KFlexRow justify={'end'}>
                     <AdminButton type={PermissionType.add}
                                  model={modelType}
-                                 onClick={openModal(null)}/>
+                                 onClick={openModal(parser(null))}/>
                 </KFlexRow>,
             id: 'buttons',
             Cell: (value: any) => (
@@ -62,7 +64,7 @@ function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
                     }
                     <AdminButton type={PermissionType.change}
                                  model={modelType}
-                                 onClick={openModal(value.row.original)}/>
+                                 onClick={openModal(parser(value.row.original), value.row.original.id)}/>
                     <AdminDeleteButton entity={value.row.original}
                                   modelType={modelType}
                                   baseActions={baseActions}/>

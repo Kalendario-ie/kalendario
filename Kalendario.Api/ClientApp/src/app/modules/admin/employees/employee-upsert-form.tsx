@@ -9,9 +9,10 @@ import {scheduleActions, scheduleSelectors} from 'src/app/store/admin/schedules'
 import {serviceCategoryActions} from 'src/app/store/admin/serviceCategories';
 import {serviceActions, serviceSelectors} from 'src/app/store/admin/services';
 
-const EmployeeUpsertForm: React.FunctionComponent<AdminEditContainerProps<EmployeeAdminResourceModel, UpsertEmployeeCommand>> = (
+const EmployeeUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertEmployeeCommand>> = (
     {
-        entity,
+        id,
+        command,
         apiError,
         onSubmit,
         isSubmitting,
@@ -29,9 +30,9 @@ const EmployeeUpsertForm: React.FunctionComponent<AdminEditContainerProps<Employ
     }, [dispatch]);
 
     return (
-        <KFormikForm initialValues={upsertEmployeeCommandParser(entity)}
+        <KFormikForm initialValues={command}
                      apiError={apiError}
-                     onSubmit={(values => onSubmit(values, entity?.id.toString()))}
+                     onSubmit={(values => onSubmit(values, id))}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
                      validationSchema={upsertEmployeeCommandValidation}

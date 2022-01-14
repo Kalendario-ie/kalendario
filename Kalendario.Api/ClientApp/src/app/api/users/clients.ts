@@ -15,7 +15,7 @@ const client: BaseModelRequest<AdminUser, UpsertUserRequest, BaseQueryParams> = 
 
 export const adminUserClient = {
     ...client,
-    changePassword: (id: number, model: ChangeUserPasswordRequest): Promise<AdminUser> =>
+    changePassword: (id: string, model: ChangeUserPasswordRequest): Promise<AdminUser> =>
         baseApiAxios
             .patch<AdminUser>(baseUrl + id + '/changePassword/', model)
             .then(data => userParser(data.data))

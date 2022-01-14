@@ -11,9 +11,10 @@ import {useAppDispatch} from 'src/app/store';
 import {permissionsActions, permissionSelectors} from 'src/app/store/admin/permissions';
 
 
-const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps<PermissionGroup, UpsertPermissionGroupRequest>> = (
+const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertPermissionGroupRequest>> = (
     {
-        entity,
+        id,
+        command,
         apiError,
         onSubmit,
         isSubmitting,
@@ -27,9 +28,9 @@ const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps
     }, [dispatch]);
 
     return (
-        <KFormikForm initialValues={upsertPermissionGroupRequestParser(entity)}
+        <KFormikForm initialValues={command}
                      apiError={apiError}
-                     onSubmit={(values => onSubmit(values, entity?.id.toString()))}
+                     onSubmit={(values => onSubmit(values, id))}
                      isSubmitting={isSubmitting}
                      onCancel={onCancel}
                      validationSchema={UpsertPermissionRequestValidation}

@@ -23,7 +23,7 @@ export const adminServiceCategoryClient: BaseModelRequest<ServiceCategoryAdminRe
     }
 }
 
-export function createUpsertServiceCategoryRequest(category: ServiceCategoryAdminResourceModel | null | undefined): UpsertServiceCategoryCommand {
+export function upsertServiceCategoryCommandParser(category: ServiceCategoryAdminResourceModel | null | undefined): UpsertServiceCategoryCommand {
     return category ? {
         name: category.name,
         colour: category.colour.code || '#FFFFFF'

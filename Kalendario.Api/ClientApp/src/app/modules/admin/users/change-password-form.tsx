@@ -41,7 +41,7 @@ const ChangePasswordForm: React.FunctionComponent<ChangePasswordFormProps> = (
 }
 
 interface ChangePasswordContainerProps {
-    id: number;
+    id: string;
 }
 
 const ChangePasswordContainer: React.FunctionComponent<ChangePasswordContainerProps> = ({id}) => {

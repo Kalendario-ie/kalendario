@@ -1,35 +1,39 @@
 import {useFormikContext} from 'formik';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import AsyncSelect from 'react-select/async';
 import {FormGroup, Label} from 'reactstrap';
-import {adminCustomerClient} from 'src/app/api/adminCustomerApi';
+import {adminCustomerClient, upsertCustomerCommandParser} from 'src/app/api/adminCustomerApi';
 import {CustomerAdminResourceModel} from 'src/app/api/api';
+import CustomerUpsertForm from 'src/app/modules/admin/customers/customer-upsert-form';
+import {useEditModal} from 'src/app/shared/admin/hooks';
 import {KFlexColumn, KFlexRow, KFlexSpacer} from 'src/app/shared/components/flex';
+import {KIconButton} from 'src/app/shared/components/primitives/buttons';
 import KIcon from 'src/app/shared/components/primitives/k-icon';
 import {useAppDispatch} from 'src/app/store';
+import {customerActions, customerSelectors, customerSlice} from 'src/app/store/admin/customers';
 
 interface FormikCustomerInput {
-    initialCustomer: CustomerAdminResourceModel | null;
+    initialCustomer: CustomerAdminResourceModel | undefined;
 }
 
 export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> = ({initialCustomer}) => {
-    const [customer, setCustomer] = useState<CustomerAdminResourceModel | null>(initialCustomer);
-    // const [openModal, modal, createdCustomer] = useEditModal(customerSelectors, customerActions, CustomerUpsertForm);
+    const [customer, setCustomer] = useState<CustomerAdminResourceModel | undefined>(initialCustomer);
+    const [openModal, modal, createdCustomer] = useEditModal(customerSelectors, customerActions, CustomerUpsertForm);
     const dispatch = useAppDispatch();
     const formik = useFormikContext();
-    const {setValue} = formik.getFieldHelpers('customer');
+    const {setValue} = formik.getFieldHelpers('customerId');
 
-    // useEffect(() => {
-    //     if (createdCustomer) {
-    //         setCustomer(createdCustomer);
-    //         setValue(createdCustomer.id);
-    //     }
-    //     return () => {
-    //         dispatch(customerSlice.actions.setCreatedEntityId(null))
-    //     }
-    //     // the below is disabled because setValue will cause an infinite loop if added to deps.
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [createdCustomer]);
+    useEffect(() => {
+        if (createdCustomer) {
+            setCustomer(createdCustomer);
+            setValue(createdCustomer.id);
+        }
+        return () => {
+            dispatch(customerSlice.actions.setCreatedEntityId(null))
+        }
+        // the below is disabled because setValue will cause an infinite loop if added to deps.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [createdCustomer]);
 
     const promiseOptions = (search: string) => adminCustomerClient.get({
         search,
@@ -38,14 +42,14 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
     }).then(res => res.entities!);
 
     const navigateToPage = (selectedCustomer: CustomerAdminResourceModel | null) => {
-        setCustomer(selectedCustomer);
+        setCustomer(selectedCustomer || undefined);
         setValue(selectedCustomer?.id || null);
     }
 
 
     return (
         <FormGroup>
-            {/*{modal}*/}
+            {modal}
             <Label>Customer</Label>
             <FormGroup>
                 <KFlexRow align={'center'}>
@@ -62,7 +66,7 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
                                  }
                                  onChange={navigateToPage}
                                  loadOptions={promiseOptions}/>
-                    {/*<KIconButton color="primary" icon={'plus'} onClick={openModal(null)}/>*/}
+                    <KIconButton color="primary" icon={'plus'} onClick={openModal(upsertCustomerCommandParser(null))}/>
                 </KFlexRow>
             </FormGroup>
 

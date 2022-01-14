@@ -78,13 +78,3 @@ export const upsertAppointmentCommandValidation = yup.object().shape({
 export const appointmentClient = {
 //     ...baseModelRequest(userUrl, customerRequestAppointmentParser),
 }
-
-
-export function blankEmployeeEvent(employeeId: string, start: Moment): AppointmentAdminResourceModel {
-    return {
-        start,
-        end: start.clone(),
-        employee: {id: employeeId},
-        internalNotes: '',
-    }
-}

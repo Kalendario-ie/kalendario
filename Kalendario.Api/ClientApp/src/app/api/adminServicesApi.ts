@@ -19,7 +19,7 @@ export const adminServiceClient: BaseModelRequest<ServiceAdminResourceModel, Ups
     }
 }
 
-export function createUpsertServiceCommand(service: ServiceAdminResourceModel | null | undefined): UpsertServiceCommand {
+export function upsertServiceCommandParser(service: ServiceAdminResourceModel | null | undefined): UpsertServiceCommand {
     return service ? {
         name: service.name,
         description: service.description,

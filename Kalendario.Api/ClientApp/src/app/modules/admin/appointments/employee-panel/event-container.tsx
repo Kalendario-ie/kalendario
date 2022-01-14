@@ -1,7 +1,8 @@
 import moment from 'moment';
 import React from 'react';
 import {Spinner} from 'reactstrap';
-import {AppointmentAdminResourceModel, EmployeeAdminResourceModel} from 'src/app/api/api';
+import {upsertAppointmentCommandParser} from 'src/app/api/adminAppointments';
+import {AppointmentAdminResourceModel, EmployeeAdminResourceModel, UpsertAppointmentCommand} from 'src/app/api/api';
 import styles from 'src/app/modules/admin/appointments/employee-panel/employee-panel.module.scss';
 import {useHoursConverter} from 'src/app/modules/admin/appointments/employee-panel/hooks';
 import {compareByStartDate} from 'src/app/shared/util/comparers';
@@ -60,7 +61,7 @@ const Event: React.FunctionComponent<EventProps> = (
 
 interface EventsContainerProps {
     employee: EmployeeAdminResourceModel;
-    onSelect: (entity: AppointmentAdminResourceModel | null) => () => void
+    onSelect: (entity: UpsertAppointmentCommand) => () => void
 }
 
 const EventsContainer: React.FunctionComponent<EventsContainerProps> = (
@@ -88,7 +89,7 @@ const EventsContainer: React.FunctionComponent<EventsContainerProps> = (
                        isOverlapping={index > 0 ? isOverlapping(appointment, employeeAppointments[index - 1]) : false}
                        order={index}
                        appointment={appointment}
-                       onClick={onSelect(appointment)}
+                       onClick={onSelect(upsertAppointmentCommandParser(appointment))}
                 />
             )}
         </div>

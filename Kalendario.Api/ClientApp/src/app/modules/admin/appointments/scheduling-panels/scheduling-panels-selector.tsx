@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {upsertSchedulingPanelCommandParser} from 'src/app/api/adminSchedulingPanels';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
 import SchedulingPanelForm from 'src/app/modules/admin/appointments/scheduling-panels/scheduling-panel-form';
 import AdminButton from 'src/app/shared/admin/admin-button';
@@ -51,7 +52,7 @@ const SchedulingPanelsSelector: React.FunctionComponent = () => {
                              onClick={handlePanelClick(i)}
                 >{panel.name}</KTextButton>)
             }
-            <AdminButton type={PermissionType.add} model={PermissionModel.schedulingpanel} onClick={openModal(null)}/>
+            <AdminButton type={PermissionType.add} model={PermissionModel.schedulingpanel} onClick={openModal(upsertSchedulingPanelCommandParser(null))}/>
             <AdminButton type={PermissionType.change} model={PermissionModel.schedulingpanel} onClick={openModal(schedulingPanels[selectedIndex])}/>
             <AdminButton type={PermissionType.delete} model={PermissionModel.schedulingpanel} onClick={handleDeleteClick}/>
         </KFlexRow>
