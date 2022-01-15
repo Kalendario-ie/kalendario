@@ -88,7 +88,7 @@ const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
 }
 
 export interface EmployeePanelsBodyContainerProps {
-    onSelect: (entity: UpsertAppointmentCommand) => () => void
+    onSelect: (command: UpsertAppointmentCommand, id?: string) => () => void
 }
 
 export const EmployeePanelsBodyContainer: React.FunctionComponent<EmployeePanelsBodyContainerProps> = ({onSelect}) => {

@@ -150,7 +150,7 @@ const AppointmentUpsertForm: React.FunctionComponent<AdminEditContainerProps<Ups
             <ServicesInput/>
             <KFormikCustomerInput initialCustomer={selectedAppointment?.customer}/>
             <KFormikInput name="internalNotes" as={'textarea'}/>
-            <KFormikInput placeholder="Allow Overlapping" name="ignoreAvailability" as={'checkbox'}/>
+            <KFormikInput placeholder="Allow Overlapping" name="ignoreTimeClashes" as={'checkbox'}/>
         </KFormikForm>
     )
 }
