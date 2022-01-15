@@ -24,7 +24,7 @@ public class GetSchedulesQuery : BaseGetAllQuery<ScheduleAdminResourceModel>
         protected override IQueryable<Schedule> FilterEntities(IQueryable<Schedule> entities,
             GetSchedulesQuery query)
         {
-            return entities.Where(e => e.Name.ToLowerInvariant().Contains(query.Search.ToLowerInvariant()));
+            return entities.Where(e => e.Name.ToLower().Contains(query.Search.ToLower()));
         }
     }
 }

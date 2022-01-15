@@ -24,7 +24,7 @@ public class GetSchedulingPanelsQuery : BaseGetAllQuery<SchedulingPanelAdminReso
         protected override IQueryable<SchedulingPanel> FilterEntities(IQueryable<SchedulingPanel> entities,
             GetSchedulingPanelsQuery query)
         {
-            return entities.Where(e => e.Name.ToLowerInvariant().Contains(query.Search.ToLowerInvariant()));
+            return entities.Where(e => e.Name.ToLower().Contains(query.Search.ToLower()));
         }
     }
 }

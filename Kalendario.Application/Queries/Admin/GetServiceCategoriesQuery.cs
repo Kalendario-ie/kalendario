@@ -23,7 +23,7 @@ public class GetServiceCategoriesQuery : BaseGetAllQuery<ServiceCategoryAdminRes
         protected override IQueryable<ServiceCategory> FilterEntities(IQueryable<ServiceCategory> entities,
             GetServiceCategoriesQuery query)
         {
-            return entities.Where(e => e.Name.ToLowerInvariant().Contains(query.Search.ToLowerInvariant()));
+            return entities.Where(e => e.Name.ToLower().Contains(query.Search.ToLower()));
         }
     }
 }

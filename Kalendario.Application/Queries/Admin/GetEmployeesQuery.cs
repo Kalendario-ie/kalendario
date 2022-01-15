@@ -23,7 +23,7 @@ public class GetEmployeesQuery : BaseGetAllQuery<EmployeeAdminResourceModel>
 
         protected override IQueryable<Employee> FilterEntities(IQueryable<Employee> entities, GetEmployeesQuery query)
         {
-            return entities.Where(e => e.Name.ToLowerInvariant().Contains(query.Search.ToLowerInvariant()));
+            return entities.Where(e => e.Name.ToLower().Contains(query.Search.ToLower()));
         }
     }
 }

@@ -22,7 +22,7 @@ public class GetCustomersQuery : BaseGetAllQuery<CustomerAdminResourceModel>
 
         protected override IQueryable<Customer> FilterEntities(IQueryable<Customer> entities, GetCustomersQuery query)
         {
-            return entities.Where(e => e.Name.ToLowerInvariant().Contains(query.Search.ToLowerInvariant()));
+            return entities.Where(e => e.Name.ToLower().Contains(query.Search.ToLower()));
         }
     }
 }
