@@ -39,6 +39,9 @@ public class GetAppointmentsQuery : IKalendarioProtectedQuery<GetAppointmentsRes
         public async Task<GetAppointmentsResult> Handle(GetAppointmentsQuery query, CancellationToken cancellationToken)
         {
             var appointments = _context.Appointments
+                .Include(a => a.Employee)
+                .Include(a => a.Service)
+                .Include(a => a.Customer)
                 .Where(a => a.AccountId == _currentUserService.AccountId)
                 .BetweenDates(query.FromDate, query.ToDate);
                 
