@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using FluentValidation.Results;
+using Kalendario.Application.Authorization;
 using Kalendario.Application.Commands.Admin.Common;
 using Kalendario.Application.Common.Exceptions;
 using Kalendario.Application.Common.Extensions;
@@ -76,6 +77,9 @@ public class UpsertAppointmentCommand : BaseUpsertAdminCommand<AppointmentAdminR
         {
             var validationFailures = new List<ValidationFailure>();
 
+            var canOverbook = request.IgnoreTimeClashes && await CurrentUserManager.IsInRoleAsync(
+                AuthorizationHelper.RoleName(typeof(Appointment), Appointment.CanOverbookRole));
+
             if (request.End.HasValue && request.End.Value <= request.Start)
                 validationFailures.Add(new ValidationFailure(nameof(request.Start),
                     "Start time can't be after end time."));
@@ -93,7 +97,7 @@ public class UpsertAppointmentCommand : BaseUpsertAdminCommand<AppointmentAdminR
                 validationFailures.Add(new ValidationFailure(nameof(request.EmployeeId), "Employee does not exist."));
 
             var schedule = employee?.Schedule;
-            if (!request.IgnoreTimeClashes && schedule == null)
+            if (!canOverbook && schedule == null)
                 validationFailures.Add(new ValidationFailure(nameof(request.EmployeeId), "Employee has no schedule."));
 
             var service = employee?.Services.FirstOrDefault(s => s.Id == request.ServiceId);
@@ -105,13 +109,13 @@ public class UpsertAppointmentCommand : BaseUpsertAdminCommand<AppointmentAdminR
             }
 
             EndTime = request.End ?? request.Start.Add(service.Duration);
-            if (!request.IgnoreTimeClashes && schedule != null && !schedule.HasAvailability(request.Start, EndTime))
+            if (!canOverbook && schedule != null && !schedule.HasAvailability(request.Start, EndTime))
                 validationFailures.Add(new ValidationFailure(nameof(request.EmployeeId),
                     "Employee has no availability for the selected times."));
 
             var hasOverlappingAppointments = await HasOverlappingAppointments(request, cancellationToken);
 
-            if (!request.IgnoreTimeClashes && hasOverlappingAppointments)
+            if (!canOverbook && hasOverlappingAppointments)
                 validationFailures.Add(new ValidationFailure(nameof(request.Start),
                     "Appointment times overlaps with other appointments."));
 

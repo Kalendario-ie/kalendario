@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Kalendario.Core.Entities
 {
     public class Appointment : AccountEntity
     {
+        public const string CanOverbookRole = "CanOverbookRole";
 
         public Guid? CustomerId { get; set; }
 
@@ -24,5 +27,10 @@ namespace Kalendario.Core.Entities
         public double Price { get; set; }
 
         public string InternalNotes { get; set; }
+        
+        public new static IEnumerable<string> EntityRoles()
+        {
+            return BaseEntity.EntityRoles().Append(CanOverbookRole);
+        }
     }
 }
