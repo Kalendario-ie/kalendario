@@ -147,7 +147,7 @@ public class UpsertAppointmentCommandTests : TestBase
     public async Task Update_After_Create_Doesnt_ThrowOverlapError()
     {
         await RunAsAdministratorAsync(typeof(Appointment),
-            new List<string> {Appointment.UpdateRole, Appointment.CreateRole}, Constants.CurrentUserAccountId);
+            $"{Appointment.UpdateRole},{Appointment.CreateRole}", Constants.CurrentUserAccountId);
 
         var command1 = ValidCommand();
 
@@ -157,7 +157,7 @@ public class UpsertAppointmentCommandTests : TestBase
         AssertResultEqualCommand(result1, command1);
         AssertEntityEqualCommand(entity1, command1);
 
-        var command2 = ValidCommand();
+        var command2 = ValidCommand(entity1.Id);
         var result2 = await FluentActions.Invoking(() => SendAsync(command2)).Invoke();
 
         var entity2 = await FindAppointmentById(result1.Id);
@@ -289,7 +289,21 @@ public class UpsertAppointmentCommandTests : TestBase
     }
 
     [Test]
-    public async Task Create_NoSchedule_WithIgnoreTimeClashes_True_Creates()
+    public async Task Create_OverlappingAppointment_ThrowsError()
+    {
+        await RunAsAdministratorAsync(typeof(Appointment), Appointment.CreateRole, Constants.CurrentUserAccountId);
+
+        var command = ValidCommand();
+        var appointment = CurrentAccountAppointment;
+        appointment.Start = command.Start;
+        appointment.End = command.Start.AddMinutes(30);
+        await AddAsync(appointment);
+
+        await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
+    }
+
+    [Test]
+    public async Task Create_WithIgnoreTimeClashesTrue_NoSchedule_Creates()
     {
         await RunAsAdministratorAsync(typeof(Appointment), Appointment.CreateRole, Constants.CurrentUserAccountId);
 
@@ -307,7 +321,7 @@ public class UpsertAppointmentCommandTests : TestBase
     }
 
     [Test]
-    public async Task Create_OutsideScheduleTimes_WithIgnoreTimeClashes_True_Creates()
+    public async Task Create_WithIgnoreTimeClashesTrue_OutsideScheduleTimes_Creates()
     {
         await RunAsAdministratorAsync(typeof(Appointment), Appointment.CreateRole, Constants.CurrentUserAccountId);
 
@@ -323,33 +337,7 @@ public class UpsertAppointmentCommandTests : TestBase
     }
 
     [Test]
-    public async Task Create_EndTimeBeforeStartTime_WithIgnoreTimeClashes_True_ThrowsError()
-    {
-        await RunAsAdministratorAsync(typeof(Appointment), Appointment.CreateRole, Constants.CurrentUserAccountId);
-
-        var command = ValidCommand();
-        command.IgnoreTimeClashes = true;
-        command.End = command.Start.AddHours(-1);
-
-        await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
-    }
-
-    [Test]
-    public async Task Create_OverlappingAppointment_ThrowsError()
-    {
-        await RunAsAdministratorAsync(typeof(Appointment), Appointment.CreateRole, Constants.CurrentUserAccountId);
-
-        var command = ValidCommand();
-        var appointment = CurrentAccountAppointment;
-        appointment.Start = command.Start;
-        appointment.End = command.Start.AddMinutes(30);
-        await AddAsync(appointment);
-
-        await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
-    }
-
-    [Test]
-    public async Task Create_OverlappingAppointment_WithIgnoreTimeClashes_True_Creates()
+    public async Task Create_WithIgnoreTimeClashesTrue_OverlappingAppointment_Creates()
     {
         await RunAsAdministratorAsync(typeof(Appointment), Appointment.CreateRole, Constants.CurrentUserAccountId);
 
@@ -365,6 +353,18 @@ public class UpsertAppointmentCommandTests : TestBase
         var entity = await FindAppointmentById(result.Id);
         AssertResultEqualCommand(result, command);
         AssertEntityEqualCommand(entity, command);
+    }
+
+    [Test]
+    public async Task Create_WithIgnoreTimeClashesTrue_EndTimeBeforeStartTime_ThrowsError()
+    {
+        await RunAsAdministratorAsync(typeof(Appointment), Appointment.CreateRole, Constants.CurrentUserAccountId);
+
+        var command = ValidCommand();
+        command.IgnoreTimeClashes = true;
+        command.End = command.Start.AddHours(-1);
+
+        await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
 
     private void AssertResultEqualCommand(AppointmentAdminResourceModel result, UpsertAppointmentCommand command)

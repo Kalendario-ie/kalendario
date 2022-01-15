@@ -21,9 +21,18 @@ public class UpsertAppointmentCommand : BaseUpsertAdminCommand<AppointmentAdminR
 {
     private DateTime _start;
     private DateTime? _end;
-    public DateTime Start { get => _start.ToUniversalTime(); set => _start = value; }
 
-    public DateTime? End { get => _end?.ToUniversalTime() ?? _end; set => _end = value; }
+    public DateTime Start
+    {
+        get => _start.ToUniversalTime();
+        set => _start = value;
+    }
+
+    public DateTime? End
+    {
+        get => _end?.ToUniversalTime() ?? _end;
+        set => _end = value;
+    }
 
     public string InternalNotes { get; set; }
 
@@ -32,7 +41,7 @@ public class UpsertAppointmentCommand : BaseUpsertAdminCommand<AppointmentAdminR
     public Guid EmployeeId { get; set; }
 
     public Guid ServiceId { get; set; }
-    
+
     public bool IgnoreTimeClashes { get; set; }
 
     public class Handler : BaseUpsertAdminCommandHandler<UpsertAppointmentCommand, Appointment,
@@ -68,9 +77,10 @@ public class UpsertAppointmentCommand : BaseUpsertAdminCommand<AppointmentAdminR
             var validationFailures = new List<ValidationFailure>();
 
             if (request.End.HasValue && request.End.Value <= request.Start)
-                validationFailures.Add(new ValidationFailure(nameof(request.Start), "Start time can't be after end time."));
-            
-            var customer = await Context.Customers.FindAsync(new object[] { request.CustomerId }, cancellationToken);
+                validationFailures.Add(new ValidationFailure(nameof(request.Start),
+                    "Start time can't be after end time."));
+
+            var customer = await Context.Customers.FindAsync(new object[] {request.CustomerId}, cancellationToken);
             if (customer == null || customer.AccountId != CurrentUserManager.CurrentUserAccountId)
                 validationFailures.Add(new ValidationFailure(nameof(request.CustomerId), "Customer does not exist."));
 
@@ -99,11 +109,8 @@ public class UpsertAppointmentCommand : BaseUpsertAdminCommand<AppointmentAdminR
                 validationFailures.Add(new ValidationFailure(nameof(request.EmployeeId),
                     "Employee has no availability for the selected times."));
 
-            var hasOverlappingAppointments = await Context.Appointments
-                .Where(a => a.EmployeeId == request.EmployeeId && request.Id.HasValue && request.Id.Value != a.Id)
-                .BetweenDates(request.Start, EndTime)
-                .AnyAsync(cancellationToken);
-            
+            var hasOverlappingAppointments = await HasOverlappingAppointments(request, cancellationToken);
+
             if (!request.IgnoreTimeClashes && hasOverlappingAppointments)
                 validationFailures.Add(new ValidationFailure(nameof(request.Start),
                     "Appointment times overlaps with other appointments."));
@@ -112,6 +119,19 @@ public class UpsertAppointmentCommand : BaseUpsertAdminCommand<AppointmentAdminR
                 throw new ValidationException(validationFailures);
 
             ServicePrice = service.Price;
+        }
+
+        private async Task<bool> HasOverlappingAppointments(UpsertAppointmentCommand request,
+            CancellationToken cancellationToken)
+        {
+            var entities = Context.Appointments
+                .Where(a => a.EmployeeId == request.EmployeeId);
+
+            if (request.Id.HasValue)
+                entities = entities.Where(a => a.Id != request.Id);
+
+            return await entities.BetweenDates(request.Start, EndTime)
+                .AnyAsync(cancellationToken);
         }
     }
 }

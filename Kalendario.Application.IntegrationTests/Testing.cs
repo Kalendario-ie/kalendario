@@ -120,19 +120,12 @@ public class Testing
         return await RunAsUserAsync("test@local", "Testing1234!", Array.Empty<string>());
     }
 
-    public static async Task<string> RunAsAdministratorAsync(Type entityClass, string actionType,
+    public static async Task<string> RunAsAdministratorAsync(Type entityClass, string actionTypes,
         Guid accountId = default)
     {
         return await RunAsUserAsync("administrator@local", "Administrator1234!",
-            new[] {AuthorizationHelper.RoleName(entityClass, actionType)}, accountId);
-    }
-
-    public static async Task<string> RunAsAdministratorAsync(Type entityClass, List<string> ActionTypes,
-        Guid accountId = default)
-    {
-        return await RunAsUserAsync("administrator@local", "Administrator1234!",
-            ActionTypes.Select(actionType => AuthorizationHelper.RoleName(entityClass, actionType)).ToArray(),
-            accountId);
+            actionTypes.Split(',').Select(actionType => AuthorizationHelper.RoleName(entityClass, actionType))
+                .ToArray(), accountId);
     }
 
     public static async Task<string> RunAsUserAsync(string userName, string password, string[] roles,
