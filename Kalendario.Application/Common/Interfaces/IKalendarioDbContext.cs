@@ -25,6 +25,8 @@ public interface IKalendarioDbContext
 
     DbSet<SchedulingPanel> SchedulingPanels { get; }
 
+    DbSet<AuditEntity> AuditEntities { get; }
+
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);

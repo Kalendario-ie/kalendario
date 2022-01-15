@@ -27,8 +27,8 @@ namespace Kalendario.Infrastructure.Persistence
             _serviceProvider = serviceProvider;
             _domainEventService = domainEventService;
             _dateTime = dateTime;
-        } 
-        
+        }
+
         public DbSet<Account> Accounts => Set<Account>();
         public DbSet<Employee> Employees => Set<Employee>();
         public DbSet<Service> Services => Set<Service>();
@@ -37,32 +37,18 @@ namespace Kalendario.Infrastructure.Persistence
         public DbSet<Appointment> Appointments => Set<Appointment>();
         public DbSet<Schedule> Schedules => Set<Schedule>();
         public DbSet<ScheduleFrame> ScheduleFrames => Set<ScheduleFrame>();
-        public DbSet<SchedulingPanel> SchedulingPanels =>  Set<SchedulingPanel>();
+        public DbSet<SchedulingPanel> SchedulingPanels => Set<SchedulingPanel>();
+        public DbSet<AuditEntity> AuditEntities => Set<AuditEntity>();
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            // ICurrentUserService can't be at the constructor
-            // because it will create an instance that has no user id.
-            var currentUserService = _serviceProvider.GetService<ICurrentUserService>();
-            if (currentUserService != null)
-            {
-                foreach (var entry in ChangeTracker.Entries<BaseEntity>())
-                {
-                    switch (entry.State)
-                    {
-                        case EntityState.Added:
-                            entry.Entity.UserCreated = currentUserService.UserId;
-                            entry.Entity.DateCreated = _dateTime.Now;
-                            break;
-
-                        case EntityState.Modified:
-                            entry.Entity.UserModified = currentUserService.UserId;
-                            entry.Entity.DateModified = _dateTime.Now;
-                            break;
-                    }
-                }                
-            }
-
+            var entities = OnBeforeSaveChanges();
             var events = ChangeTracker.Entries<IHasDomainEvent>()
                 .Select(x => x.Entity.DomainEvents)
                 .SelectMany(x => x)
@@ -71,15 +57,116 @@ namespace Kalendario.Infrastructure.Persistence
 
             var result = await base.SaveChangesAsync(cancellationToken);
 
+            await OnAfterSaveChanges(entities);
             await DispatchEvents(events);
 
             return result;
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        private List<AuditEntry> OnBeforeSaveChanges()
         {
-            base.OnModelCreating(builder);
-            builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+            // ICurrentUserService can't be at the constructor
+            // because it will create an instance that has no user id.
+            var currentUserService = _serviceProvider.GetService<ICurrentUserService>();
+            ChangeTracker.DetectChanges();
+            var auditEntries = new List<AuditEntry>();
+
+            foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.UserCreated = currentUserService.UserId;
+                        entry.Entity.DateCreated = _dateTime.Now;
+                        break;
+
+                    case EntityState.Modified:
+                        entry.Entity.UserModified = currentUserService.UserId;
+                        entry.Entity.DateModified = _dateTime.Now;
+                        break;
+                }
+            }
+
+            foreach (var entry in ChangeTracker.Entries<IAuditable>())
+            {
+                if (entry.State is EntityState.Detached or EntityState.Unchanged)
+                    continue;
+
+                var auditEntry = new AuditEntry(entry, currentUserService.UserId);
+                auditEntries.Add(auditEntry);
+
+                foreach (var property in entry.Properties)
+                {
+                    if (property.IsTemporary)
+                    {
+                        auditEntry.TemporaryProperties.Add(property);
+                        continue;
+                    }
+
+                    var propertyName = property.Metadata.Name;
+                    if (property.Metadata.IsPrimaryKey())
+                    {
+                        auditEntry.EntityId = property.CurrentValue.ToString();
+                        continue;
+                    }
+
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            break;
+
+                        case EntityState.Deleted:
+                            auditEntry.OldValues[propertyName] = property.OriginalValue;
+                            break;
+
+                        case EntityState.Modified:
+                            if (property.IsModified)
+                            {
+                                auditEntry.OldValues[propertyName] = property.OriginalValue;
+                                auditEntry.NewValues[propertyName] = property.CurrentValue;
+                            }
+
+                            break;
+                    }
+                }
+            }
+
+            // Save audit entities that have all the modifications
+            foreach (var auditEntry in auditEntries.Where(_ => !_.HasTemporaryProperties))
+            {
+                AuditEntities.Add(auditEntry.ToAudit());
+            }
+
+            // keep a list of entries where the value of some properties are unknown at this step
+            return auditEntries.Where(_ => _.HasTemporaryProperties).ToList();
+        }
+
+        private Task OnAfterSaveChanges(List<AuditEntry> auditEntries)
+        {
+            if (auditEntries == null || auditEntries.Count == 0)
+                return Task.CompletedTask;
+
+            foreach (var auditEntry in auditEntries)
+            {
+                // Get the final value of the temporary properties
+                foreach (var prop in auditEntry.TemporaryProperties)
+                {
+                    if (prop.Metadata.IsPrimaryKey())
+                    {
+                        auditEntry.EntityId = prop.CurrentValue.ToString();
+                    }
+                    else
+                    {
+                        auditEntry.NewValues[prop.Metadata.Name] = prop.CurrentValue;
+                    }
+                }
+
+                // Save the Audit entry
+                AuditEntities.Add(auditEntry.ToAudit());
+            }
+
+            return SaveChangesAsync();
         }
 
         private async Task DispatchEvents(DomainEvent[] events)

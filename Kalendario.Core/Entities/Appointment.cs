@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Kalendario.Core.Common;
 
 namespace Kalendario.Core.Entities
 {
-    public class Appointment : AccountEntity
+    public class Appointment : AccountEntity, IAuditable
     {
         public const string CanOverbookRole = "CanOverbookRole";
 
