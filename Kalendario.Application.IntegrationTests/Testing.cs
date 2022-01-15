@@ -127,6 +127,14 @@ public class Testing
             new[] {AuthorizationHelper.RoleName(entityClass, actionType)}, accountId);
     }
 
+    public static async Task<string> RunAsAdministratorAsync(Type entityClass, List<string> ActionTypes,
+        Guid accountId = default)
+    {
+        return await RunAsUserAsync("administrator@local", "Administrator1234!",
+            ActionTypes.Select(actionType => AuthorizationHelper.RoleName(entityClass, actionType)).ToArray(),
+            accountId);
+    }
+
     public static async Task<string> RunAsUserAsync(string userName, string password, string[] roles,
         Guid accountId = default)
     {
@@ -209,7 +217,8 @@ public class Testing
 
         IQueryable<TEntity> set = context.Set<TEntity>();
 
-        set = navigationPropertyPaths.Aggregate(set, (current, navigationPropertyPath) => current.Include(navigationPropertyPath));
+        set = navigationPropertyPaths.Aggregate(set,
+            (current, navigationPropertyPath) => current.Include(navigationPropertyPath));
 
         return await set.FirstOrDefaultAsync(e => e.Id == id);
     }

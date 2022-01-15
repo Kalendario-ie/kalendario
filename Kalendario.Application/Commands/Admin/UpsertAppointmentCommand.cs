@@ -100,7 +100,7 @@ public class UpsertAppointmentCommand : BaseUpsertAdminCommand<AppointmentAdminR
                     "Employee has no availability for the selected times."));
 
             var hasOverlappingAppointments = await Context.Appointments
-                .Where(a => a.EmployeeId == request.EmployeeId)
+                .Where(a => a.EmployeeId == request.EmployeeId && request.Id.HasValue && request.Id.Value != a.Id)
                 .BetweenDates(request.Start, EndTime)
                 .AnyAsync(cancellationToken);
             

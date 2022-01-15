@@ -61,7 +61,7 @@ public class UpsertAppointmentCommandTests : TestBase
         await base.TestSetUp();
 
         var scheduleId = await AddAsync(Entities.TestSchedule());
-        
+
         CurrentAccountCustomerId = await AddAsync(Entities.TestCustomer());
         CurrentAccountServiceId = await AddAsync(Entities.TestService());
         CurrentAccountEmployeeId =
@@ -144,6 +144,28 @@ public class UpsertAppointmentCommandTests : TestBase
     }
 
     [Test]
+    public async Task Update_After_Create_Doesnt_ThrowOverlapError()
+    {
+        await RunAsAdministratorAsync(typeof(Appointment),
+            new List<string> {Appointment.UpdateRole, Appointment.CreateRole}, Constants.CurrentUserAccountId);
+
+        var command1 = ValidCommand();
+
+        var result1 = await FluentActions.Invoking(() => SendAsync(command1)).Invoke();
+
+        var entity1 = await FindAppointmentById(result1.Id);
+        AssertResultEqualCommand(result1, command1);
+        AssertEntityEqualCommand(entity1, command1);
+
+        var command2 = ValidCommand();
+        var result2 = await FluentActions.Invoking(() => SendAsync(command2)).Invoke();
+
+        var entity2 = await FindAppointmentById(result1.Id);
+        AssertResultEqualCommand(result2, command2);
+        AssertEntityEqualCommand(entity2, command2);
+    }
+
+    [Test]
     public async Task Create_CorrectCommand_CreatesEntity()
     {
         await RunAsAdministratorAsync(typeof(Appointment), Appointment.CreateRole, Constants.CurrentUserAccountId);
@@ -219,7 +241,7 @@ public class UpsertAppointmentCommandTests : TestBase
 
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
-    
+
     [Test]
     public async Task Create_NoSchedule_ThrowsValidationError()
     {
@@ -232,7 +254,7 @@ public class UpsertAppointmentCommandTests : TestBase
 
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
-        
+
     [Test]
     public async Task Create_OutsideScheduleTimes_ThrowsValidationError()
     {
@@ -243,7 +265,7 @@ public class UpsertAppointmentCommandTests : TestBase
 
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
-    
+
     [Test]
     public async Task Create_EndTimeBeforeStartTime_ThrowsValidationError()
     {
@@ -254,7 +276,7 @@ public class UpsertAppointmentCommandTests : TestBase
 
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
-    
+
     [Test]
     public async Task Create_EndTimeSameStartTime_ThrowsValidationError()
     {
@@ -265,7 +287,7 @@ public class UpsertAppointmentCommandTests : TestBase
 
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
-    
+
     [Test]
     public async Task Create_NoSchedule_WithIgnoreTimeClashes_True_Creates()
     {
@@ -322,7 +344,7 @@ public class UpsertAppointmentCommandTests : TestBase
         appointment.Start = command.Start;
         appointment.End = command.Start.AddMinutes(30);
         await AddAsync(appointment);
-        
+
         await FluentActions.Invoking(() => SendAsync(command)).Should().ThrowAsync<ValidationException>();
     }
 
@@ -337,14 +359,14 @@ public class UpsertAppointmentCommandTests : TestBase
         appointment.Start = command.Start;
         appointment.End = command.Start.AddMinutes(30);
         await AddAsync(appointment);
-        
+
         var result = await FluentActions.Invoking(() => SendAsync(command)).Invoke();
-        
+
         var entity = await FindAppointmentById(result.Id);
         AssertResultEqualCommand(result, command);
         AssertEntityEqualCommand(entity, command);
     }
-    
+
     private void AssertResultEqualCommand(AppointmentAdminResourceModel result, UpsertAppointmentCommand command)
     {
         Assert.AreEqual(command.Start, result.Start);
