@@ -3,8 +3,11 @@ using System.Text.Json;
 
 namespace Kalendario.Core.Entities;
 
-public class AuditEntity : BaseEntity
+public class AuditEntity
 {
+    public Guid Id { get; set; }
+    public DateTime ActionDate { get; set; }
+    public string? ActionUserId { get; set; }
     public string EntityState { get; set; }
     public string EntityTable { get; set; }
     public string EntityId { get; set; }

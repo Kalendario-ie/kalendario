@@ -31,6 +31,8 @@ public class AuditEntry
             EntityState = Entry.State.ToString(),
             EntityTable = TableName,
             EntityId = EntityId,
+            ActionUserId = UserId,
+            ActionDate = DateTime.UtcNow,
             OldValues = OldValues.Count == 0 ? null : System.Text.Json.JsonSerializer.Serialize(OldValues),
             NewValues = NewValues.Count == 0 ? null : JsonConvert.SerializeObject(NewValues)
         };

@@ -35,12 +35,12 @@ const AppointmentHistoryItem: React.FunctionComponent<AppointmentHistoryItemProp
             </KFlexRow>
             {appointment.start && moment(appointment.start).isValid() &&
             <KFlexRow align="center">
-                Start: {timeFormatter(appointment.start)}
+                <KIcon icon="hourglass-start" color="primary" margin={2}/> {timeFormatter(appointment.start)}
             </KFlexRow>
             }
             {appointment.end && moment(appointment.end).isValid() &&
                 <KFlexRow align="center">
-                    Finish: {timeFormatter(appointment.end)}
+                    <KIcon icon="hourglass-end" color="primary" margin={2}/> {timeFormatter(appointment.end)}
                 </KFlexRow>
             }
             {appointment.employee &&

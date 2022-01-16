@@ -45,11 +45,9 @@ public class GetAppointmentHistoryQuery : IKalendarioProtectedQuery<GetAppointme
 
             var result = new GetAppointmentHistoryResult();
 
-            foreach (var auditEntity in auditEntities.OrderByDescending(e => e.DateCreated).ThenBy(e => e.DateModified))
+            foreach (var auditEntity in auditEntities.OrderByDescending(e => e.ActionDate))
             {
                 var entity = auditEntity.Deserialize<Appointment>();
-
-                ApplicationUser applicationUser = null;
 
                 if (entity.CustomerId.HasValue)
                     entity.Customer = await _context.Customers.FindAsync(entity.CustomerId);
@@ -60,19 +58,16 @@ public class GetAppointmentHistoryQuery : IKalendarioProtectedQuery<GetAppointme
                 if (entity.ServiceId.HasValue)
                     entity.Service = await _context.Services.FindAsync(entity.ServiceId);
 
-                if (entity.UserCreated != null)
-                    applicationUser = await _context.Users.FindAsync(entity.UserCreated);
-
-                if (entity.UserModified != null)
-                    applicationUser = await _context.Users.FindAsync(entity.UserModified);
-
                 var model = _mapper.Map<AppointmentHistoryAdminResourceModel>(entity);
 
-                if (applicationUser != null)
-                    model.User = _mapper.Map<ApplicationUserAdminResourceModel>(applicationUser);
+                if (auditEntity.ActionUserId != null)
+                {
+                    var user = await _context.Users.FindAsync(auditEntity.ActionUserId);
+                    model.User = _mapper.Map<ApplicationUserAdminResourceModel>(user);
+                }
 
                 model.EntityState = auditEntity.EntityState;
-                model.Date = entity.DateCreated ?? entity.DateModified ?? DateTime.Now;
+                model.Date = auditEntity.ActionDate;
                 result.Entities.Add(model);
             }
 
