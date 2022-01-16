@@ -11,10 +11,10 @@ export const adminEmployeeClient: BaseModelRequest<EmployeeAdminResourceModel, U
         return client.employeesGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
     post(body: UpsertEmployeeCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.employeesPost(body, cancelToken);
+        return client.employeesCreate(body, cancelToken);
     },
     put(id: string, command: UpsertEmployeeCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.employeesPut(id, command, cancelToken);
+        return client.employeesUpdate(id, command, cancelToken);
     }
 }
 

@@ -4,6 +4,7 @@ import React, {ChangeEvent, useEffect, useState} from 'react';
 import {FormGroup, Input, Label} from 'reactstrap';
 import {upsertAppointmentCommandValidation} from 'src/app/api/adminAppointments';
 import {UpsertAppointmentCommand} from 'src/app/api/api';
+import AppointmentUpsertFormWrapper from 'src/app/modules/admin/appointments/forms/appointment-upsert-form-wrapper';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikCustomerInput, KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
@@ -138,20 +139,22 @@ const AppointmentUpsertForm: React.FunctionComponent<AdminEditContainerProps<Ups
     const selectedAppointment = useAppSelector(store => appointmentSelectors.selectById(store, id || ''))
 
     return (
-        <KFormikForm initialValues={command}
-                     onSubmit={(values => onSubmit(values, id))}
-                     apiError={apiError}
-                     isSubmitting={isSubmitting}
-                     onCancel={onCancel}
-                     validationSchema={upsertAppointmentCommandValidation}
-        >
-            <FormikStartEndTimeInput/>
-            <KFormikInput name="employeeId" as={'select'} options={employees}/>
-            <ServicesInput/>
-            <KFormikCustomerInput initialCustomer={selectedAppointment?.customer}/>
-            <KFormikInput name="internalNotes" as={'textarea'}/>
-            <KFormikInput placeholder="Allow Overlapping" name="ignoreTimeClashes" as={'checkbox'}/>
-        </KFormikForm>
+        <AppointmentUpsertFormWrapper id={id}>
+            <KFormikForm initialValues={command}
+                         onSubmit={(values => onSubmit(values, id))}
+                         apiError={apiError}
+                         isSubmitting={isSubmitting}
+                         onCancel={onCancel}
+                         validationSchema={upsertAppointmentCommandValidation}
+            >
+                <FormikStartEndTimeInput/>
+                <KFormikInput name="employeeId" as={'select'} options={employees}/>
+                <ServicesInput/>
+                <KFormikCustomerInput initialCustomer={selectedAppointment?.customer}/>
+                <KFormikInput name="internalNotes" as={'textarea'}/>
+                <KFormikInput placeholder="Allow Overlapping" name="ignoreTimeClashes" as={'checkbox'}/>
+            </KFormikForm>
+        </AppointmentUpsertFormWrapper>
     )
 }
 

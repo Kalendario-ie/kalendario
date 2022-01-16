@@ -11,10 +11,10 @@ export const adminCustomerClient: BaseModelRequest<CustomerAdminResourceModel, U
         return client.customersGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
     post(body: UpsertCustomerCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.customersPost(body, cancelToken);
+        return client.customersCreate(body, cancelToken);
     },
     put(id: string, command: UpsertCustomerCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.customersPut(id, command, cancelToken);
+        return client.customersUpdate(id, command, cancelToken);
     }
 }
 

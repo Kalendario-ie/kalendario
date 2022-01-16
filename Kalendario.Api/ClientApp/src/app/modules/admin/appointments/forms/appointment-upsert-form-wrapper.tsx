@@ -10,12 +10,12 @@ import {appointmentActions} from 'src/app/store/admin/appointments';
 import {serviceActions} from 'src/app/store/admin/services';
 
 interface AppointmentUpsertFormWrapperProps {
- entity: AppointmentAdminResourceModel;
+ id: string | undefined;
 }
 
 const AppointmentUpsertFormWrapper: React.FunctionComponent<AppointmentUpsertFormWrapperProps> = (
     {
-        entity,
+        id,
         children
     }) => {
     const [showHistory, setShowHistory] = useState(false);
@@ -31,15 +31,15 @@ const AppointmentUpsertFormWrapper: React.FunctionComponent<AppointmentUpsertFor
 
     return (
         <>
-            {entity && entity.id !== '' &&
+            {id && id !== '' &&
             <KFlexRow justify="end">
-                <DeleteButton entity={entity}
-                              modelType={PermissionModel.appointment}
-                              baseActions={appointmentActions}/>
+                {/*<DeleteButton entity={entity}*/}
+                {/*              modelType={PermissionModel.appointment}*/}
+                {/*              baseActions={appointmentActions}/>*/}
                 <KIconButton icon="history"
                              color="primary"
                              onClick={handleHistoryClick}/>
-                <AppointmentHistoryContainer id={entity.id} isOpen={showHistory} onClose={handleHistoryCloseClick}/>
+                <AppointmentHistoryContainer id={id} isOpen={showHistory} onClose={handleHistoryCloseClick}/>
             </KFlexRow>
             }
             {children}

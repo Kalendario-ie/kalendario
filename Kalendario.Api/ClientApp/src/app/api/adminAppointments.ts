@@ -1,7 +1,13 @@
 import {CancelToken} from 'axios';
 import {Moment} from 'moment';
 import * as moment from 'moment';
-import {AppointmentAdminResourceModel, AppointmentsClient, UpsertAppointmentCommand} from 'src/app/api/api';
+import {
+    AppointmentAdminResourceModel,
+    AppointmentsClient,
+    GetAppointmentHistoryResult,
+    UpsertAppointmentCommand
+} from 'src/app/api/api';
+import {ApiListResult} from 'src/app/api/common/api-results';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
 import {BaseModelRequest} from 'src/app/api/common/clients/base-django-api';
 import * as yup from 'yup';
@@ -16,24 +22,23 @@ export interface AppointmentsGetParams {
     cancelToken?: CancelToken | undefined;
 }
 
-export const adminAppointmentClient: BaseModelRequest<AppointmentAdminResourceModel, UpsertAppointmentCommand, AppointmentsGetParams> = {
+export interface AppointmentClient extends BaseModelRequest<AppointmentAdminResourceModel, UpsertAppointmentCommand, AppointmentsGetParams> {
+    history: (id: string, cancelToken?: CancelToken | undefined) => Promise<GetAppointmentHistoryResult>;
+}
+
+export const adminAppointmentClient: AppointmentClient = {
     get(params) {
         return client.appointmentsGet(params?.fromDate, params?.toDate, params?.customerId, params?.employeeIds, params?.cancelToken);
     },
     post(body: UpsertAppointmentCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.appointmentsPost(body, cancelToken);
+        return client.appointmentsCreate(body, cancelToken);
     },
     put(id: string, command: UpsertAppointmentCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.appointmentsPut(id, command, cancelToken);
+        return client.appointmentsUpdate(id, command, cancelToken);
+    },
+    history(id: string, cancelToken?: CancelToken | undefined) {
+        return client.appointmentsHistory(id, cancelToken);
     }
-    // ...baseModelRequest<Appointment, AppointmentQueryParams>(adminUrl, appointmentParser),
-    // history(id: number): Promise<ApiListResult<AppointmentHistory>> {
-    //     return baseApiAxios.get<ApiListResult<AppointmentHistory>>(adminUrl + `${id}/history/`)
-    //         .then(project => {
-    //             project.data.results = project.data.results.map(appointmentHistoryParser);
-    //             return project.data;
-    //         });
-    // },
     //
     // createLock(model: any): Promise<Appointment> {
     //     return baseApiAxios.post<Appointment>(adminUrl + 'lock/', model)

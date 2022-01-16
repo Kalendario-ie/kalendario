@@ -24,7 +24,9 @@ const AuthAutoLogin: React.FunctionComponent<AuthAutoLoginProps> = (
             .then((user) => {
                 if (!!user) {
                     dispatch(setUser(user.profile));
-                    baseApiAxios.defaults.headers.common['Authorization'] = `Bearer ${user.access_token}`; // TODO: maybe this shouldn't be set here.
+                    authService.getAccessToken().then(token => {
+                        baseApiAxios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                    });
                 }
             });
     }, [dispatch]);

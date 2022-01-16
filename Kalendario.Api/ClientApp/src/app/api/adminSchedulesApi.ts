@@ -17,10 +17,10 @@ export const adminScheduleClient: BaseModelRequest<ScheduleAdminResourceModel, U
         return client.schedulesGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
     post(body: UpsertScheduleCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.schedulesPost(body, cancelToken);
+        return client.schedulesCreate(body, cancelToken);
     },
     put(id: string, command: UpsertScheduleCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.schedulesPut(id, command, cancelToken);
+        return client.schedulesUpdate(id, command, cancelToken);
     }
 }
 

@@ -12,10 +12,10 @@ export const adminServiceClient: BaseModelRequest<ServiceAdminResourceModel, Ups
         return client.servicesGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
     post(body: UpsertServiceCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.servicesPost(body, cancelToken);
+        return client.servicesCreate(body, cancelToken);
     },
     put(id: string, command: UpsertServiceCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.servicesPut(id, command, cancelToken);
+        return client.servicesUpdate(id, command, cancelToken);
     }
 }
 

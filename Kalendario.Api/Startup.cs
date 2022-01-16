@@ -50,6 +50,7 @@ public class Startup
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
+            options.CustomOperationIds(e => $"{e.ActionDescriptor.RouteValues["controller"]}{e.ActionDescriptor.RouteValues["action"]}");
             options.SupportNonNullableReferenceTypes();
             options.MapType(typeof(TimeSpan), () => new OpenApiSchema
             {

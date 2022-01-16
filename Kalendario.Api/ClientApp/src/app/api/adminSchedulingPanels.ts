@@ -10,10 +10,10 @@ export const adminSchedulingPanelsClient: BaseModelRequest<SchedulingPanelAdminR
         return client.schedulingPanelsGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
     post(body: UpsertSchedulingPanelCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.schedulingPanelsPost(body, cancelToken);
+        return client.schedulingPanelsCreate(body, cancelToken);
     },
     put(id: string, command: UpsertSchedulingPanelCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.schedulingPanelsPut(id, command, cancelToken);
+        return client.schedulingPanelsUpdate(id, command, cancelToken);
     }
 }
 

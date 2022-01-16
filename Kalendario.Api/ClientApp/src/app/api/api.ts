@@ -16,7 +16,7 @@ export interface IAccountsClient {
      * @param body (optional)
      * @return Success
      */
-    accounts(body: CreateAccountCommand | undefined): Promise<string>;
+    accountsCreate(body: CreateAccountCommand | undefined): Promise<string>;
 }
 
 export class AccountsClient implements IAccountsClient {
@@ -36,7 +36,7 @@ export class AccountsClient implements IAccountsClient {
      * @param body (optional)
      * @return Success
      */
-    accounts(body: CreateAccountCommand | undefined , cancelToken?: CancelToken | undefined): Promise<string> {
+    accountsCreate(body: CreateAccountCommand | undefined , cancelToken?: CancelToken | undefined): Promise<string> {
         let url_ = this.baseUrl + "/api/Accounts";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -60,11 +60,11 @@ export class AccountsClient implements IAccountsClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processAccounts(_response);
+            return this.processAccountsCreate(_response);
         });
     }
 
-    protected processAccounts(response: AxiosResponse): Promise<string> {
+    protected processAccountsCreate(response: AxiosResponse): Promise<string> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -102,12 +102,16 @@ export interface IAppointmentsClient {
      * @param body (optional)
      * @return Success
      */
-    appointmentsPost(body: UpsertAppointmentCommand | undefined): Promise<AppointmentAdminResourceModel>;
+    appointmentsCreate(body: UpsertAppointmentCommand | undefined): Promise<AppointmentAdminResourceModel>;
     /**
      * @param body (optional)
      * @return Success
      */
-    appointmentsPut(id: string, body: UpsertAppointmentCommand | undefined): Promise<AppointmentAdminResourceModel>;
+    appointmentsUpdate(id: string, body: UpsertAppointmentCommand | undefined): Promise<AppointmentAdminResourceModel>;
+    /**
+     * @return Success
+     */
+    appointmentsHistory(id: string): Promise<GetAppointmentHistoryResult>;
 }
 
 export class AppointmentsClient implements IAppointmentsClient {
@@ -198,7 +202,7 @@ export class AppointmentsClient implements IAppointmentsClient {
      * @param body (optional)
      * @return Success
      */
-    appointmentsPost(body: UpsertAppointmentCommand | undefined , cancelToken?: CancelToken | undefined): Promise<AppointmentAdminResourceModel> {
+    appointmentsCreate(body: UpsertAppointmentCommand | undefined , cancelToken?: CancelToken | undefined): Promise<AppointmentAdminResourceModel> {
         let url_ = this.baseUrl + "/api/Appointments";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -222,11 +226,11 @@ export class AppointmentsClient implements IAppointmentsClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processAppointmentsPost(_response);
+            return this.processAppointmentsCreate(_response);
         });
     }
 
-    protected processAppointmentsPost(response: AxiosResponse): Promise<AppointmentAdminResourceModel> {
+    protected processAppointmentsCreate(response: AxiosResponse): Promise<AppointmentAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -254,7 +258,7 @@ export class AppointmentsClient implements IAppointmentsClient {
      * @param body (optional)
      * @return Success
      */
-    appointmentsPut(id: string, body: UpsertAppointmentCommand | undefined , cancelToken?: CancelToken | undefined): Promise<AppointmentAdminResourceModel> {
+    appointmentsUpdate(id: string, body: UpsertAppointmentCommand | undefined , cancelToken?: CancelToken | undefined): Promise<AppointmentAdminResourceModel> {
         let url_ = this.baseUrl + "/api/Appointments/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -281,11 +285,11 @@ export class AppointmentsClient implements IAppointmentsClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processAppointmentsPut(_response);
+            return this.processAppointmentsUpdate(_response);
         });
     }
 
-    protected processAppointmentsPut(response: AxiosResponse): Promise<AppointmentAdminResourceModel> {
+    protected processAppointmentsUpdate(response: AxiosResponse): Promise<AppointmentAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -308,6 +312,60 @@ export class AppointmentsClient implements IAppointmentsClient {
         }
         return Promise.resolve<AppointmentAdminResourceModel>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    appointmentsHistory(id: string , cancelToken?: CancelToken | undefined): Promise<GetAppointmentHistoryResult> {
+        let url_ = this.baseUrl + "/api/Appointments/history/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processAppointmentsHistory(_response);
+        });
+    }
+
+    protected processAppointmentsHistory(response: AxiosResponse): Promise<GetAppointmentHistoryResult> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<GetAppointmentHistoryResult>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<GetAppointmentHistoryResult>(<any>null);
+    }
 }
 
 export interface ICustomersClient {
@@ -322,12 +380,12 @@ export interface ICustomersClient {
      * @param body (optional)
      * @return Success
      */
-    customersPost(body: UpsertCustomerCommand | undefined): Promise<CustomerAdminResourceModel>;
+    customersCreate(body: UpsertCustomerCommand | undefined): Promise<CustomerAdminResourceModel>;
     /**
      * @param body (optional)
      * @return Success
      */
-    customersPut(id: string, body: UpsertCustomerCommand | undefined): Promise<CustomerAdminResourceModel>;
+    customersUpdate(id: string, body: UpsertCustomerCommand | undefined): Promise<CustomerAdminResourceModel>;
 }
 
 export class CustomersClient implements ICustomersClient {
@@ -413,7 +471,7 @@ export class CustomersClient implements ICustomersClient {
      * @param body (optional)
      * @return Success
      */
-    customersPost(body: UpsertCustomerCommand | undefined , cancelToken?: CancelToken | undefined): Promise<CustomerAdminResourceModel> {
+    customersCreate(body: UpsertCustomerCommand | undefined , cancelToken?: CancelToken | undefined): Promise<CustomerAdminResourceModel> {
         let url_ = this.baseUrl + "/api/Customers";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -437,11 +495,11 @@ export class CustomersClient implements ICustomersClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCustomersPost(_response);
+            return this.processCustomersCreate(_response);
         });
     }
 
-    protected processCustomersPost(response: AxiosResponse): Promise<CustomerAdminResourceModel> {
+    protected processCustomersCreate(response: AxiosResponse): Promise<CustomerAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -469,7 +527,7 @@ export class CustomersClient implements ICustomersClient {
      * @param body (optional)
      * @return Success
      */
-    customersPut(id: string, body: UpsertCustomerCommand | undefined , cancelToken?: CancelToken | undefined): Promise<CustomerAdminResourceModel> {
+    customersUpdate(id: string, body: UpsertCustomerCommand | undefined , cancelToken?: CancelToken | undefined): Promise<CustomerAdminResourceModel> {
         let url_ = this.baseUrl + "/api/Customers/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -496,11 +554,11 @@ export class CustomersClient implements ICustomersClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processCustomersPut(_response);
+            return this.processCustomersUpdate(_response);
         });
     }
 
-    protected processCustomersPut(response: AxiosResponse): Promise<CustomerAdminResourceModel> {
+    protected processCustomersUpdate(response: AxiosResponse): Promise<CustomerAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -537,12 +595,12 @@ export interface IEmployeesClient {
      * @param body (optional)
      * @return Success
      */
-    employeesPost(body: UpsertEmployeeCommand | undefined): Promise<EmployeeAdminResourceModel>;
+    employeesCreate(body: UpsertEmployeeCommand | undefined): Promise<EmployeeAdminResourceModel>;
     /**
      * @param body (optional)
      * @return Success
      */
-    employeesPut(id: string, body: UpsertEmployeeCommand | undefined): Promise<EmployeeAdminResourceModel>;
+    employeesUpdate(id: string, body: UpsertEmployeeCommand | undefined): Promise<EmployeeAdminResourceModel>;
 }
 
 export class EmployeesClient implements IEmployeesClient {
@@ -628,7 +686,7 @@ export class EmployeesClient implements IEmployeesClient {
      * @param body (optional)
      * @return Success
      */
-    employeesPost(body: UpsertEmployeeCommand | undefined , cancelToken?: CancelToken | undefined): Promise<EmployeeAdminResourceModel> {
+    employeesCreate(body: UpsertEmployeeCommand | undefined , cancelToken?: CancelToken | undefined): Promise<EmployeeAdminResourceModel> {
         let url_ = this.baseUrl + "/api/Employees";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -652,11 +710,11 @@ export class EmployeesClient implements IEmployeesClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processEmployeesPost(_response);
+            return this.processEmployeesCreate(_response);
         });
     }
 
-    protected processEmployeesPost(response: AxiosResponse): Promise<EmployeeAdminResourceModel> {
+    protected processEmployeesCreate(response: AxiosResponse): Promise<EmployeeAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -684,7 +742,7 @@ export class EmployeesClient implements IEmployeesClient {
      * @param body (optional)
      * @return Success
      */
-    employeesPut(id: string, body: UpsertEmployeeCommand | undefined , cancelToken?: CancelToken | undefined): Promise<EmployeeAdminResourceModel> {
+    employeesUpdate(id: string, body: UpsertEmployeeCommand | undefined , cancelToken?: CancelToken | undefined): Promise<EmployeeAdminResourceModel> {
         let url_ = this.baseUrl + "/api/Employees/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -711,11 +769,11 @@ export class EmployeesClient implements IEmployeesClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processEmployeesPut(_response);
+            return this.processEmployeesUpdate(_response);
         });
     }
 
-    protected processEmployeesPut(response: AxiosResponse): Promise<EmployeeAdminResourceModel> {
+    protected processEmployeesUpdate(response: AxiosResponse): Promise<EmployeeAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -744,7 +802,7 @@ export interface IOidcConfigurationClient {
     /**
      * @return Success
      */
-    _configuration(clientId: string): Promise<void>;
+    oidcConfigurationGetClientRequestParameters(clientId: string): Promise<void>;
 }
 
 export class OidcConfigurationClient implements IOidcConfigurationClient {
@@ -763,7 +821,7 @@ export class OidcConfigurationClient implements IOidcConfigurationClient {
     /**
      * @return Success
      */
-    _configuration(clientId: string , cancelToken?: CancelToken | undefined): Promise<void> {
+    oidcConfigurationGetClientRequestParameters(clientId: string , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/_configuration/{clientId}";
         if (clientId === undefined || clientId === null)
             throw new Error("The parameter 'clientId' must be defined.");
@@ -785,11 +843,11 @@ export class OidcConfigurationClient implements IOidcConfigurationClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.process_configuration(_response);
+            return this.processOidcConfigurationGetClientRequestParameters(_response);
         });
     }
 
-    protected process_configuration(response: AxiosResponse): Promise<void> {
+    protected processOidcConfigurationGetClientRequestParameters(response: AxiosResponse): Promise<void> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -823,12 +881,12 @@ export interface ISchedulesClient {
      * @param body (optional)
      * @return Success
      */
-    schedulesPost(body: UpsertScheduleCommand | undefined): Promise<ScheduleAdminResourceModel>;
+    schedulesCreate(body: UpsertScheduleCommand | undefined): Promise<ScheduleAdminResourceModel>;
     /**
      * @param body (optional)
      * @return Success
      */
-    schedulesPut(id: string, body: UpsertScheduleCommand | undefined): Promise<ScheduleAdminResourceModel>;
+    schedulesUpdate(id: string, body: UpsertScheduleCommand | undefined): Promise<ScheduleAdminResourceModel>;
 }
 
 export class SchedulesClient implements ISchedulesClient {
@@ -914,7 +972,7 @@ export class SchedulesClient implements ISchedulesClient {
      * @param body (optional)
      * @return Success
      */
-    schedulesPost(body: UpsertScheduleCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ScheduleAdminResourceModel> {
+    schedulesCreate(body: UpsertScheduleCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ScheduleAdminResourceModel> {
         let url_ = this.baseUrl + "/api/Schedules";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -938,11 +996,11 @@ export class SchedulesClient implements ISchedulesClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processSchedulesPost(_response);
+            return this.processSchedulesCreate(_response);
         });
     }
 
-    protected processSchedulesPost(response: AxiosResponse): Promise<ScheduleAdminResourceModel> {
+    protected processSchedulesCreate(response: AxiosResponse): Promise<ScheduleAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -970,7 +1028,7 @@ export class SchedulesClient implements ISchedulesClient {
      * @param body (optional)
      * @return Success
      */
-    schedulesPut(id: string, body: UpsertScheduleCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ScheduleAdminResourceModel> {
+    schedulesUpdate(id: string, body: UpsertScheduleCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ScheduleAdminResourceModel> {
         let url_ = this.baseUrl + "/api/Schedules/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -997,11 +1055,11 @@ export class SchedulesClient implements ISchedulesClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processSchedulesPut(_response);
+            return this.processSchedulesUpdate(_response);
         });
     }
 
-    protected processSchedulesPut(response: AxiosResponse): Promise<ScheduleAdminResourceModel> {
+    protected processSchedulesUpdate(response: AxiosResponse): Promise<ScheduleAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1038,12 +1096,12 @@ export interface ISchedulingPanelsClient {
      * @param body (optional)
      * @return Success
      */
-    schedulingPanelsPost(body: UpsertSchedulingPanelCommand | undefined): Promise<SchedulingPanelAdminResourceModel>;
+    schedulingPanelsCreate(body: UpsertSchedulingPanelCommand | undefined): Promise<SchedulingPanelAdminResourceModel>;
     /**
      * @param body (optional)
      * @return Success
      */
-    schedulingPanelsPut(id: string, body: UpsertSchedulingPanelCommand | undefined): Promise<SchedulingPanelAdminResourceModel>;
+    schedulingPanelsUpdate(id: string, body: UpsertSchedulingPanelCommand | undefined): Promise<SchedulingPanelAdminResourceModel>;
 }
 
 export class SchedulingPanelsClient implements ISchedulingPanelsClient {
@@ -1129,7 +1187,7 @@ export class SchedulingPanelsClient implements ISchedulingPanelsClient {
      * @param body (optional)
      * @return Success
      */
-    schedulingPanelsPost(body: UpsertSchedulingPanelCommand | undefined , cancelToken?: CancelToken | undefined): Promise<SchedulingPanelAdminResourceModel> {
+    schedulingPanelsCreate(body: UpsertSchedulingPanelCommand | undefined , cancelToken?: CancelToken | undefined): Promise<SchedulingPanelAdminResourceModel> {
         let url_ = this.baseUrl + "/api/SchedulingPanels";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1153,11 +1211,11 @@ export class SchedulingPanelsClient implements ISchedulingPanelsClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processSchedulingPanelsPost(_response);
+            return this.processSchedulingPanelsCreate(_response);
         });
     }
 
-    protected processSchedulingPanelsPost(response: AxiosResponse): Promise<SchedulingPanelAdminResourceModel> {
+    protected processSchedulingPanelsCreate(response: AxiosResponse): Promise<SchedulingPanelAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1185,7 +1243,7 @@ export class SchedulingPanelsClient implements ISchedulingPanelsClient {
      * @param body (optional)
      * @return Success
      */
-    schedulingPanelsPut(id: string, body: UpsertSchedulingPanelCommand | undefined , cancelToken?: CancelToken | undefined): Promise<SchedulingPanelAdminResourceModel> {
+    schedulingPanelsUpdate(id: string, body: UpsertSchedulingPanelCommand | undefined , cancelToken?: CancelToken | undefined): Promise<SchedulingPanelAdminResourceModel> {
         let url_ = this.baseUrl + "/api/SchedulingPanels/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1212,11 +1270,11 @@ export class SchedulingPanelsClient implements ISchedulingPanelsClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processSchedulingPanelsPut(_response);
+            return this.processSchedulingPanelsUpdate(_response);
         });
     }
 
-    protected processSchedulingPanelsPut(response: AxiosResponse): Promise<SchedulingPanelAdminResourceModel> {
+    protected processSchedulingPanelsUpdate(response: AxiosResponse): Promise<SchedulingPanelAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1253,12 +1311,12 @@ export interface IServiceCategoriesClient {
      * @param body (optional)
      * @return Success
      */
-    serviceCategoriesPost(body: UpsertServiceCategoryCommand | undefined): Promise<ServiceCategoryAdminResourceModel>;
+    serviceCategoriesCreate(body: UpsertServiceCategoryCommand | undefined): Promise<ServiceCategoryAdminResourceModel>;
     /**
      * @param body (optional)
      * @return Success
      */
-    serviceCategoriesPut(id: string, body: UpsertServiceCategoryCommand | undefined): Promise<ServiceCategoryAdminResourceModel>;
+    serviceCategoriesUpdate(id: string, body: UpsertServiceCategoryCommand | undefined): Promise<ServiceCategoryAdminResourceModel>;
 }
 
 export class ServiceCategoriesClient implements IServiceCategoriesClient {
@@ -1344,7 +1402,7 @@ export class ServiceCategoriesClient implements IServiceCategoriesClient {
      * @param body (optional)
      * @return Success
      */
-    serviceCategoriesPost(body: UpsertServiceCategoryCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ServiceCategoryAdminResourceModel> {
+    serviceCategoriesCreate(body: UpsertServiceCategoryCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ServiceCategoryAdminResourceModel> {
         let url_ = this.baseUrl + "/api/ServiceCategories";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1368,11 +1426,11 @@ export class ServiceCategoriesClient implements IServiceCategoriesClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processServiceCategoriesPost(_response);
+            return this.processServiceCategoriesCreate(_response);
         });
     }
 
-    protected processServiceCategoriesPost(response: AxiosResponse): Promise<ServiceCategoryAdminResourceModel> {
+    protected processServiceCategoriesCreate(response: AxiosResponse): Promise<ServiceCategoryAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1400,7 +1458,7 @@ export class ServiceCategoriesClient implements IServiceCategoriesClient {
      * @param body (optional)
      * @return Success
      */
-    serviceCategoriesPut(id: string, body: UpsertServiceCategoryCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ServiceCategoryAdminResourceModel> {
+    serviceCategoriesUpdate(id: string, body: UpsertServiceCategoryCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ServiceCategoryAdminResourceModel> {
         let url_ = this.baseUrl + "/api/ServiceCategories/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1427,11 +1485,11 @@ export class ServiceCategoriesClient implements IServiceCategoriesClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processServiceCategoriesPut(_response);
+            return this.processServiceCategoriesUpdate(_response);
         });
     }
 
-    protected processServiceCategoriesPut(response: AxiosResponse): Promise<ServiceCategoryAdminResourceModel> {
+    protected processServiceCategoriesUpdate(response: AxiosResponse): Promise<ServiceCategoryAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1468,12 +1526,12 @@ export interface IServicesClient {
      * @param body (optional)
      * @return Success
      */
-    servicesPost(body: UpsertServiceCommand | undefined): Promise<ServiceAdminResourceModel>;
+    servicesCreate(body: UpsertServiceCommand | undefined): Promise<ServiceAdminResourceModel>;
     /**
      * @param body (optional)
      * @return Success
      */
-    servicesPut(id: string, body: UpsertServiceCommand | undefined): Promise<ServiceAdminResourceModel>;
+    servicesUpdate(id: string, body: UpsertServiceCommand | undefined): Promise<ServiceAdminResourceModel>;
 }
 
 export class ServicesClient implements IServicesClient {
@@ -1559,7 +1617,7 @@ export class ServicesClient implements IServicesClient {
      * @param body (optional)
      * @return Success
      */
-    servicesPost(body: UpsertServiceCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ServiceAdminResourceModel> {
+    servicesCreate(body: UpsertServiceCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ServiceAdminResourceModel> {
         let url_ = this.baseUrl + "/api/Services";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1583,11 +1641,11 @@ export class ServicesClient implements IServicesClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processServicesPost(_response);
+            return this.processServicesCreate(_response);
         });
     }
 
-    protected processServicesPost(response: AxiosResponse): Promise<ServiceAdminResourceModel> {
+    protected processServicesCreate(response: AxiosResponse): Promise<ServiceAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1615,7 +1673,7 @@ export class ServicesClient implements IServicesClient {
      * @param body (optional)
      * @return Success
      */
-    servicesPut(id: string, body: UpsertServiceCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ServiceAdminResourceModel> {
+    servicesUpdate(id: string, body: UpsertServiceCommand | undefined , cancelToken?: CancelToken | undefined): Promise<ServiceAdminResourceModel> {
         let url_ = this.baseUrl + "/api/Services/{id}";
         if (id === undefined || id === null)
             throw new Error("The parameter 'id' must be defined.");
@@ -1642,11 +1700,11 @@ export class ServicesClient implements IServicesClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processServicesPut(_response);
+            return this.processServicesUpdate(_response);
         });
     }
 
-    protected processServicesPut(response: AxiosResponse): Promise<ServiceAdminResourceModel> {
+    protected processServicesUpdate(response: AxiosResponse): Promise<ServiceAdminResourceModel> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1675,7 +1733,7 @@ export interface IWeatherForecastClient {
     /**
      * @return Success
      */
-    weatherForecast(): Promise<WeatherForecast[]>;
+    weatherForecastGet(): Promise<WeatherForecast[]>;
 }
 
 export class WeatherForecastClient implements IWeatherForecastClient {
@@ -1694,7 +1752,7 @@ export class WeatherForecastClient implements IWeatherForecastClient {
     /**
      * @return Success
      */
-    weatherForecast(  cancelToken?: CancelToken | undefined): Promise<WeatherForecast[]> {
+    weatherForecastGet(  cancelToken?: CancelToken | undefined): Promise<WeatherForecast[]> {
         let url_ = this.baseUrl + "/WeatherForecast";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1714,11 +1772,11 @@ export class WeatherForecastClient implements IWeatherForecastClient {
                 throw _error;
             }
         }).then((_response: AxiosResponse) => {
-            return this.processWeatherForecast(_response);
+            return this.processWeatherForecastGet(_response);
         });
     }
 
-    protected processWeatherForecast(response: AxiosResponse): Promise<WeatherForecast[]> {
+    protected processWeatherForecastGet(response: AxiosResponse): Promise<WeatherForecast[]> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1743,6 +1801,10 @@ export class WeatherForecastClient implements IWeatherForecastClient {
     }
 }
 
+export interface ApplicationUserAdminResourceModel {
+    userName: string | undefined;
+}
+
 export interface AppointmentAdminResourceModel {
     id: string;
     customer: CustomerAdminResourceModel;
@@ -1752,6 +1814,22 @@ export interface AppointmentAdminResourceModel {
     end: moment.Moment;
     price: number;
     internalNotes: string | undefined;
+}
+
+export interface AppointmentHistoryAdminResourceModel {
+    user: ApplicationUserAdminResourceModel;
+    date: moment.Moment;
+    entityState: string | undefined;
+    id: string;
+    customer: CustomerAdminResourceModel;
+    employee: EmployeeAdminResourceModel;
+    service: ServiceAdminResourceModel;
+    start: moment.Moment;
+    end: moment.Moment;
+    price: number;
+    internalNotes: string | undefined;
+    dateCreated: moment.Moment | undefined;
+    dateModified: moment.Moment | undefined;
 }
 
 export interface Colour {
@@ -1794,6 +1872,10 @@ export interface EmployeeAdminResourceModelGetAllResult {
     entities: EmployeeAdminResourceModel[] | undefined;
     filteredCount: number;
     totalCount: number;
+}
+
+export interface GetAppointmentHistoryResult {
+    readonly entities: AppointmentHistoryAdminResourceModel[] | undefined;
 }
 
 export interface GetAppointmentsResult {

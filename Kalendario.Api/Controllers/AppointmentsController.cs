@@ -27,4 +27,10 @@ public class AppointmentsController : ApiControllerBase
         command.Id = id;
         return await Mediator.Send(command);
     }
+    
+    [HttpGet("history/{id}")]
+    public async Task<ActionResult<GetAppointmentHistoryResult>> History(Guid id)
+    {
+        return await Mediator.Send(new GetAppointmentHistoryQuery { Id = id});
+    }
 }

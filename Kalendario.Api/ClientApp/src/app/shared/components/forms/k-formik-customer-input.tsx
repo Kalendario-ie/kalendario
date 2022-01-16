@@ -73,7 +73,6 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
             {customer &&
             <KFlexColumn>
                 <KFlexRow justify={'between'}>
-                    <KIcon icon="user" color="primary" text={customer.name}/>
                     <KIcon icon="phone" color="primary" text={customer.phoneNumber}/>
                     <KIcon icon="at" color="primary" text={customer.email}/>
                 </KFlexRow>

@@ -7,7 +7,7 @@ const client = new AccountsClient('', baseApiAxios);
 
 export const adminCompanyClient = {
     post(body: CreateAccountCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.accounts(body, cancelToken);
+        return client.accountsCreate(body, cancelToken);
     }
     // ...baseModelRequest<AdminCompany, null>(adminUrl, adminCompanyParser),
     //

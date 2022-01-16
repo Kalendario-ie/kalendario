@@ -16,10 +16,10 @@ export const adminServiceCategoryClient: BaseModelRequest<ServiceCategoryAdminRe
         return client.serviceCategoriesGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
     post(body: UpsertServiceCategoryCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.serviceCategoriesPost(body, cancelToken);
+        return client.serviceCategoriesCreate(body, cancelToken);
     },
     put(id: string, command: UpsertServiceCategoryCommand | undefined, cancelToken?: CancelToken | undefined) {
-        return client.serviceCategoriesPut(id, command, cancelToken);
+        return client.serviceCategoriesUpdate(id, command, cancelToken);
     }
 }
 

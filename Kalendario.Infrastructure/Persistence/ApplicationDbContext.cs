@@ -48,7 +48,9 @@ namespace Kalendario.Infrastructure.Persistence
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            var entities = OnBeforeSaveChanges();
+            var currentUserService = _serviceProvider.GetService<ICurrentUserService>();
+            UpdateBaseEntity(currentUserService);
+            var entities = OnBeforeSaveChanges(currentUserService);
             var events = ChangeTracker.Entries<IHasDomainEvent>()
                 .Select(x => x.Entity.DomainEvents)
                 .SelectMany(x => x)
@@ -63,14 +65,8 @@ namespace Kalendario.Infrastructure.Persistence
             return result;
         }
 
-        private List<AuditEntry> OnBeforeSaveChanges()
+        private void UpdateBaseEntity(ICurrentUserService currentUserService)
         {
-            // ICurrentUserService can't be at the constructor
-            // because it will create an instance that has no user id.
-            var currentUserService = _serviceProvider.GetService<ICurrentUserService>();
-            ChangeTracker.DetectChanges();
-            var auditEntries = new List<AuditEntry>();
-
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())
             {
                 switch (entry.State)
@@ -86,6 +82,14 @@ namespace Kalendario.Infrastructure.Persistence
                         break;
                 }
             }
+        }
+
+        private List<AuditEntry> OnBeforeSaveChanges(ICurrentUserService currentUserService)
+        {
+            // ICurrentUserService can't be at the constructor
+            // because it will create an instance that has no user id.
+            ChangeTracker.DetectChanges();
+            var auditEntries = new List<AuditEntry>();
 
             foreach (var entry in ChangeTracker.Entries<IAuditable>())
             {
