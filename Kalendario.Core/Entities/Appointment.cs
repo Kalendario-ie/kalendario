@@ -5,7 +5,7 @@ using Kalendario.Core.Common;
 
 namespace Kalendario.Core.Entities
 {
-    public class Appointment : AccountEntity, IAuditable
+    public class Appointment : AccountEntity, IAuditable, ISoftDeletable
     {
         public const string CanOverbookRole = "CanOverbookRole";
 
@@ -33,5 +33,7 @@ namespace Kalendario.Core.Entities
         {
             return BaseEntity.EntityRoles().Append(CanOverbookRole);
         }
+
+        public bool IsDeleted { get; set; }
     }
 }

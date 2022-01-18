@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Kalendario.Core.Common;
 
 namespace Kalendario.Core.Entities;
 
-public class Schedule : AccountEntity
+public class Schedule : AccountEntity, ISoftDeletable
 {
     public string Name { get; set; }
 
@@ -40,5 +41,6 @@ public class Schedule : AccountEntity
             .ToList();
     }
 
+    public bool IsDeleted { get; set; }
 }
 

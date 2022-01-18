@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Kalendario.Core.Common;
 
 namespace Kalendario.Core.Entities
 {
-    public class Employee : AccountEntity
+    public class Employee : AccountEntity, ISoftDeletable
     {
         public string Name { get; set; }
 
@@ -19,5 +20,6 @@ namespace Kalendario.Core.Entities
         public ICollection<EmployeeService> EmployeeServices { get; set; }
 
         public ICollection<SchedulingPanel> SchedulingPanels { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

@@ -1,9 +1,11 @@
-﻿using Duende.IdentityServer.EntityFramework.Options;
+﻿using System.Reflection;
+using Duende.IdentityServer.EntityFramework.Options;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Common;
 using Kalendario.Core.Common;
 using Kalendario.Core.Entities;
 using Kalendario.Core.Infrastructure;
+using Kalendario.Infrastructure.Extensions;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -44,12 +46,15 @@ namespace Kalendario.Infrastructure.Persistence
         {
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+            builder.ApplyGlobalFilters<ISoftDeletable>(e => !e.IsDeleted);
         }
+        
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             var currentUserService = _serviceProvider.GetService<ICurrentUserService>();
             UpdateBaseEntity(currentUserService);
+            SoftDeleteEntities();
             var entities = OnBeforeSaveChanges(currentUserService);
             var events = ChangeTracker.Entries<IHasDomainEvent>()
                 .Select(x => x.Entity.DomainEvents)
@@ -81,6 +86,16 @@ namespace Kalendario.Infrastructure.Persistence
                         entry.Entity.DateModified = _dateTime.Now;
                         break;
                 }
+            }
+        }
+
+        private void SoftDeleteEntities()
+        {
+            foreach (var entry in ChangeTracker.Entries<ISoftDeletable>()
+                         .Where((entry) => entry.State == EntityState.Deleted))
+            {
+                entry.State = EntityState.Unchanged;
+                entry.Entity.IsDeleted = true;
             }
         }
 
