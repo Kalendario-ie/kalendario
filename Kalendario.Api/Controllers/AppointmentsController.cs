@@ -14,23 +14,35 @@ public class AppointmentsController : ApiControllerBase
     {
         return await Mediator.Send(query);
     }
-    
+
     [HttpPost]
     public async Task<ActionResult<AppointmentAdminResourceModel>> Create([FromBody] UpsertAppointmentCommand command)
     {
         return await Mediator.Send(command);
     }
-    
+
     [HttpPut("{id}")]
-    public async Task<ActionResult<AppointmentAdminResourceModel>> Update(Guid id, [FromBody] UpsertAppointmentCommand command)
+    public async Task<ActionResult<AppointmentAdminResourceModel>> Update(Guid id,
+        [FromBody] UpsertAppointmentCommand command)
     {
         command.Id = id;
         return await Mediator.Send(command);
     }
-    
+
     [HttpGet("history/{id}")]
     public async Task<ActionResult<GetAppointmentHistoryResult>> History(Guid id)
     {
-        return await Mediator.Send(new GetAppointmentHistoryQuery { Id = id});
+        return await Mediator.Send(new GetAppointmentHistoryQuery {Id = id});
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        var command = new DeleteAppointmentCommand
+        {
+            Id = id
+        };
+        await Mediator.Send(command);
+        return NoContent();
     }
 }

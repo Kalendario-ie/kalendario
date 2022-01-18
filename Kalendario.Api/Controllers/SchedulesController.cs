@@ -28,4 +28,15 @@ public class SchedulesController : ApiControllerBase
         command.Id = id;
         return await Mediator.Send(command);
     }
+    
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        var command = new DeleteScheduleCommand
+        {
+            Id = id
+        };
+        await Mediator.Send(command);
+        return NoContent();
+    }
 }

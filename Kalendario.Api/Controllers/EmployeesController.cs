@@ -27,4 +27,15 @@ public class EmployeesController : ApiControllerBase
         command.Id = id;
         return await Mediator.Send(command);
     }
+    
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        var command = new DeleteEmployeeCommand
+        {
+            Id = id
+        };
+        await Mediator.Send(command);
+        return NoContent();
+    }
 }

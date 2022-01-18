@@ -14,18 +14,29 @@ public class ServicesController : ApiControllerBase
     {
         return await Mediator.Send(query);
     }
-    
+
     [HttpPost]
     public async Task<ActionResult<ServiceAdminResourceModel>> Create([FromBody] UpsertServiceCommand command)
     {
         return await Mediator.Send(command);
     }
-    
-        
+
+
     [HttpPut("{id}")]
     public async Task<ActionResult<ServiceAdminResourceModel>> Update(Guid id, [FromBody] UpsertServiceCommand command)
     {
         command.Id = id;
         return await Mediator.Send(command);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        var command = new DeleteServiceCommand
+        {
+            Id = id
+        };
+        await Mediator.Send(command);
+        return NoContent();
     }
 }

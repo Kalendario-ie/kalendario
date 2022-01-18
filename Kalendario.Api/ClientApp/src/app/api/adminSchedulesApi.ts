@@ -21,6 +21,9 @@ export const adminScheduleClient: BaseModelRequest<ScheduleAdminResourceModel, U
     },
     put(id: string, command: UpsertScheduleCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.schedulesUpdate(id, command, cancelToken);
+    },
+    delete(id: string , cancelToken?: CancelToken | undefined) {
+        return client.schedulesDelete(id, cancelToken)
     }
 }
 

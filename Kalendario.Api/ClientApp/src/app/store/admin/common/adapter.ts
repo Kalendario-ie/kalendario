@@ -28,7 +28,7 @@ interface BaseState<TEntity> extends EntityState<TEntity> {
 }
 
 export interface BaseSelectors<TEntity> extends EntitySelectors<TEntity, any> {
-    selectByIds: OutputParametricSelector<any, number[] | string[], NonNullable<TEntity>[], (res1: Dictionary<TEntity>, res2: number[]) => NonNullable<TEntity>[]> // TODO: number[] | string[]
+    selectByIds: OutputParametricSelector<any, string[], NonNullable<TEntity>[], (res1: Dictionary<TEntity>, res2: string[]) => NonNullable<TEntity>[]>;
     selectIsInitialized: (state: any) => boolean;
     selectApiError: (state: any) => ApiBaseError | null;
     selectEditMode: (state: any) => boolean;
@@ -231,9 +231,9 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         }
     }
 
-    function* deleteEntity(action: { type: string, payload: number }) {
+    function* deleteEntity(action: { type: string, payload: string }) {
         try {
-            // yield call(client.delete, action.payload);
+            yield call(client.delete, action.payload);
             yield put(slice.actions.removeOne(action.payload));
             yield put(slice.actions.setApiError(null));
             yield put(slice.actions.setEditMode(false));

@@ -16,6 +16,9 @@ export const adminServiceClient: BaseModelRequest<ServiceAdminResourceModel, Ups
     },
     put(id: string, command: UpsertServiceCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.servicesUpdate(id, command, cancelToken);
+    },
+    delete(id: string , cancelToken?: CancelToken | undefined) {
+        return client.servicesDelete(id, cancelToken)
     }
 }
 

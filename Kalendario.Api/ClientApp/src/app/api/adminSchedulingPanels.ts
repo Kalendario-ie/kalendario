@@ -14,6 +14,9 @@ export const adminSchedulingPanelsClient: BaseModelRequest<SchedulingPanelAdminR
     },
     put(id: string, command: UpsertSchedulingPanelCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.schedulingPanelsUpdate(id, command, cancelToken);
+    },
+    delete(id: string , cancelToken?: CancelToken | undefined) {
+        return client.schedulingPanelsDelete(id, cancelToken)
     }
 }
 

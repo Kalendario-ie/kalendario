@@ -1,10 +1,10 @@
 import React from 'react';
-import {Employee} from 'src/app/api/employees';
+import {EmployeeAdminResourceModel} from 'src/app/api/api';
 import ServicesCard from 'src/app/modules/admin/employees/services-card';
 import {KFlexRow} from 'src/app/shared/components/flex';
 
 interface EmployeeRowExpandedProps {
-    employee: Employee;
+    employee: EmployeeAdminResourceModel;
 }
 
 const EmployeeRowExpanded: React.FunctionComponent<EmployeeRowExpandedProps> = (
@@ -13,7 +13,7 @@ const EmployeeRowExpanded: React.FunctionComponent<EmployeeRowExpandedProps> = (
     }) => {
     return (
         <KFlexRow>
-            <ServicesCard serviceIds={employee.services}/>
+            <ServicesCard serviceIds={employee.services || []}/>
         </KFlexRow>
     )
 }

@@ -15,6 +15,9 @@ export const adminEmployeeClient: BaseModelRequest<EmployeeAdminResourceModel, U
     },
     put(id: string, command: UpsertEmployeeCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.employeesUpdate(id, command, cancelToken);
+    },
+    delete(id: string , cancelToken?: CancelToken | undefined) {
+        return client.employeesDelete(id, cancelToken)
     }
 }
 

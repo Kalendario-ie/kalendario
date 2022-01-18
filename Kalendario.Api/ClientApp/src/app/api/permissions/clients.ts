@@ -8,6 +8,7 @@ const baseUrl = 'core/groups/';
 export const adminPermissionGroupClient : BaseModelRequest<PermissionGroup, UpsertPermissionGroupRequest, BaseQueryParams> = {
     get: search => Promise.resolve({entities: []}),
     put: (id, command) => Promise.resolve(permissionGroupParser(null)),
-    post: body => Promise.resolve(permissionGroupParser(null))
+    post: body => Promise.resolve(permissionGroupParser(null)),
+    delete: id => Promise.resolve(),
 }
 

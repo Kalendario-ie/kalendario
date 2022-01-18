@@ -6,7 +6,7 @@ import {serviceCategoryActions} from 'src/app/store/admin/serviceCategories';
 import {serviceActions, serviceSelectors} from 'src/app/store/admin/services';
 
 interface ServicesCardProps {
-    serviceIds: number[];
+    serviceIds: string[];
 }
 
 const ServicesCard: React.FunctionComponent<ServicesCardProps> = (

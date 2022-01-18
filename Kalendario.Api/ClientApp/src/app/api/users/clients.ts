@@ -10,7 +10,7 @@ const client: BaseModelRequest<AdminUser, UpsertUserRequest, BaseQueryParams> = 
     get: search => Promise.resolve({entities: []}),
     post: body => Promise.resolve(userParser(null)),
     put: id => Promise.resolve(userParser(null)),
-
+    delete: id => Promise.resolve(),
 }
 
 export const adminUserClient = {

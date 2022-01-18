@@ -15,6 +15,9 @@ export const adminCustomerClient: BaseModelRequest<CustomerAdminResourceModel, U
     },
     put(id: string, command: UpsertCustomerCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.customersUpdate(id, command, cancelToken);
+    },
+    delete(id: string , cancelToken?: CancelToken | undefined) {
+        return client.customersDelete(id, cancelToken)
     }
 }
 

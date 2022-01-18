@@ -111,6 +111,10 @@ export interface IAppointmentsClient {
     /**
      * @return Success
      */
+    appointmentsDelete(id: string): Promise<void>;
+    /**
+     * @return Success
+     */
     appointmentsHistory(id: string): Promise<GetAppointmentHistoryResult>;
 }
 
@@ -316,6 +320,56 @@ export class AppointmentsClient implements IAppointmentsClient {
     /**
      * @return Success
      */
+    appointmentsDelete(id: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Appointments/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processAppointmentsDelete(_response);
+        });
+    }
+
+    protected processAppointmentsDelete(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
     appointmentsHistory(id: string , cancelToken?: CancelToken | undefined): Promise<GetAppointmentHistoryResult> {
         let url_ = this.baseUrl + "/api/Appointments/history/{id}";
         if (id === undefined || id === null)
@@ -386,6 +440,10 @@ export interface ICustomersClient {
      * @return Success
      */
     customersUpdate(id: string, body: UpsertCustomerCommand | undefined): Promise<CustomerAdminResourceModel>;
+    /**
+     * @return Success
+     */
+    customersDelete(id: string): Promise<void>;
 }
 
 export class CustomersClient implements ICustomersClient {
@@ -581,6 +639,56 @@ export class CustomersClient implements ICustomersClient {
         }
         return Promise.resolve<CustomerAdminResourceModel>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    customersDelete(id: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Customers/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCustomersDelete(_response);
+        });
+    }
+
+    protected processCustomersDelete(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
 }
 
 export interface IEmployeesClient {
@@ -601,6 +709,10 @@ export interface IEmployeesClient {
      * @return Success
      */
     employeesUpdate(id: string, body: UpsertEmployeeCommand | undefined): Promise<EmployeeAdminResourceModel>;
+    /**
+     * @return Success
+     */
+    employeesDelete(id: string): Promise<void>;
 }
 
 export class EmployeesClient implements IEmployeesClient {
@@ -796,6 +908,56 @@ export class EmployeesClient implements IEmployeesClient {
         }
         return Promise.resolve<EmployeeAdminResourceModel>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    employeesDelete(id: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Employees/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processEmployeesDelete(_response);
+        });
+    }
+
+    protected processEmployeesDelete(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
 }
 
 export interface IOidcConfigurationClient {
@@ -887,6 +1049,10 @@ export interface ISchedulesClient {
      * @return Success
      */
     schedulesUpdate(id: string, body: UpsertScheduleCommand | undefined): Promise<ScheduleAdminResourceModel>;
+    /**
+     * @return Success
+     */
+    schedulesDelete(id: string): Promise<void>;
 }
 
 export class SchedulesClient implements ISchedulesClient {
@@ -1082,6 +1248,56 @@ export class SchedulesClient implements ISchedulesClient {
         }
         return Promise.resolve<ScheduleAdminResourceModel>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    schedulesDelete(id: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Schedules/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSchedulesDelete(_response);
+        });
+    }
+
+    protected processSchedulesDelete(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
 }
 
 export interface ISchedulingPanelsClient {
@@ -1102,6 +1318,10 @@ export interface ISchedulingPanelsClient {
      * @return Success
      */
     schedulingPanelsUpdate(id: string, body: UpsertSchedulingPanelCommand | undefined): Promise<SchedulingPanelAdminResourceModel>;
+    /**
+     * @return Success
+     */
+    schedulingPanelsDelete(id: string): Promise<void>;
 }
 
 export class SchedulingPanelsClient implements ISchedulingPanelsClient {
@@ -1297,6 +1517,56 @@ export class SchedulingPanelsClient implements ISchedulingPanelsClient {
         }
         return Promise.resolve<SchedulingPanelAdminResourceModel>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    schedulingPanelsDelete(id: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/SchedulingPanels/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processSchedulingPanelsDelete(_response);
+        });
+    }
+
+    protected processSchedulingPanelsDelete(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
 }
 
 export interface IServiceCategoriesClient {
@@ -1317,6 +1587,10 @@ export interface IServiceCategoriesClient {
      * @return Success
      */
     serviceCategoriesUpdate(id: string, body: UpsertServiceCategoryCommand | undefined): Promise<ServiceCategoryAdminResourceModel>;
+    /**
+     * @return Success
+     */
+    serviceCategoriesDelete(id: string): Promise<void>;
 }
 
 export class ServiceCategoriesClient implements IServiceCategoriesClient {
@@ -1512,6 +1786,56 @@ export class ServiceCategoriesClient implements IServiceCategoriesClient {
         }
         return Promise.resolve<ServiceCategoryAdminResourceModel>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    serviceCategoriesDelete(id: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/ServiceCategories/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processServiceCategoriesDelete(_response);
+        });
+    }
+
+    protected processServiceCategoriesDelete(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
 }
 
 export interface IServicesClient {
@@ -1532,6 +1856,10 @@ export interface IServicesClient {
      * @return Success
      */
     servicesUpdate(id: string, body: UpsertServiceCommand | undefined): Promise<ServiceAdminResourceModel>;
+    /**
+     * @return Success
+     */
+    servicesDelete(id: string): Promise<void>;
 }
 
 export class ServicesClient implements IServicesClient {
@@ -1727,6 +2055,56 @@ export class ServicesClient implements IServicesClient {
         }
         return Promise.resolve<ServiceAdminResourceModel>(<any>null);
     }
+
+    /**
+     * @return Success
+     */
+    servicesDelete(id: string , cancelToken?: CancelToken | undefined): Promise<void> {
+        let url_ = this.baseUrl + "/api/Services/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "DELETE",
+            url: url_,
+            headers: {
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processServicesDelete(_response);
+        });
+    }
+
+    protected processServicesDelete(response: AxiosResponse): Promise<void> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            return Promise.resolve<void>(<any>null);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<void>(<any>null);
+    }
 }
 
 export interface IWeatherForecastClient {
@@ -1824,8 +2202,8 @@ export interface AppointmentHistoryAdminResourceModel {
     customer: CustomerAdminResourceModel;
     employee: EmployeeAdminResourceModel;
     service: ServiceAdminResourceModel;
-    start: moment.Moment;
-    end: moment.Moment;
+    start: moment.Moment | undefined;
+    end: moment.Moment | undefined;
     price: number;
     internalNotes: string | undefined;
     dateCreated: moment.Moment | undefined;

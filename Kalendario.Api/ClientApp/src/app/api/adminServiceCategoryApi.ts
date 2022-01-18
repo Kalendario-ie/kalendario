@@ -20,6 +20,9 @@ export const adminServiceCategoryClient: BaseModelRequest<ServiceCategoryAdminRe
     },
     put(id: string, command: UpsertServiceCategoryCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.serviceCategoriesUpdate(id, command, cancelToken);
+    },
+    delete(id: string , cancelToken?: CancelToken | undefined) {
+        return client.serviceCategoriesDelete(id, cancelToken)
     }
 }
 

@@ -38,6 +38,9 @@ export const adminAppointmentClient: AppointmentClient = {
     },
     history(id: string, cancelToken?: CancelToken | undefined) {
         return client.appointmentsHistory(id, cancelToken);
+    },
+    delete(id: string , cancelToken?: CancelToken | undefined) {
+        return client.appointmentsDelete(id, cancelToken)
     }
     //
     // createLock(model: any): Promise<Appointment> {

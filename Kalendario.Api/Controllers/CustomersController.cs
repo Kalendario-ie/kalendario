@@ -27,4 +27,15 @@ public class CustomersController : ApiControllerBase
         command.Id = id;
         return await Mediator.Send(command);
     }
+    
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        var command = new DeleteCustomerCommand
+        {
+            Id = id
+        };
+        await Mediator.Send(command);
+        return NoContent();
+    }
 }
