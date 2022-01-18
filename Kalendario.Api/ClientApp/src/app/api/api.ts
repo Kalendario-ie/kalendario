@@ -2185,8 +2185,11 @@ export interface ApplicationUserAdminResourceModel {
 
 export interface AppointmentAdminResourceModel {
     id: string;
+    customerId: string | undefined;
     customer: CustomerAdminResourceModel;
+    employeeId: string | undefined;
     employee: EmployeeAdminResourceModel;
+    serviceId: string | undefined;
     service: ServiceAdminResourceModel;
     start: moment.Moment;
     end: moment.Moment;

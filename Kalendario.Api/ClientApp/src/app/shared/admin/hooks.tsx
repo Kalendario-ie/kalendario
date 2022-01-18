@@ -38,7 +38,7 @@ export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     }
 
     const openModal = React.useMemo(() =>
-        (entity: TUpsertCommand, id?: string | undefined) => () => {
+        (entity: TUpsertCommand, id?: string | undefined) => {
             setSelectedEntity(entity);
             setSelectedEntityId(id);
             dispatch(baseActions.setEditMode(true));

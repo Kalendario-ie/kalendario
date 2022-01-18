@@ -69,9 +69,9 @@ export function upsertAppointmentCommandParser(appointment: AppointmentAdminReso
         ignoreTimeClashes: false,
         start: appointment.start,
         end: appointment.end,
-        employeeId: appointment.employee.id,
-        customerId: appointment.customer.id,
-        serviceId: appointment.service.id,
+        employeeId: appointment.employeeId || '',
+        customerId: appointment.customerId || '',
+        serviceId: appointment.serviceId || '',
     }
 }
 

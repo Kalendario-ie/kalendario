@@ -33,8 +33,8 @@ const Event: React.FunctionComponent<EventProps> = (
     const duration = moment.duration(end.diff(start));
 
     const backgroundColor = serviceCategory ? serviceCategory.colour.code : '#FFFFFF';
-    const title = appointment.customer ? appointment.customer.name : appointment.internalNotes;
-    const subTitle = appointment.customer ? appointment.service.name : '';
+    const title = appointment.customer ? appointment.customer.name : appointment.customerId ? 'Customer Deleted' : appointment.internalNotes;
+    const subTitle = appointment.service ? appointment.service.name : appointment.serviceId ? 'Service Deleted' : '';
 
     const style: React.CSSProperties = {
         width: `${BASE_WIDTH - 0.25 - 3 * +isOverlapping}rem`,
