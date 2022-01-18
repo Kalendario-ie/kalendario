@@ -41,10 +41,10 @@ const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertS
                         <KFormikInput className="flex-fill" name="serviceCategoryId" as={'select'} options={serviceCategories}/>
                         <AdminButton type={PermissionType.change}
                                      model={PermissionModel.servicecategory}
-                                     onClick={openModal(serviceCategory(formik.getFieldProps('category').value))}/>
+                                     onClick={() => openModal(serviceCategory(formik.getFieldProps('category').value))}/>
                         <AdminButton type={PermissionType.add}
                                      model={PermissionModel.servicecategory}
-                                     onClick={openModal(upsertServiceCategoryCommandParser(null))}/>
+                                     onClick={() => openModal(upsertServiceCategoryCommandParser(null))}/>
                     </KFlexRow>
                     <KFormikInput name="name"/>
                     <KFormikInput name="duration" type="time"/>

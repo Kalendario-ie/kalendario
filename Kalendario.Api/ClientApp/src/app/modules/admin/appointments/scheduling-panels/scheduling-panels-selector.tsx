@@ -52,8 +52,8 @@ const SchedulingPanelsSelector: React.FunctionComponent = () => {
                              onClick={handlePanelClick(i)}
                 >{panel.name}</KTextButton>)
             }
-            <AdminButton type={PermissionType.add} model={PermissionModel.schedulingpanel} onClick={openModal(upsertSchedulingPanelCommandParser(null))}/>
-            <AdminButton type={PermissionType.change} model={PermissionModel.schedulingpanel} onClick={openModal(schedulingPanels[selectedIndex])}/>
+            <AdminButton type={PermissionType.add} model={PermissionModel.schedulingpanel} onClick={() => openModal(upsertSchedulingPanelCommandParser(null))}/>
+            <AdminButton type={PermissionType.change} model={PermissionModel.schedulingpanel} onClick={() => openModal(schedulingPanels[selectedIndex])}/>
             <AdminButton type={PermissionType.delete} model={PermissionModel.schedulingpanel} onClick={handleDeleteClick}/>
         </KFlexRow>
     )

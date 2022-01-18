@@ -52,7 +52,7 @@ function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
                 <KFlexRow justify={'end'}>
                     <AdminButton type={PermissionType.add}
                                  model={modelType}
-                                 onClick={openModal(parser(null))}/>
+                                 onClick={() => openModal(parser(null))}/>
                 </KFlexRow>,
             id: 'buttons',
             Cell: (value: any) => (
@@ -64,7 +64,7 @@ function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
                     }
                     <AdminButton type={PermissionType.change}
                                  model={modelType}
-                                 onClick={openModal(parser(value.row.original), value.row.original.id)}/>
+                                 onClick={() => openModal(parser(value.row.original), value.row.original.id)}/>
                     <AdminDeleteButton entity={value.row.original}
                                   modelType={modelType}
                                   baseActions={baseActions}/>

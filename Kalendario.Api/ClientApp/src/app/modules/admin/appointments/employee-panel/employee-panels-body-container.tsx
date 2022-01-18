@@ -38,7 +38,7 @@ const PanelHours: React.FunctionComponent = () => {
 
 interface EmployeePanelProps {
     employee: EmployeeAdminResourceModel;
-    onCreateClick: (entity: UpsertAppointmentCommand) => () => void;
+    onCreateClick: (entity: UpsertAppointmentCommand) => void;
 }
 
 const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
@@ -88,7 +88,7 @@ const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
 }
 
 export interface EmployeePanelsBodyContainerProps {
-    onSelect: (command: UpsertAppointmentCommand, id?: string) => () => void
+    onSelect: (command: UpsertAppointmentCommand, id?: string) => void
 }
 
 export const EmployeePanelsBodyContainer: React.FunctionComponent<EmployeePanelsBodyContainerProps> = ({onSelect}) => {

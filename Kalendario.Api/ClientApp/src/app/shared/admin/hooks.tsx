@@ -15,7 +15,7 @@ export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     baseSelectors: BaseSelectors<TEntity>,
     baseActions: CommandAndBaseActions<TUpsertCommand>,
     EditContainer: React.FunctionComponent<AdminEditContainerProps<TUpsertCommand>>
-): [(command: TUpsertCommand, id?: string | undefined) => () => void, JSX.Element, TEntity | undefined] {
+): [(command: TUpsertCommand, id?: string | undefined) => void, JSX.Element, TEntity | undefined] {
     const [selectedEntityId, setSelectedEntityId] = useState<string | undefined>();
     const [selectedEntity, setSelectedEntity] = useState<TUpsertCommand | null>(null);
     const apiError = useAppSelector(baseSelectors.selectApiError);

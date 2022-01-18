@@ -6,7 +6,7 @@ import {KIconButton} from 'src/app/shared/components/primitives/buttons';
 
 interface CreateAppointmentButtonsProps {
     employee: EmployeeAdminResourceModel;
-    onCreateClick: (entity: UpsertAppointmentCommand) => () => void;
+    onCreateClick: (entity: UpsertAppointmentCommand) => void;
     currentDate: Moment;
     hour: number;
     minute: number;
@@ -25,7 +25,7 @@ const CreateAppointmentButtons: React.FunctionComponent<CreateAppointmentButtons
     const handleAddClick = () => onCreateClick({
         ...upsertAppointmentCommandParser(null)
         , employeeId, start: selectedTime(), end: selectedTime()
-    })();
+    });
     // const handleLockClick = () =>
     //     onCreateClick(blankEmployeeEvent(employeeId, selectedTime().add(minute, 'minute')))();
 

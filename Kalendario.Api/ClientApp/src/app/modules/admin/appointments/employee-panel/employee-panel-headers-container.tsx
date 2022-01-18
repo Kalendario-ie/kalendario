@@ -10,7 +10,7 @@ import styles from './employee-panel.module.scss';
 
 interface EmployeePanelHeaderProps {
     employee: EmployeeAdminResourceModel;
-    onCreateClick: (entity: UpsertAppointmentCommand) => () => void;
+    onCreateClick: (entity: UpsertAppointmentCommand) => void;
 }
 
 const EmployeePanelHeader: React.FunctionComponent<EmployeePanelHeaderProps> = (
@@ -36,7 +36,7 @@ const EmployeePanelHeader: React.FunctionComponent<EmployeePanelHeaderProps> = (
 }
 
 interface EmployeePanelHeadersContainerProps {
-    onCreateClick: (entity: UpsertAppointmentCommand) => () => void;
+    onCreateClick: (entity: UpsertAppointmentCommand) => void;
 }
 
 export const EmployeePanelHeadersContainer: React.FunctionComponent<EmployeePanelHeadersContainerProps> = (

@@ -66,7 +66,7 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
                                  }
                                  onChange={navigateToPage}
                                  loadOptions={promiseOptions}/>
-                    <KIconButton color="primary" icon={'plus'} onClick={openModal(upsertCustomerCommandParser(null))}/>
+                    <KIconButton color="primary" icon={'plus'} onClick={() => openModal(upsertCustomerCommandParser(null))}/>
                 </KFlexRow>
             </FormGroup>
 
