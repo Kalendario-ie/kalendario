@@ -6,13 +6,13 @@ import {useEditModal} from 'src/app/shared/admin/hooks';
 import {AdminEditContainerProps, AdminTableContainerProps} from 'src/app/shared/admin/interfaces';
 import {useKHistory} from 'src/app/shared/util/router-extensions';
 import {useAppDispatch, useAppSelector} from 'src/app/store';
-import {ExtendedBaseActions, BaseSelectors} from 'src/app/store/admin/common/adapter';
+import {BaseSelectors, CommandAndBaseActions} from 'src/app/store/admin/common/adapter';
 import {KFlexRow} from '../components/flex';
 import AdminButton from './admin-button';
 
 interface AdminListEditContainerProps<TEntity, TUpsertCommand> {
     baseSelectors: BaseSelectors<TEntity>;
-    baseActions: ExtendedBaseActions<TUpsertCommand>;
+    baseActions: CommandAndBaseActions<TUpsertCommand>;
     modelType: PermissionModel;
     filter?: (value: string | undefined) => void;
     detailsUrl?: string;

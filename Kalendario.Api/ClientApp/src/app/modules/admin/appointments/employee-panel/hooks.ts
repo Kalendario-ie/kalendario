@@ -20,13 +20,13 @@ export function useReloadAppointmentsEffect() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
-        const params: AppointmentsGetParams = {
+        const query: AppointmentsGetParams = {
             fromDate: currentDate,
             toDate: currentDate.clone().add(1, 'day'),
             employeeIds: selectedPanel?.employeeIds || [],
             customerId: undefined,
         };
-        dispatch(appointmentActions.fetchEntitiesWithSetAll(params));
+        dispatch(appointmentActions.fetchEntitiesWithSetAll({query}));
 
     }, [selectedPanel, currentDate, dispatch]);
 

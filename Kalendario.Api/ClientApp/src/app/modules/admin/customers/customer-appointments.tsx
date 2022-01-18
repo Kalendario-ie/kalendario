@@ -23,8 +23,8 @@ const CustomerAppointmentsTable: React.FunctionComponent<AdminTableContainerProp
         buttonsColumn,
         filter,
     }) => {
-    const [start, setStart] = useState(moment.utc().subtract(1, 'week').startOf('day').toISOString());
-    const [end, setEnd] = useState(moment.utc().add(1, 'week').startOf('day').toISOString());
+    const [start, setStart] = useState(moment.utc().subtract(1, 'week').startOf('day'));
+    const [end, setEnd] = useState(moment.utc().add(1, 'week').startOf('day'));
 
     const services = useSelectAll(serviceSelectors, serviceActions);
     const employees = useSelectAll(employeeSelectors, employeeActions);
@@ -36,9 +36,12 @@ const CustomerAppointmentsTable: React.FunctionComponent<AdminTableContainerProp
     useEffect(() => {
         dispatch(appointmentActions
             .fetchEntitiesWithSetAll({
-                from_date: start,
-                to_date: end,
-                customer: customer?.id
+                query: {
+                    fromDate: start,
+                    toDate: end,
+                    customerId: customer?.id,
+                    employeeIds: []
+                }
             }));
     }, [start, end, customer, dispatch]);
 
@@ -46,12 +49,12 @@ const CustomerAppointmentsTable: React.FunctionComponent<AdminTableContainerProp
         {
             Header: 'Start',
             accessor: 'start',
-            Filter: (cell: any) => <KDateInput value={start} onChange={(value) => setStart(momentToIso(value))}/>
+            Filter: (cell: any) => <KDateInput value={start} onChange={(value) => setStart(value)}/>
         },
         {
             Header: 'End',
             accessor: 'end',
-            Filter: (cell: any) => <KDateInput value={end} onChange={(value) => setEnd(momentToIso(value))}/>
+            Filter: (cell: any) => <KDateInput value={end} onChange={(value) => setEnd(value)}/>
         },
         {
             Header: 'Employee',
@@ -91,15 +94,15 @@ const CustomerAppointments: React.FunctionComponent<CustomerAppointmentsProps> =
     }) => {
     return (
 
-            <CustomerContext.Provider value={customer}>
-                <AdminListEditContainer baseSelectors={appointmentSelectors}
-                                        baseActions={appointmentActions}
-                                        initializeStore={false}
-                                        parser={upsertAppointmentCommandParser}
-                                        modelType={PermissionModel.appointment}
-                                        EditContainer={AppointmentUpsertForm}
-                                        ListContainer={CustomerAppointmentsTable}/>
-            </CustomerContext.Provider>
+        <CustomerContext.Provider value={customer}>
+            <AdminListEditContainer baseSelectors={appointmentSelectors}
+                                    baseActions={appointmentActions}
+                                    initializeStore={false}
+                                    parser={upsertAppointmentCommandParser}
+                                    modelType={PermissionModel.appointment}
+                                    EditContainer={AppointmentUpsertForm}
+                                    ListContainer={CustomerAppointmentsTable}/>
+        </CustomerContext.Provider>
     )
 }
 

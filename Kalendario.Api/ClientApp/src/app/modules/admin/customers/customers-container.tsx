@@ -13,8 +13,8 @@ const CustomersContainer: React.FunctionComponent = () => {
     const dispatch = useAppDispatch()
 
     const filter = React.useMemo(() =>
-        (value: string | undefined) => {
-            dispatch(customerActions.fetchEntities({search: value}));
+        (search: string | undefined) => {
+            dispatch(customerActions.fetchEntities({query: {search, start: 0, length: 200}}));
         }, [dispatch]);
 
     return (

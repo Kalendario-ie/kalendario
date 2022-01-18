@@ -46,21 +46,34 @@ export interface CreateActionPayload<TUpsertCommand> {
     command: TUpsertCommand
 }
 
-export interface ExtendedBaseActions<TUpsertCommand> extends BaseActions {
+export interface QueryActionPayload<TGetQueryParams> {
+    query: TGetQueryParams;
+}
+
+export interface ExtendedBaseActions<TUpsertCommand, TGetQueryParams>
+    extends BaseActions, CommandActions<TUpsertCommand>, QueryActions<TGetQueryParams> {
+}
+
+export interface QueryActions<TGetQueryParams> {
+    fetchEntities: ActionCreatorWithPayload<QueryActionPayload<TGetQueryParams>>;
+    fetchEntitiesWithSetAll: ActionCreatorWithPayload<QueryActionPayload<TGetQueryParams>>;
+}
+
+export interface CommandActions<TUpsertCommand> {
     createEntity: ActionCreatorWithPayload<CreateActionPayload<TUpsertCommand>>;
     patchEntity: ActionCreatorWithPayload<PatchActionPayload<TUpsertCommand>>;
 }
 
+export interface CommandAndBaseActions<TUpsertCommand> extends CommandActions<TUpsertCommand>, BaseActions {
+}
+
 export interface BaseActions {
     initializeStore: ActionCreatorWithoutPayload;
-    fetchEntities: ActionCreatorWithPayload<object>;
-    fetchEntity: ActionCreatorWithPayload<number>;
-    fetchEntitiesWithSetAll: ActionCreatorWithPayload<object>;
+    fetchEntity: ActionCreatorWithPayload<string>;
     deleteEntity: ActionCreatorWithPayload<string>;
     setEditMode: ActionCreatorWithPayload<boolean>;
     setIsSubmitting: ActionCreatorWithPayload<boolean>;
 }
-
 
 
 export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGetQueryParams>(
@@ -74,11 +87,11 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         sortComparer: compareByName,
     })
 
-    const actions: ExtendedBaseActions<TUpsertCommand> = {
+    const actions: ExtendedBaseActions<TUpsertCommand, TGetQueryParams> = {
         initializeStore: createAction<void>(`${sliceName}/initializeStore`),
-        fetchEntities: createAction<object>(`${sliceName}/fetchEntities`),
-        fetchEntity: createAction<number>(`${sliceName}/fetchEntity`),
-        fetchEntitiesWithSetAll: createAction<object>(`${sliceName}/fetchEntitiesWithSetAll`),
+        fetchEntities: createAction<QueryActionPayload<TGetQueryParams>>(`${sliceName}/fetchEntities`),
+        fetchEntity: createAction<string>(`${sliceName}/fetchEntity`),
+        fetchEntitiesWithSetAll: createAction<QueryActionPayload<TGetQueryParams>>(`${sliceName}/fetchEntitiesWithSetAll`),
         createEntity: createAction<CreateActionPayload<TUpsertCommand>>(`${sliceName}/createEntity`),
         patchEntity: createAction<PatchActionPayload<TUpsertCommand>>(`${sliceName}/patchEntity`),
         deleteEntity: createAction<string>(`${sliceName}/deleteEntity`),
@@ -148,15 +161,15 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
             store.createdEntityId ? store.entities[store.createdEntityId] : undefined),
     }
 
-    function* initializeStore(action: { type: string, payload: {} }) {
+    function* initializeStore(action: { type: string, payload: QueryActionPayload<TGetQueryParams> }) {
         const isInitialized: boolean = yield select(selectors.selectIsInitialized);
         if (isInitialized) return;
         yield put(actions.fetchEntities(action.payload))
     }
 
-    function* fetchEntities(action: { type: string, payload: TGetQueryParams }) {
+    function* fetchEntities(action: { type: string, payload: QueryActionPayload<TGetQueryParams> }) {
         try {
-            const result: ApiListResult<TEntity> = yield call(client.get, action.payload);
+            const result: ApiListResult<TEntity> = yield call(client.get, action.payload?.query);
             yield put(slice.actions.upsertMany(result.entities));
             yield put(slice.actions.setInitialized(true));
         } catch (error) {
@@ -177,11 +190,11 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         yield put(slice.actions.setIsLoading(false));
     }
 
-    function* fetchEntitiesWithSetAll(action: { type: string, payload: TGetQueryParams }) {
+    function* fetchEntitiesWithSetAll(action: { type: string, payload: QueryActionPayload<TGetQueryParams> }) {
         yield put(slice.actions.setIsLoading(true));
         yield put(slice.actions.removeAll([]));
         try {
-            const result: ApiListResult<TEntity> = yield call(client.get, action.payload);
+            const result: ApiListResult<TEntity> = yield call(client.get, action.payload?.query);
             yield put(slice.actions.setAll(result.entities));
         } catch (error) {
             yield put(slice.actions.setApiError(error));

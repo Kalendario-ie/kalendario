@@ -21,7 +21,7 @@ public class GetAppointmentsQuery : IKalendarioProtectedQuery<GetAppointmentsRes
 
     public Guid? CustomerId { get; set; }
 
-    public IEnumerable<Guid> EmployeeIds { get; set; }
+    public IEnumerable<Guid> EmployeeIds { get; set; } = new List<Guid>();
 
     public class Handler : IRequestHandler<GetAppointmentsQuery, GetAppointmentsResult>
     {

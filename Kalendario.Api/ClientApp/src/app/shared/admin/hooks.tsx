@@ -3,11 +3,17 @@ import {IReadModel} from 'src/app/api/common/models';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import KModal from 'src/app/shared/components/modal/k-modal';
 import {useAppDispatch, useAppSelector} from 'src/app/store';
-import {ExtendedBaseActions, BaseSelectors, BaseActions} from 'src/app/store/admin/common/adapter';
+import {
+    ExtendedBaseActions,
+    BaseSelectors,
+    BaseActions,
+    QueryActions,
+    CommandActions, CommandAndBaseActions
+} from 'src/app/store/admin/common/adapter';
 
 export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     baseSelectors: BaseSelectors<TEntity>,
-    baseActions: ExtendedBaseActions<TUpsertCommand>,
+    baseActions: CommandAndBaseActions<TUpsertCommand>,
     EditContainer: React.FunctionComponent<AdminEditContainerProps<TUpsertCommand>>
 ): [(command: TUpsertCommand, id?: string | undefined) => () => void, JSX.Element, TEntity | undefined] {
     const [selectedEntityId, setSelectedEntityId] = useState<string | undefined>();
@@ -50,7 +56,7 @@ export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
 }
 
 
-export function useSelectAll<TEntity, TUpsertCommand>(baseSelectors: BaseSelectors<TEntity>, baseActions: ExtendedBaseActions<TUpsertCommand>) {
+export function useSelectAll<TEntity>(baseSelectors: BaseSelectors<TEntity>, baseActions: BaseActions) {
     const dispatch = useAppDispatch();
     useEffect(() => {
         dispatch(baseActions.initializeStore());

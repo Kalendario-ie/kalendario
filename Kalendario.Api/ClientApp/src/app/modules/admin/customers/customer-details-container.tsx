@@ -16,13 +16,13 @@ interface CustomerDetailsContainerProps {
 
 const CustomerDetailsContainer: React.FunctionComponent<CustomerDetailsContainerProps> = () => {
     const {id} = useParams<{ id: string }>();
-    const customer = useAppSelector(state => customerSelectors.selectById(state, +id));
+    const customer = useAppSelector(state => customerSelectors.selectById(state, id));
     const dispatch = useAppDispatch();
     const history = useKHistory();
 
     useEffect(() => {
         if (!customer && !!id) {
-            dispatch(customerActions.fetchEntity(+id));
+            // dispatch(customerActions.fetchEntity(id));
         }
     }, [dispatch, id, customer]);
 

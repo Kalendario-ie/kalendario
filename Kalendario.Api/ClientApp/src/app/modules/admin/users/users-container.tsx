@@ -12,8 +12,8 @@ import {userActions, userSelectors} from 'src/app/store/admin/users';
 const UsersContainer: React.FunctionComponent = () => {
     const dispatch = useAppDispatch()
 
-    const filter = (value: string | undefined) => {
-        dispatch(customerActions.fetchEntities({search: value}));
+    const filter = (search: string | undefined) => {
+        dispatch(customerActions.fetchEntities({query: {search, start: 0, length: 200}}));
     }
 
     return (
