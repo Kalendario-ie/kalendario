@@ -1,6 +1,5 @@
 import {companyParser} from 'src/app/api/companies';
 import {RequestItem, RequestModel} from 'src/app/api/requests';
-import {userParser} from 'src/app/api/users';
 
 
 export function requestParser(data: any): RequestModel {
@@ -21,7 +20,7 @@ export function requestParser(data: any): RequestModel {
     return {
         ...data,
         owner: companyParser(data.owner),
-        user: data.user ? userParser(data.user) : null,
+        user: null,
         name: data.user?.name,
         items: Object.keys(items).map(k => items[k]),
         itemsCount

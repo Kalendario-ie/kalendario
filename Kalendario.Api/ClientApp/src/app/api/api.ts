@@ -2107,6 +2107,96 @@ export class ServicesClient implements IServicesClient {
     }
 }
 
+export interface IUsersClient {
+    /**
+     * @param search (optional)
+     * @param start (optional)
+     * @param length (optional)
+     * @return Success
+     */
+    usersGet(search: string | undefined, start: number | undefined, length: number | undefined): Promise<ApplicationUserAdminResourceModelGetAllResult>;
+}
+
+export class UsersClient implements IUsersClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+
+    }
+
+    /**
+     * @param search (optional)
+     * @param start (optional)
+     * @param length (optional)
+     * @return Success
+     */
+    usersGet(search: string | undefined, start: number | undefined, length: number | undefined , cancelToken?: CancelToken | undefined): Promise<ApplicationUserAdminResourceModelGetAllResult> {
+        let url_ = this.baseUrl + "/api/Users?";
+        if (search === null)
+            throw new Error("The parameter 'search' cannot be null.");
+        else if (search !== undefined)
+            url_ += "Search=" + encodeURIComponent("" + search) + "&";
+        if (start === null)
+            throw new Error("The parameter 'start' cannot be null.");
+        else if (start !== undefined)
+            url_ += "Start=" + encodeURIComponent("" + start) + "&";
+        if (length === null)
+            throw new Error("The parameter 'length' cannot be null.");
+        else if (length !== undefined)
+            url_ += "Length=" + encodeURIComponent("" + length) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUsersGet(_response);
+        });
+    }
+
+    protected processUsersGet(response: AxiosResponse): Promise<ApplicationUserAdminResourceModelGetAllResult> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<ApplicationUserAdminResourceModelGetAllResult>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<ApplicationUserAdminResourceModelGetAllResult>(<any>null);
+    }
+}
+
 export interface IWeatherForecastClient {
     /**
      * @return Success
@@ -2180,7 +2270,14 @@ export class WeatherForecastClient implements IWeatherForecastClient {
 }
 
 export interface ApplicationUserAdminResourceModel {
+    id: string;
     userName: string | undefined;
+}
+
+export interface ApplicationUserAdminResourceModelGetAllResult {
+    entities: ApplicationUserAdminResourceModel[] | undefined;
+    filteredCount: number;
+    totalCount: number;
 }
 
 export interface AppointmentAdminResourceModel {

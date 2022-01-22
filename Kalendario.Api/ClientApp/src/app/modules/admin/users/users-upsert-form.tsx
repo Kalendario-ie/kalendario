@@ -1,5 +1,5 @@
 import React from 'react';
-import {upsertUserRequestParser, UpsertUserRequestValidation, AdminUser, UpsertUserRequest} from 'src/app/api/users';
+import {UpsertUserRequest, UpsertUserRequestValidation} from 'src/app/api/adminUsersApi';
 import ChangePasswordForm from 'src/app/modules/admin/users/change-password-form';
 import {useSelectAll} from 'src/app/shared/admin/hooks';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';

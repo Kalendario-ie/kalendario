@@ -1,4 +1,4 @@
-import {adminUserClient} from 'src/app/api/users';
+import {adminUsersClient} from 'src/app/api/adminUsersApi';
 import {kCreateBaseStore} from 'src/app/store/admin/common/adapter';
 
 const storeName = 'adminUsers';
@@ -9,7 +9,7 @@ const {
     reducer,
     sagas,
     selectors
-} = kCreateBaseStore(storeName, adminUserClient, (state) => state.adminUsers);
+} = kCreateBaseStore(storeName, adminUsersClient, (state) => state.adminUsers);
 
 export {reducer as userReducer}
 export {actions as userActions}

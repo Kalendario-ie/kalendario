@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import {Button, FormGroup} from 'reactstrap';
-import {ApiValidationError} from 'src/app/api/common/api-errors';
 import {
-    adminUserClient,
     ChangeUserPasswordRequest,
     changeUserPasswordRequestParser,
     ChangeUserPasswordValidation
-} from 'src/app/api/users';
+} from 'src/app/api/adminUsersApi';
+import {ApiValidationError} from 'src/app/api/common/api-errors';
+
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import KModal from 'src/app/shared/components/modal/k-modal';
 
@@ -58,10 +58,10 @@ const ChangePasswordContainer: React.FunctionComponent<ChangePasswordContainerPr
     }
     const handleSubmit = (form: ChangeUserPasswordRequest) => {
         setIsSubmitting(true);
-        adminUserClient.changePassword(id, form)
-            .then(() => setIsOpen(false))
-            .catch(apiError => setApiError(apiError))
-            .finally(() => setIsSubmitting(false));
+        // adminUserClient.changePassword(id, form)
+        //     .then(() => setIsOpen(false))
+        //     .catch(apiError => setApiError(apiError))
+        //     .finally(() => setIsSubmitting(false));
     }
 
     const form = <ChangePasswordForm

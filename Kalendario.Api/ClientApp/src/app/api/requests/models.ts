@@ -1,7 +1,6 @@
 import {IReadModel} from 'src/app/api/common/models';
 import {Company} from 'src/app/api/companies';
 import {Employee} from 'src/app/api/employees';
-import {AdminUser} from 'src/app/api/users';
 
 export interface RequestItem {
   employee: Employee;
@@ -19,6 +18,6 @@ export interface RequestModel extends IReadModel {
   complete: boolean;
   customerNotes: string | null | undefined;
   status: string;
-  user: AdminUser;
+  // user: AdminUser;
 }
 
