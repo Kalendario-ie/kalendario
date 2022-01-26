@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿using Duende.IdentityServer.EntityFramework.Entities;
+using Duende.IdentityServer.EntityFramework.Extensions;
+using Duende.IdentityServer.EntityFramework.Interfaces;
 using Duende.IdentityServer.EntityFramework.Options;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Common;
@@ -6,15 +8,16 @@ using Kalendario.Core.Common;
 using Kalendario.Core.Entities;
 using Kalendario.Core.Infrastructure;
 using Kalendario.Infrastructure.Extensions;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Kalendario.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IKalendarioDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string> , IPersistedGrantDbContext, IKalendarioDbContext
     {
+        private readonly IOptions<OperationalStoreOptions> _operationalStoreOptions;
         private readonly IServiceProvider _serviceProvider;
         private readonly IDomainEventService _domainEventService;
         private readonly IDateTime _dateTime;
@@ -24,8 +27,9 @@ namespace Kalendario.Infrastructure.Persistence
             IOptions<OperationalStoreOptions> operationalStoreOptions,
             IServiceProvider serviceProvider,
             IDomainEventService domainEventService,
-            IDateTime dateTime) : base(options, operationalStoreOptions)
+            IDateTime dateTime) : base(options)
         {
+            _operationalStoreOptions = operationalStoreOptions;
             _serviceProvider = serviceProvider;
             _domainEventService = domainEventService;
             _dateTime = dateTime;
@@ -41,14 +45,18 @@ namespace Kalendario.Infrastructure.Persistence
         public DbSet<ScheduleFrame> ScheduleFrames => Set<ScheduleFrame>();
         public DbSet<SchedulingPanel> SchedulingPanels => Set<SchedulingPanel>();
         public DbSet<AuditEntity> AuditEntities => Set<AuditEntity>();
-
+        public DbSet<ApplicationRoleGroup> RoleGroups => Set<ApplicationRoleGroup>();
+        public DbSet<PersistedGrant> PersistedGrants { get; set; }
+        public DbSet<DeviceFlowCodes> DeviceFlowCodes { get; set; }
+        public DbSet<Key> Keys { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+            builder.ConfigurePersistedGrantContext(_operationalStoreOptions.Value);
             builder.ApplyGlobalFilters<ISoftDeletable>(e => !e.IsDeleted);
         }
-        
+
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -196,5 +204,7 @@ namespace Kalendario.Infrastructure.Persistence
                 await _domainEventService.Publish(@event);
             }
         }
+
+        Task<int> IPersistedGrantDbContext.SaveChangesAsync() => base.SaveChangesAsync();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using Kalendario.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 
@@ -19,6 +20,14 @@ public static class ModelBuilderExtensions
                 .HasQueryFilter(Expression.Lambda(body, parameterExpression));
         }
     }
+        public static void ApplyGlobalConfiguration(this ModelBuilder builder)
+        {
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                if (entityType.ClrType.GetInterface(nameof(AccountEntity)) == null) continue;
+                builder.Entity(entityType.ClrType).HasOne(typeof(Account)).WithMany().HasForeignKey();
+            }
+        }
 
     
 }

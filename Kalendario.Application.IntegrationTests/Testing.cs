@@ -146,11 +146,11 @@ public class Testing
 
         if (roles.Any())
         {
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
 
             foreach (var role in roles)
             {
-                await roleManager.CreateAsync(new IdentityRole(role));
+                await roleManager.CreateAsync(new ApplicationRole(role));
             }
 
             await AddExtraRoles(roleManager);
@@ -283,9 +283,9 @@ public class Testing
         return JsonConvert.DeserializeObject<List<T>>(accountsJson)!;
     }
 
-    private static async Task AddExtraRoles(RoleManager<IdentityRole> roleManager)
+    private static async Task AddExtraRoles(RoleManager<ApplicationRole> roleManager)
     {
         // Any Extra roles that should always exist in the DB goes here.
-        await roleManager.CreateAsync(new IdentityRole(AuthorizationHelper.MasterRole));
+        await roleManager.CreateAsync(new ApplicationRole(AuthorizationHelper.MasterRole));
     }
 }

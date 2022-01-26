@@ -1,17 +1,14 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {
-    PermissionGroup, UpsertPermissionGroupRequest,
-    upsertPermissionGroupRequestParser,
-    UpsertPermissionRequestValidation
-} from 'src/app/api/permissions';
+import {UpsertPermissionRequestValidation} from 'src/app/api/adminRoleGroupsApi';
+import {UpsertApplicationRoleGroupCommand} from 'src/app/api/api';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import {useAppDispatch} from 'src/app/store';
 import {permissionsActions, permissionSelectors} from 'src/app/store/admin/permissions';
 
 
-const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertPermissionGroupRequest>> = (
+const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertApplicationRoleGroupCommand>> = (
     {
         id,
         command,
@@ -36,7 +33,7 @@ const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps
                      validationSchema={UpsertPermissionRequestValidation}
         >
             <KFormikInput name="name"/>
-            <KFormikInput name="permissions" as={'multi-select'} options={permissions}/>
+            <KFormikInput name="roles" as={'multi-select'} options={permissions}/>
         </KFormikForm>
     )
 }

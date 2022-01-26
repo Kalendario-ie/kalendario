@@ -31,10 +31,9 @@ const UsersUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertUse
             {id &&
             <ChangePasswordForm id={id}/>
             }
-            <KFormikInput name="firstName"/>
-            <KFormikInput name="lastName"/>
+            <KFormikInput name="userName"/>
             <KFormikInput name="email"/>
-            <KFormikInput name="groups" as={'multi-select'} options={groups}/>
+            <KFormikInput name="roleGroup" as={'select'} options={groups}/>
             <KFormikInput name="employee" as={'select'} options={employees}/>
         </KFormikForm>
     )

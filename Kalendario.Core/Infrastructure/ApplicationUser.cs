@@ -8,4 +8,7 @@ public class ApplicationUser : IdentityUser
 {
     public Guid? AccountId { get; set; }
     public Account Account { get; set; }
+
+    public Guid? RoleGroupId { get; set; }
+    public ApplicationRoleGroup RoleGroup { get; set; }
 }

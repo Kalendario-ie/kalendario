@@ -25,7 +25,7 @@ public static class DependencyInjection
         services.AddScoped<IKalendarioDbContext>(provider => provider.GetService<ApplicationDbContext>());
 
         services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            .AddRoles<IdentityRole>()
+            .AddRoles<ApplicationRole>()
             .AddUserManager<ApplicationUserManager>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddClaimsPrincipalFactory<KalendarioUserClaimsPrincipalFactory>();

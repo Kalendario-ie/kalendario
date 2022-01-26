@@ -1,14 +1,15 @@
 import {createAction, createSelector, createSlice} from '@reduxjs/toolkit';
-import {put, select, takeEvery} from 'redux-saga/effects';
+import {call, put, select, takeEvery} from 'redux-saga/effects';
+import {adminPermissionGroupClient} from 'src/app/api/adminRoleGroupsApi';
+import {RoleAdminResourceModel} from 'src/app/api/api';
 import {ApiBaseError} from 'src/app/api/common/api-errors';
-import {Permission} from 'src/app/api/permissions';
 import {RootState} from 'src/app/store/store';
 import {PayloadAction} from 'typesafe-actions';
 
 
 interface PermissionsState {
     initialized: boolean;
-    permissions: Permission[];
+    permissions: RoleAdminResourceModel[];
     apiError: ApiBaseError | null;
 }
 
@@ -22,7 +23,7 @@ const permissionSlice = createSlice({
     name: 'adminPermissions',
     initialState,
     reducers: {
-        setPermissions(state, action: PayloadAction<string, Permission[]>) {
+        setPermissions(state, action: PayloadAction<string, RoleAdminResourceModel[]>) {
             state.permissions = action.payload;
             state.initialized = true;
         },
@@ -57,8 +58,8 @@ function* initializeStore(action: { type: string, payload: string }) {
     const isInitialized: boolean = yield select(selectors.selectIsInitialized);
     if (!isInitialized) {
         try {
-            // const permissions: Permission[] = yield call(adminPermissionGroupClient.permissions); // TODO: FIx here.
-            // yield put(actions.setPermissions(permissions));
+            const permissions: RoleAdminResourceModel[] = yield call(adminPermissionGroupClient.roles);
+            yield put(actions.setPermissions(permissions));
         } catch (error) {
             yield put(actions.setApiError(error as ApiBaseError));
         }

@@ -1,4 +1,5 @@
 ﻿using Kalendario.Application.Authorization;
+using Kalendario.Core.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,7 +9,7 @@ public static class RolesSeeder
 {
     public static async Task CreateRoles(IServiceProvider serviceProvider)
     {
-        var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+        var roleManager = serviceProvider.GetService<RoleManager<ApplicationRole>>();
 
         if (roleManager == null)
         {
@@ -19,7 +20,7 @@ public static class RolesSeeder
         {
             if (!await roleManager.RoleExistsAsync(role))
             {
-                await roleManager.CreateAsync(new IdentityRole(role));
+                await roleManager.CreateAsync(new ApplicationRole(role));
             }            
         }
 

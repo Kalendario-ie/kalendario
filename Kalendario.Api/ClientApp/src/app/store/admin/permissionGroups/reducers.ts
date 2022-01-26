@@ -1,4 +1,4 @@
-import {adminPermissionGroupClient} from 'src/app/api/permissions';
+import {adminPermissionGroupClient} from 'src/app/api/adminRoleGroupsApi';
 import {kCreateBaseStore} from 'src/app/store/admin/common/adapter';
 
 const storeName = 'adminPermissionGroups';

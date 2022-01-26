@@ -1031,6 +1031,282 @@ export class OidcConfigurationClient implements IOidcConfigurationClient {
     }
 }
 
+export interface IRoleGroupsClient {
+    /**
+     * @param search (optional)
+     * @param start (optional)
+     * @param length (optional)
+     * @return Success
+     */
+    roleGroupsGet(search: string | undefined, start: number | undefined, length: number | undefined): Promise<RoleGroupAdminResourceModelGetAllResult>;
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    roleGroupsCreate(body: UpsertApplicationRoleGroupCommand | undefined): Promise<RoleGroupAdminResourceModel>;
+    /**
+     * @param query (optional)
+     * @return Success
+     */
+    roleGroupsGetAllRoles(query: GetAllRolesQuery | undefined): Promise<RoleAdminResourceModel[]>;
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    roleGroupsUpdate(id: string, body: UpsertApplicationRoleGroupCommand | undefined): Promise<RoleGroupAdminResourceModel>;
+}
+
+export class RoleGroupsClient implements IRoleGroupsClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+
+    }
+
+    /**
+     * @param search (optional)
+     * @param start (optional)
+     * @param length (optional)
+     * @return Success
+     */
+    roleGroupsGet(search: string | undefined, start: number | undefined, length: number | undefined , cancelToken?: CancelToken | undefined): Promise<RoleGroupAdminResourceModelGetAllResult> {
+        let url_ = this.baseUrl + "/api/RoleGroups?";
+        if (search === null)
+            throw new Error("The parameter 'search' cannot be null.");
+        else if (search !== undefined)
+            url_ += "Search=" + encodeURIComponent("" + search) + "&";
+        if (start === null)
+            throw new Error("The parameter 'start' cannot be null.");
+        else if (start !== undefined)
+            url_ += "Start=" + encodeURIComponent("" + start) + "&";
+        if (length === null)
+            throw new Error("The parameter 'length' cannot be null.");
+        else if (length !== undefined)
+            url_ += "Length=" + encodeURIComponent("" + length) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRoleGroupsGet(_response);
+        });
+    }
+
+    protected processRoleGroupsGet(response: AxiosResponse): Promise<RoleGroupAdminResourceModelGetAllResult> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<RoleGroupAdminResourceModelGetAllResult>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<RoleGroupAdminResourceModelGetAllResult>(<any>null);
+    }
+
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    roleGroupsCreate(body: UpsertApplicationRoleGroupCommand | undefined , cancelToken?: CancelToken | undefined): Promise<RoleGroupAdminResourceModel> {
+        let url_ = this.baseUrl + "/api/RoleGroups";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRoleGroupsCreate(_response);
+        });
+    }
+
+    protected processRoleGroupsCreate(response: AxiosResponse): Promise<RoleGroupAdminResourceModel> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<RoleGroupAdminResourceModel>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<RoleGroupAdminResourceModel>(<any>null);
+    }
+
+    /**
+     * @param query (optional)
+     * @return Success
+     */
+    roleGroupsGetAllRoles(query: GetAllRolesQuery | undefined , cancelToken?: CancelToken | undefined): Promise<RoleAdminResourceModel[]> {
+        let url_ = this.baseUrl + "/api/RoleGroups/Roles?";
+        if (query === null)
+            throw new Error("The parameter 'query' cannot be null.");
+        else if (query !== undefined)
+            url_ += "query=" + encodeURIComponent("" + query) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRoleGroupsGetAllRoles(_response);
+        });
+    }
+
+    protected processRoleGroupsGetAllRoles(response: AxiosResponse): Promise<RoleAdminResourceModel[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<RoleAdminResourceModel[]>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<RoleAdminResourceModel[]>(<any>null);
+    }
+
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    roleGroupsUpdate(id: string, body: UpsertApplicationRoleGroupCommand | undefined , cancelToken?: CancelToken | undefined): Promise<RoleGroupAdminResourceModel> {
+        let url_ = this.baseUrl + "/api/RoleGroups/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processRoleGroupsUpdate(_response);
+        });
+    }
+
+    protected processRoleGroupsUpdate(response: AxiosResponse): Promise<RoleGroupAdminResourceModel> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<RoleGroupAdminResourceModel>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<RoleGroupAdminResourceModel>(<any>null);
+    }
+}
+
 export interface ISchedulesClient {
     /**
      * @param search (optional)
@@ -2352,12 +2628,32 @@ export interface EmployeeAdminResourceModelGetAllResult {
     totalCount: number;
 }
 
+export interface GetAllRolesQuery {
+}
+
 export interface GetAppointmentHistoryResult {
     readonly entities: AppointmentHistoryAdminResourceModel[] | undefined;
 }
 
 export interface GetAppointmentsResult {
     entities: AppointmentAdminResourceModel[] | undefined;
+}
+
+export interface RoleAdminResourceModel {
+    id: string;
+    name: string;
+}
+
+export interface RoleGroupAdminResourceModel {
+    id: string;
+    name: string;
+    roles: string[] | undefined;
+}
+
+export interface RoleGroupAdminResourceModelGetAllResult {
+    entities: RoleGroupAdminResourceModel[] | undefined;
+    filteredCount: number;
+    totalCount: number;
 }
 
 export interface ScheduleAdminResourceModel {
@@ -2420,6 +2716,11 @@ export interface ServiceCategoryAdminResourceModelGetAllResult {
     entities: ServiceCategoryAdminResourceModel[] | undefined;
     filteredCount: number;
     totalCount: number;
+}
+
+export interface UpsertApplicationRoleGroupCommand {
+    name: string | undefined;
+    roles: string[] | undefined;
 }
 
 export interface UpsertAppointmentCommand {

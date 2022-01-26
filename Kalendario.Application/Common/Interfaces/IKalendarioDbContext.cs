@@ -27,7 +27,12 @@ public interface IKalendarioDbContext
     DbSet<SchedulingPanel> SchedulingPanels { get; }
 
     DbSet<AuditEntity> AuditEntities { get; }
+
     DbSet<ApplicationUser> Users { get; }
+    
+    DbSet<ApplicationRole> Roles { get; }
+    
+    DbSet<ApplicationRoleGroup> RoleGroups { get; }
 
     DbSet<TEntity> Set<TEntity>() where TEntity : class;
 

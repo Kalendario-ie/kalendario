@@ -12,5 +12,10 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
             .WithMany(a => a.Users)
             .HasForeignKey(u => u.AccountId)
             .IsRequired(false);
+
+        builder.HasOne(a => a.RoleGroup)
+            .WithMany()
+            .HasForeignKey(a => a.RoleGroupId)
+            .IsRequired(false);
     }
 }
