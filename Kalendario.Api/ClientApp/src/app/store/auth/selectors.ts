@@ -1,4 +1,3 @@
-import {createSelector} from '@reduxjs/toolkit';
 import {Profile} from 'oidc-client';
 import {RootState} from 'src/app/store/store';
 

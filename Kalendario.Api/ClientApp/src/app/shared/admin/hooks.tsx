@@ -3,13 +3,7 @@ import {IReadModel} from 'src/app/api/common/models';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import KModal from 'src/app/shared/components/modal/k-modal';
 import {useAppDispatch, useAppSelector} from 'src/app/store';
-import {
-    ExtendedBaseActions,
-    BaseSelectors,
-    BaseActions,
-    QueryActions,
-    CommandActions, CommandAndBaseActions
-} from 'src/app/store/admin/common/adapter';
+import {BaseActions, BaseSelectors, CommandAndBaseActions} from 'src/app/store/admin/common/adapter';
 
 export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     baseSelectors: BaseSelectors<TEntity>,
