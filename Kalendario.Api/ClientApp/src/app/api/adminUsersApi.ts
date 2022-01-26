@@ -1,38 +1,36 @@
-import {ApplicationUserAdminResourceModel, UsersClient} from 'src/app/api/api';
+import {CancelToken} from 'axios';
+import {
+    ApplicationUserAdminResourceModel,
+    UpsertApplicationRoleGroupCommand,
+    UpsertUserCommand,
+    UsersClient
+} from 'src/app/api/api';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
 import {BaseModelRequest, BaseQueryParams} from 'src/app/api/common/clients/base-django-api';
 import * as yup from 'yup';
 
 const client = new UsersClient('', baseApiAxios);
 
-export const adminUsersClient: BaseModelRequest<ApplicationUserAdminResourceModel, UpsertUserRequest, BaseQueryParams> = {
+export const adminUsersClient: BaseModelRequest<ApplicationUserAdminResourceModel, UpsertUserCommand, BaseQueryParams> = {
     get(params) {
         return client.usersGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
-    post: body => Promise.resolve(userParser(null)),
-    put: id => Promise.resolve(userParser(null)),
-    delete: id => Promise.resolve(),
-}
-
-export function userParser(data: any): ApplicationUserAdminResourceModel {
-    return {
-        id: '',
-        userName: ''
+    post(body: UpsertUserCommand | undefined, cancelToken?: CancelToken | undefined) {
+        return client.usersCreate(body, cancelToken);
+    },
+    put(id: string, command: UpsertUserCommand | undefined, cancelToken?: CancelToken | undefined) {
+        return client.usersUpdate(id, command, cancelToken);
+    },
+    delete(id: string, cancelToken?: CancelToken | undefined) {
+        return Promise.resolve();
     }
 }
 
-export interface UpsertUserRequest {
-    firstName: string;
-    lastName: string;
-    email: string;
-    employee: number | '';
-    groups: number[];
-}
-
 export const UpsertUserRequestValidation = yup.object().shape({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
+    userName: yup.string().required(),
     email: yup.string().required().email(),
+    roleGroupId: yup.string().required(),
+    employeeId: yup.string(),
 });
 
 
@@ -50,13 +48,17 @@ export const ChangeUserPasswordValidation = yup.object().shape({
 });
 
 
-export function upsertUserRequestParser(user: ApplicationUserAdminResourceModel | null): UpsertUserRequest {
-    return {
-        firstName: '',
-        lastName: '',
+export function upsertUserRequestParser(user: ApplicationUserAdminResourceModel | null): UpsertUserCommand {
+    return user == null ? {
+        userName: '',
         email: '',
-        employee: '',
-        groups: []
+        roleGroupId: '',
+        employeeId: ''
+    } : {
+        userName: user.userName,
+        email: user.email,
+        roleGroupId: user.roleGroupId,
+        employeeId: user.employeeId
     }
 }
 

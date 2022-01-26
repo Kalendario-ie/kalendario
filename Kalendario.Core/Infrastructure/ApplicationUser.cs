@@ -11,4 +11,8 @@ public class ApplicationUser : IdentityUser
 
     public Guid? RoleGroupId { get; set; }
     public ApplicationRoleGroup RoleGroup { get; set; }
+    
+    public Guid? EmployeeId { get; set; }
+
+    public Employee Employee { get; set; }
 }

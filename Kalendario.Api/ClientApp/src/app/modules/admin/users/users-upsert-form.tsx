@@ -1,5 +1,6 @@
 import React from 'react';
-import {UpsertUserRequest, UpsertUserRequestValidation} from 'src/app/api/adminUsersApi';
+import {UpsertUserRequestValidation} from 'src/app/api/adminUsersApi';
+import {UpsertUserCommand} from 'src/app/api/api';
 import ChangePasswordForm from 'src/app/modules/admin/users/change-password-form';
 import {useSelectAll} from 'src/app/shared/admin/hooks';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
@@ -8,7 +9,7 @@ import {employeeActions, employeeSelectors} from 'src/app/store/admin/employees'
 import {permissionGroupActions, permissionGroupSelectors} from 'src/app/store/admin/permissionGroups';
 
 
-const UsersUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertUserRequest>> = (
+const UsersUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertUserCommand>> = (
     {
         id,
         command,
@@ -33,8 +34,8 @@ const UsersUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertUse
             }
             <KFormikInput name="userName"/>
             <KFormikInput name="email"/>
-            <KFormikInput name="roleGroup" as={'select'} options={groups}/>
-            <KFormikInput name="employee" as={'select'} options={employees}/>
+            <KFormikInput name="roleGroupId" as={'select'} options={groups}/>
+            <KFormikInput name="employeeId" as={'select'} options={employees}/>
         </KFormikForm>
     )
 }

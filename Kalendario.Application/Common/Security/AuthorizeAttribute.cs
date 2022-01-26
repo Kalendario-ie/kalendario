@@ -15,6 +15,8 @@ public class AuthorizeAttribute : Attribute
     /// </summary>
     public AuthorizeAttribute(Type entity, string roles) =>
         Roles = roles.Split(',').Select(role => AuthorizationHelper.RoleName(entity, role));
+    
+    public AuthorizeAttribute(string roles) => Roles = roles.Split(',');
 
     public IEnumerable<string> Roles { get; }
 }
