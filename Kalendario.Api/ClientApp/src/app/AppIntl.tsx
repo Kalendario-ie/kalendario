@@ -29,22 +29,26 @@ interface AppItlProps {
 }
 
 const AppIntl: React.FunctionComponent<AppItlProps> = ({language, children}) => {
-    const [messages, setMessages] = useState({});
+    const [messages, setMessages] = useState<{} | null>(null);
     useEffect(() => {
         loadLocaleData(language).then(m => {
-            const flattenedMessages = flattenMessages(m.default);
-            setMessages(flattenedMessages)
+                const flattenedMessages = flattenMessages(m.default);
+                setMessages(flattenedMessages)
             }
         );
     }, [language])
     return (
-        <IntlProvider
-            messages={messages}
-            locale="en"
-            defaultLocale="en"
-        >
-            {children}
-        </IntlProvider>
+        <>
+            {messages &&
+            <IntlProvider
+                messages={messages}
+                locale="en"
+                defaultLocale="en"
+            >
+                {children}
+            </IntlProvider>
+            }
+        </>
     )
 }
 
