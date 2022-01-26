@@ -26,5 +26,7 @@ public class ApplicationRoleGroupConfiguration : IEntityTypeConfiguration<Applic
 
         builder.Property(r => r.Name)
             .HasMaxLength(120);
+        
+        builder.Ignore(e => e.DomainEvents);
     }
 }

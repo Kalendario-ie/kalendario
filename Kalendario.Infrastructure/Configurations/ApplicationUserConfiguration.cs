@@ -22,5 +22,7 @@ public class ApplicationUserConfiguration : IEntityTypeConfiguration<Application
             .WithMany()
             .HasForeignKey(a => a.EmployeeId)
             .IsRequired(false);
+        
+        builder.Ignore(e => e.DomainEvents);
     }
 }
