@@ -12,7 +12,7 @@ const CompaniesContainer: React.FunctionComponent<CompaniesMainProps>  = () => {
     const company = useSelector(selectCompany);
     const service = useSelector(selectService);
 
-    const serviceClick = (id: number | null) => {
+    const serviceClick = (id: string | null) => {
         dispatch(setSelectedServiceId(id));
     }
 

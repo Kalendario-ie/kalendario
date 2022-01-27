@@ -1,44 +1,25 @@
 import moment, {Moment} from 'moment';
-import {call, put, takeEvery, select} from 'redux-saga/effects'
+import {isMobile} from 'react-device-detect';
+import {call, put, select, takeEvery} from 'redux-saga/effects'
+import {CompanyDetailsResourceModel} from 'src/app/api/api';
 import {ApiBaseError} from 'src/app/api/common/api-errors';
-import {RequestModel} from 'src/app/api/requests';
+import {companyClient} from 'src/app/api/publicCompanyApi';
 import {selectLoggedIn} from 'src/app/store/auth';
 import {selectSelectedDate, selectSelectedServiceId} from 'src/app/store/companies/selectors';
-import {ACTION_TYPES} from './types';
 import {
-    addNotesRequestFail,
-    addNotesRequestSuccess,
-    bookSlotRequestFail,
-    bookSlotRequestSuccess,
     companyDetailsRequestFail,
     companyDetailsRequestSuccess,
-    confirmCartRequestFail,
-    confirmCartRequestSuccess,
     currentCartRequest,
     currentCartRequestFail,
-    currentCartRequestSuccess,
     deleteAppointmentRequestFail,
-    deleteAppointmentRequestSuccess,
-    setCurrentRequest,
     setSelectedDate,
-    slotsRequest,
-    slotsRequestFail,
-    slotsRequestSuccess
 } from './actions';
-import {
-    companyClient,
-    companyRequestClient,
-    CompanyDetails,
-    Slot,
-    SlotRequestParams,
-    CreateAppointmentRequest, AddNotesRequest
-} from 'src/app/api/companies';
-import {isMobile} from 'react-device-detect';
+import {ACTION_TYPES} from './types';
 
 
 function* requestCompanyDetails(action: { type: string, payload: string }) {
     try {
-        const company: CompanyDetails = yield call(companyClient.fromName, action.payload);
+        const company: CompanyDetailsResourceModel = yield call([companyClient, companyClient.companiesFind], action.payload)
         yield put(companyDetailsRequestSuccess(company));
     } catch (error) {
         yield put(companyDetailsRequestFail(error as ApiBaseError));
@@ -46,7 +27,7 @@ function* requestCompanyDetails(action: { type: string, payload: string }) {
 }
 
 
-function* triggerCartRequestIfLoggedIn(action: { type: string, payload: CompanyDetails }) {
+function* triggerCartRequestIfLoggedIn(action: { type: string, payload: CompanyDetailsResourceModel }) {
     const isLoggedIn: boolean = yield select(selectLoggedIn);
     if (isLoggedIn) {
         yield put(currentCartRequest(action.payload.id))
@@ -56,9 +37,9 @@ function* triggerCartRequestIfLoggedIn(action: { type: string, payload: CompanyD
 
 function* requestCartForCompany(action: { type: string, payload: number }) {
     try {
-        const request: RequestModel = yield call(companyRequestClient.current, action.payload);
-        yield put(currentCartRequestSuccess());
-        yield put(setCurrentRequest(request));
+        // const request: RequestModel = yield call(companyRequestClient.current, action.payload); //TODO: FIX HERE
+        // yield put(currentCartRequestSuccess());
+        // yield put(setCurrentRequest(request));
 
     } catch (error) {
         yield put(currentCartRequestFail(error as ApiBaseError));
@@ -71,19 +52,19 @@ function* triggerSlotRequest(action: { type: string, payload: number }) {
     if (service) {
         const start: Moment = yield select(selectSelectedDate);
         const end = start.clone().add(isMobile ? 0 : 1, 'day').endOf('day');
-        yield put(slotsRequest({start, end, service}));
+        // yield put(slotsRequest({start, end, service})); // TODO HERE.
     }
 }
 
 
-function* requestSlots(action: { type: string, payload: SlotRequestParams }) {
-    try {
-        const slots: Slot[] = yield call(companyClient.slots, action.payload);
-        yield put(slotsRequestSuccess(slots));
-    } catch (error) {
-        yield put(slotsRequestFail());
-    }
-}
+// function* requestSlots(action: { type: string, payload: SlotRequestParams }) {
+//     try {
+//         const slots: Slot[] = yield call(companyClient.slots, action.payload);
+//         yield put(slotsRequestSuccess(slots));
+//     } catch (error) {
+//         yield put(slotsRequestFail());
+//     }
+// }
 
 
 function* addOneDayToSelectedDate(action: { type: string, payload: number }) {
@@ -103,48 +84,48 @@ function* updateSelectedDate(action: { type: string, payload: number }) {
 }
 
 
-function* requestAddAppointment(action: { type: string, payload: CreateAppointmentRequest }) {
-    try {
-        const request: RequestModel = yield call(companyRequestClient.createAppointment, action.payload)
-        yield put(bookSlotRequestSuccess());
-        yield put(setCurrentRequest(request));
-    } catch (error) {
-        yield put(bookSlotRequestFail());
-    }
-}
+// function* requestAddAppointment(action: { type: string, payload: CreateAppointmentRequest }) {
+//     try {
+//         const request: RequestModel = yield call(companyRequestClient.createAppointment, action.payload)
+//         yield put(bookSlotRequestSuccess());
+//         yield put(setCurrentRequest(request));
+//     } catch (error) {
+//         yield put(bookSlotRequestFail());
+//     }
+// }
 
 
 function* requestRemoveAppointment(action: { type: string, payload: number }) {
     try {
-        const request: RequestModel = yield call(companyRequestClient.delete, action.payload)
-        yield put(deleteAppointmentRequestSuccess());
-        yield put(setCurrentRequest(request));
+        // const request: RequestModel = yield call(companyRequestClient.delete, action.payload)
+        // yield put(deleteAppointmentRequestSuccess());
+        // yield put(setCurrentRequest(request));
     } catch (error) {
         yield put(deleteAppointmentRequestFail(error as ApiBaseError));
     }
 }
 
 
-function* requestAddNotes(action: { type: string, payload: AddNotesRequest }) {
-    try {
-        const request: RequestModel = yield call(companyRequestClient.patch, action.payload)
-        yield put(addNotesRequestSuccess());
-        yield put(setCurrentRequest(request));
-    } catch (error) {
-        yield put(addNotesRequestFail(error as ApiBaseError));
-    }
-}
+// function* requestAddNotes(action: { type: string, payload: AddNotesRequest }) {
+//     try {
+//         const request: RequestModel = yield call(companyRequestClient.patch, action.payload)
+//         yield put(addNotesRequestSuccess());
+//         yield put(setCurrentRequest(request));
+//     } catch (error) {
+//         yield put(addNotesRequestFail(error as ApiBaseError));
+//     }
+// }
 
-
-function* requestCartConfirmation(action: { type: string, payload: number }) {
-    try {
-        yield call(companyRequestClient.complete, action.payload);
-        yield put(confirmCartRequestSuccess());
-        yield put(setCurrentRequest(null));
-    } catch (error) {
-        yield put(confirmCartRequestFail(error as ApiBaseError));
-    }
-}
+//
+// function* requestCartConfirmation(action: { type: string, payload: number }) {
+//     try {
+//         yield call(companyRequestClient.complete, action.payload);
+//         yield put(confirmCartRequestSuccess());
+//         yield put(setCurrentRequest(null));
+//     } catch (error) {
+//         yield put(confirmCartRequestFail(error as ApiBaseError));
+//     }
+// }
 
 
 export function* companiesSaga() {
@@ -153,12 +134,12 @@ export function* companiesSaga() {
     yield takeEvery(ACTION_TYPES.CURRENT_CART_REQUEST, requestCartForCompany);
     yield takeEvery(ACTION_TYPES.SET_SELECTED_SERVICE_ID, triggerSlotRequest);
     yield takeEvery(ACTION_TYPES.SET_SELECTED_DATE, triggerSlotRequest);
-    yield takeEvery(ACTION_TYPES.SLOTS_REQUEST, requestSlots);
+    // yield takeEvery(ACTION_TYPES.SLOTS_REQUEST, requestSlots);
     yield takeEvery(ACTION_TYPES.SELECTED_DATE_ADD_ONE, addOneDayToSelectedDate);
     yield takeEvery(ACTION_TYPES.SELECTED_DATE_SUBTRACT_ONE, subtractOneDayToSelectedDate);
     yield takeEvery(ACTION_TYPES.SELECTED_DATE_TODAY, updateSelectedDate);
-    yield takeEvery(ACTION_TYPES.BOOK_SLOT_REQUEST, requestAddAppointment);
+    // yield takeEvery(ACTION_TYPES.BOOK_SLOT_REQUEST, requestAddAppointment);
     yield takeEvery(ACTION_TYPES.DELETE_APPOINTMENT_REQUEST, requestRemoveAppointment);
-    yield takeEvery(ACTION_TYPES.ADD_NOTES_REQUEST, requestAddNotes);
-    yield takeEvery(ACTION_TYPES.CONFIRM_CART_REQUEST, requestCartConfirmation);
+    // yield takeEvery(ACTION_TYPES.ADD_NOTES_REQUEST, requestAddNotes);
+    // yield takeEvery(ACTION_TYPES.CONFIRM_CART_REQUEST, requestCartConfirmation);
 }

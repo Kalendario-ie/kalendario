@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {CompanyDetails} from 'src/app/api/companies';
+import {CompanyDetailsResourceModel} from 'src/app/api/api';
 import {RequestModel} from 'src/app/api/requests';
 import CompanyAvatar from 'src/app/modules/companies/avatar/company-avatar';
 import {KInput} from 'src/app/shared/components/primitives/inputs';
 import {KCard} from 'src/app/shared/components/primitives/containers';
 
 interface CartSummaryProps {
-    company: CompanyDetails;
+    company: CompanyDetailsResourceModel;
     request: RequestModel,
     proceedToCheckoutClick: (notes: string) => void;
 }
@@ -25,7 +25,7 @@ const CartCompanySummary: React.FunctionComponent<CartSummaryProps> = (
         <KCard>
             <CompanyAvatar company={company}/>
             <p>
-                {company.config.preBookWarn}
+                {/*{company.config.preBookWarn}*/}
             </p>
             <KInput className="mb-2"
                     type="textarea"

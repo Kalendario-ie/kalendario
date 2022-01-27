@@ -1,22 +1,17 @@
 import {Moment} from 'moment';
+import {CompanyDetailsResourceModel} from 'src/app/api/api';
 import {RequestModel} from 'src/app/api/requests';
 import {momentToIso} from 'src/app/shared/util/moment-helpers';
 import {ACTION_TYPES} from './types';
 import {action} from 'typesafe-actions';
 import {ApiBaseError} from 'src/app/api/common/api-errors';
-import {
-    AddNotesRequest,
-    CompanyDetails,
-    CreateAppointmentRequest,
-    Slot,
-    SlotRequestParams
-} from 'src/app/api/companies';
+
 
 export const companyDetailsRequest = (companyName: string) =>
     action(ACTION_TYPES.COMPANY_DETAILS_REQUEST, companyName);
 
 
-export const companyDetailsRequestSuccess = (company: CompanyDetails) =>
+export const companyDetailsRequestSuccess = (company: CompanyDetailsResourceModel) =>
     action(ACTION_TYPES.COMPANY_DETAILS_REQUEST_SUCCESS, company);
 
 
@@ -24,25 +19,25 @@ export const companyDetailsRequestFail = (apiError: ApiBaseError) =>
     action(ACTION_TYPES.COMPANY_DETAILS_REQUEST_FAIL, apiError);
 
 
-export const setSelectedServiceId = (id: number | null) =>
+export const setSelectedServiceId = (id: string | null) =>
     action(ACTION_TYPES.SET_SELECTED_SERVICE_ID, id);
 
 
-export const slotsRequest = (request: SlotRequestParams) =>
-    action(ACTION_TYPES.SLOTS_REQUEST, request);
+// export const slotsRequest = (request: SlotRequestParams) =>
+//     action(ACTION_TYPES.SLOTS_REQUEST, request);
 
 
-export const slotsRequestSuccess = (slots: Slot[]) => {
-    let slotMap: {[key: string]: Slot[]} = {};
-    slots.forEach(slot => {
-        if (slotMap[slot.date]) {
-            slotMap[slot.date].push(slot)
-        } else {
-            slotMap[slot.date] = [slot]
-        }
-    })
-    return action(ACTION_TYPES.SLOTS_REQUEST_SUCCESS, slotMap);
-}
+// export const slotsRequestSuccess = (slots: Slot[]) => {
+//     let slotMap: {[key: string]: Slot[]} = {};
+//     slots.forEach(slot => {
+//         if (slotMap[slot.date]) {
+//             slotMap[slot.date].push(slot)
+//         } else {
+//             slotMap[slot.date] = [slot]
+//         }
+//     })
+//     return action(ACTION_TYPES.SLOTS_REQUEST_SUCCESS, slotMap);
+// }
 
 
 export const slotsRequestFail = () =>
@@ -52,9 +47,9 @@ export const slotsRequestFail = () =>
 export const setSelectedSlotId = (id: number) =>
     action(ACTION_TYPES.SET_SELECTED_SLOT_ID, id);
 
-
-export const bookSlotRequest = (request: CreateAppointmentRequest) =>
-    action(ACTION_TYPES.BOOK_SLOT_REQUEST, request);
+//
+// export const bookSlotRequest = (request: CreateAppointmentRequest) =>
+//     action(ACTION_TYPES.BOOK_SLOT_REQUEST, request);
 
 
 export const bookSlotRequestSuccess = () =>
@@ -107,8 +102,8 @@ export const setCurrentRequest = (request: RequestModel | null) =>
     action(ACTION_TYPES.SET_CURRENT_REQUEST, request);
 
 
-export const addNotesRequest = (request: AddNotesRequest) =>
-    action(ACTION_TYPES.ADD_NOTES_REQUEST, request);
+// export const addNotesRequest = (request: AddNotesRequest) =>
+//     action(ACTION_TYPES.ADD_NOTES_REQUEST, request);
 
 
 export const addNotesRequestSuccess = () =>

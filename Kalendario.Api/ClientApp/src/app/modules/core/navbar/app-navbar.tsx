@@ -15,7 +15,7 @@ import {
     NavLink,
     UncontrolledDropdown,
 } from 'reactstrap';
-import {CompanyDetails} from 'src/app/api/companies';
+import {CompanyDetailsResourceModel} from 'src/app/api/api';
 import {RequestModel} from 'src/app/api/requests';
 import {ADMIN_ROUTES} from 'src/app/modules/admin/urls';
 import {companiesUrls} from 'src/app/modules/companies/paths';
@@ -25,7 +25,7 @@ import {KIconButton} from 'src/app/shared/components/primitives/buttons';
 import {ApplicationPaths} from 'src/components/api-authorization/ApiAuthorizationConstants';
 
 interface AppNavbarProps {
-    company: CompanyDetails | null;
+    company: CompanyDetailsResourceModel | null;
     cart: RequestModel | null;
     cartIsEmpty: boolean;
     user: Profile | null;
@@ -62,7 +62,7 @@ const AppNavbar: React.FunctionComponent<AppNavbarProps> = (
                         {company &&
                         <NavItem>
                             <NavLink tag={Link} to={companiesUrls(company).index}>
-                                <AvatarImg src={company.avatar} size={2} id="TooltipExample"/>
+                                <AvatarImg src={company.avatar || ''} size={2} id="TooltipExample"/>
                             </NavLink>
                         </NavItem>
                         }

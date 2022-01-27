@@ -1,16 +1,12 @@
 import moment, {Moment} from 'moment';
+import {CompanyDetailsResourceModel} from 'src/app/api/api';
 import {RequestModel} from 'src/app/api/requests';
 import {SlotDict} from 'src/app/store/companies/reducers';
 import {RootState} from 'src/app/store/store';
-import {CompanyDetails} from '../../api/companies';
 import { createSelector } from '@reduxjs/toolkit';
 
 
-export const selectOwnerId: (rootState: RootState) => number | null =
-    (rootState) => rootState.companies.ownerId;
-
-
-export const selectCompany: (rootState: RootState) => CompanyDetails | null =
+export const selectCompany: (rootState: RootState) => CompanyDetailsResourceModel | null =
     (rootState) => rootState.companies.company;
 
 
@@ -32,7 +28,7 @@ export const selectCurrentRequest: (rootState: RootState) => RequestModel | null
 
 
 
-export const selectSelectedServiceId: (rootState: RootState) => number | null =
+export const selectSelectedServiceId: (rootState: RootState) => string | null =
     (rootState) => rootState.companies.selectedServiceId;
 
 
@@ -54,7 +50,7 @@ const selectServices = createSelector(
 export const selectService = createSelector(
     [selectServices, selectSelectedServiceId],
     (services, id) =>
-        services && services.find(service => service === id) // todo service.id === id
+        services && services.find(service => service.id === id)
 )
 
 export const selectIsStoreReady = createSelector(

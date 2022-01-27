@@ -7,7 +7,6 @@ import {companiesUrls} from 'src/app/modules/companies/paths';
 import KGrid from 'src/app/shared/components/grid/k-grid';
 import {KPageContainer, KCard} from 'src/app/shared/components/primitives/containers';
 import {
-    addNotesRequest,
     deleteAppointmentRequest,
     selectCartIsLoadedAndEmpty,
     selectCompany,
@@ -26,7 +25,7 @@ const CartContainer: React.FunctionComponent<CartContainerProps> = () => {
 
     const proceedToCheckout = (notes: string) => {
         if (!company || !request) return;
-        dispatch(addNotesRequest({id: request.id, notes}));
+        // dispatch(addNotesRequest({id: request.id, notes})); // todo: addNotesRequest
         history.push(companiesUrls(company).checkout)
     }
 

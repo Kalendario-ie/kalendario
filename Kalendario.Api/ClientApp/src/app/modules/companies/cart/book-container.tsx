@@ -1,10 +1,9 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import {CreateAppointmentRequest} from 'src/app/api/companies';
 import {companiesUrls} from 'src/app/modules/companies/paths';
 import {useQueryParams} from 'src/app/shared/util/router-extensions';
-import {bookSlotRequest, selectCompany} from 'src/app/store/companies';
+import {selectCompany} from 'src/app/store/companies';
 
 
 const BookContainer: React.FunctionComponent = () => {
@@ -13,9 +12,9 @@ const BookContainer: React.FunctionComponent = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         if (company) {
-            const request: CreateAppointmentRequest = {start, service: +service};
-            if (employee) request.employee = +employee;
-            dispatch(bookSlotRequest(request))
+            // const request: CreateAppointmentRequest = {start, service: +service};
+            // if (employee) request.employee = +employee;
+            // dispatch(bookSlotRequest(request)) // TODO HERE.
         }
     }, [company, dispatch, employee, service, start]);
     return (

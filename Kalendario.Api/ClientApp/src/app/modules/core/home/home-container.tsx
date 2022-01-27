@@ -1,43 +1,25 @@
-import React, {useEffect} from 'react';
-import {useSelector} from 'react-redux';
+import React from 'react';
 import {useHistory} from "react-router-dom";
-import {Company} from 'src/app/api/companies';
-import {selectCompany, selectOwnerId} from 'src/app/store/companies';
+import {CompaniesClient, CompanySearchResourceModel} from 'src/app/api/api';
+import baseApiAxios from 'src/app/api/common/clients/base-api';
+import {companyClient} from 'src/app/api/publicCompanyApi';
+import HomeView from 'src/app/modules/core/home/home-view';
 
 
 const HomeContainer: React.FunctionComponent = () => {
     const history = useHistory();
-    const ownerId = useSelector(selectOwnerId);
-    const company = useSelector(selectCompany);
 
-    useEffect(() => {
-        if (company && ownerId) {
-            history.push(`/c/${company.name}`);
-        }
-        if (ownerId && !company) {
-            // companyClient.detail(ownerId)
-            //     .then(company => history.push(`/c/${company.name}`)) //todo: fix here.
-        }
-    }, [company, history, ownerId]);
+    const promiseOptions = (search: string) => companyClient.companiesSearch(search).then(r => r.entities || []);
 
-
-    // const promiseOptions = (value: string) => companyClient.get({search: value})
-    //     .then(res => res.results); // todo fix here
-
-    const navigateToPage = (company: Company | null) => {
+    const navigateToPage = (company: CompanySearchResourceModel | null) => {
         if (company) {
             history.push(`/c/${company.name}`)
         }
     }
 
     return (
-        <>
-            {!ownerId &&
-                <></>
-            // <HomeView values={promiseOptions}
-            //           onChange={navigateToPage}/>
-            }
-        </>
+            <HomeView values={promiseOptions}
+                      onChange={navigateToPage}/>
     )
 }
 

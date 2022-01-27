@@ -1,5 +1,5 @@
+import {CompanySearchResourceModel} from 'src/app/api/api';
 import {IReadModel} from 'src/app/api/common/models';
-import {Company} from 'src/app/api/companies';
 import {Employee} from 'src/app/api/employees';
 
 export interface RequestItem {
@@ -9,7 +9,7 @@ export interface RequestItem {
 
 export interface RequestModel extends IReadModel {
   id: string;
-  owner: Company;
+  owner: CompanySearchResourceModel;
   name: string;
   scheduledDate: string;
   items: RequestItem[];

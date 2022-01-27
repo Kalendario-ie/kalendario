@@ -1,13 +1,13 @@
 import React from 'react';
 import AsyncSelect from 'react-select/async';
-import {Company} from 'src/app/api/companies';
+import {CompanySearchResourceModel} from 'src/app/api/api';
 import {KFlexRow} from 'src/app/shared/components/flex';
 import {KPageContainer} from 'src/app/shared/components/primitives/containers';
 
 
 interface HomeViewProps {
-    values: (value: string) => Promise<Company[]>,
-    onChange: (value: Company | null) => void;
+    values: (value: string) => Promise<CompanySearchResourceModel[]>,
+    onChange: (value: CompanySearchResourceModel | null) => void;
 }
 
 const HomeView: React.FunctionComponent<HomeViewProps> = (

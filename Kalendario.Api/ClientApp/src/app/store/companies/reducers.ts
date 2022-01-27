@@ -1,22 +1,19 @@
 import moment from 'moment';
 import {Reducer} from 'redux';
+import {CompanyDetailsResourceModel} from 'src/app/api/api';
 import {RequestModel} from 'src/app/api/requests';
 import {ApiValidationError} from '../../api/common/api-errors';
-import {CompanyDetails, Slot} from '../../api/companies';
 import {ACTION_TYPES} from './types';
 
-const ownerId = process.env.REACT_APP_OWNER_ID || null;
-
 export interface SlotDict {
-    [key: string]: Slot[];
+    // [key: string]: Slot[];
 }
 
 export interface CompaniesState {
     apiError: ApiValidationError | null;
-    company: CompanyDetails | null;
+    company: CompanyDetailsResourceModel | null;
     companyRequestCompleted: boolean;
-    ownerId: number | null,
-    selectedServiceId: number | null;
+    selectedServiceId: string | null;
     slots: SlotDict;
     selectedSlotId: number | null;
     selectedDate: string;
@@ -28,7 +25,6 @@ const initialState: CompaniesState = {
     apiError: null,
     company: null,
     companyRequestCompleted: false,
-    ownerId: ownerId ? +ownerId : null,
     selectedServiceId: null,
     slots: {},
     selectedSlotId: null,

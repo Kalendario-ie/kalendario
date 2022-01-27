@@ -422,6 +422,142 @@ export class AppointmentsClient implements IAppointmentsClient {
     }
 }
 
+export interface ICompaniesClient {
+    /**
+     * @param search (optional)
+     * @return Success
+     */
+    companiesSearch(search: string | undefined): Promise<SearchCompaniesResult>;
+    /**
+     * @return Success
+     */
+    companiesFind(name: string): Promise<CompanyDetailsResourceModel>;
+}
+
+export class CompaniesClient implements ICompaniesClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+
+    }
+
+    /**
+     * @param search (optional)
+     * @return Success
+     */
+    companiesSearch(search: string | undefined , cancelToken?: CancelToken | undefined): Promise<SearchCompaniesResult> {
+        let url_ = this.baseUrl + "/api/Companies?";
+        if (search === null)
+            throw new Error("The parameter 'search' cannot be null.");
+        else if (search !== undefined)
+            url_ += "Search=" + encodeURIComponent("" + search) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCompaniesSearch(_response);
+        });
+    }
+
+    protected processCompaniesSearch(response: AxiosResponse): Promise<SearchCompaniesResult> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<SearchCompaniesResult>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<SearchCompaniesResult>(<any>null);
+    }
+
+    /**
+     * @return Success
+     */
+    companiesFind(name: string , cancelToken?: CancelToken | undefined): Promise<CompanyDetailsResourceModel> {
+        let url_ = this.baseUrl + "/api/Companies/{name}";
+        if (name === undefined || name === null)
+            throw new Error("The parameter 'name' must be defined.");
+        url_ = url_.replace("{name}", encodeURIComponent("" + name));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCompaniesFind(_response);
+        });
+    }
+
+    protected processCompaniesFind(response: AxiosResponse): Promise<CompanyDetailsResourceModel> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<CompanyDetailsResourceModel>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<CompanyDetailsResourceModel>(<any>null);
+    }
+}
+
 export interface ICustomersClient {
     /**
      * @param search (optional)
@@ -2718,6 +2854,20 @@ export interface Colour {
     readonly code: string | undefined;
 }
 
+export interface CompanyDetailsResourceModel {
+    id: string;
+    name: string | undefined;
+    avatar: string | undefined;
+    services: ServicePublicResourceModel[] | undefined;
+    serviceCategories: ServiceCategoryPublicResourceModel[] | undefined;
+}
+
+export interface CompanySearchResourceModel {
+    id: string;
+    name: string;
+    avatar: string | undefined;
+}
+
 export interface CreateAccountCommand {
     name: string | undefined;
 }
@@ -2819,6 +2969,10 @@ export interface SchedulingPanelAdminResourceModelGetAllResult {
     totalCount: number;
 }
 
+export interface SearchCompaniesResult {
+    entities: CompanySearchResourceModel[] | undefined;
+}
+
 export interface ServiceAdminResourceModel {
     id: string;
     name: string;
@@ -2844,6 +2998,21 @@ export interface ServiceCategoryAdminResourceModelGetAllResult {
     entities: ServiceCategoryAdminResourceModel[] | undefined;
     filteredCount: number;
     totalCount: number;
+}
+
+export interface ServiceCategoryPublicResourceModel {
+    id: string;
+    name: string;
+    colour: Colour;
+}
+
+export interface ServicePublicResourceModel {
+    id: string;
+    name: string | undefined;
+    description: string | undefined;
+    price: number;
+    duration: string;
+    serviceCategoryId: string | undefined;
 }
 
 export interface UpsertApplicationRoleGroupCommand {

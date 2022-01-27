@@ -27,6 +27,10 @@ namespace Kalendario.Infrastructure.Configurations
                 .WithOne(e => e.Account)
                 .HasForeignKey(e => e.AccountId);
             
+            builder.HasMany(a => a.ServiceCategories)
+                .WithOne(e => e.Account)
+                .HasForeignKey(e => e.AccountId);
+            
             builder.HasMany(a => a.Customers)
                 .WithOne(e => e.Account)
                 .HasForeignKey(e => e.AccountId);

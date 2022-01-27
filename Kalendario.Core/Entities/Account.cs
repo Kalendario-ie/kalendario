@@ -14,6 +14,7 @@ namespace Kalendario.Core.Entities
         public ICollection<EmployeeService> EmployeeServices { get; set; }
 
         public ICollection<Service> Services { get; set; }
+        public ICollection<ServiceCategory> ServiceCategories { get; set; }
         
         public ICollection<Customer> Customers { get; set; }
 

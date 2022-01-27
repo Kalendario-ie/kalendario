@@ -60,18 +60,18 @@ const CheckoutContainer: React.FunctionComponent = () => {
                         {request.customerNotes}
                         <KFlexSpacer/>
                         <>
-                            {company.config.canReceiveCardPayments &&
-                            <button onClick={toggleStripePaymentOpen(request.id)}
-                                    className="btn btn-primary mr-2">
-                                <FormattedMessage id="COMPANY.PAY-CARD"/>
-                            </button>
-                            }
-                            {company.config.canReceiveUnpaidRequest &&
-                            <button className="btn btn-accent"
-                                    onClick={confirmRequest(request)}>
-                                <FormattedMessage id="COMPANY.PAY-CASH"/>
-                            </button>
-                            }
+                            {/*{company.config.canReceiveCardPayments &&*/}
+                            {/*<button onClick={toggleStripePaymentOpen(request.id)}*/}
+                            {/*        className="btn btn-primary mr-2">*/}
+                            {/*    <FormattedMessage id="COMPANY.PAY-CARD"/>*/}
+                            {/*</button>*/}
+                            {/*}*/}
+                            {/*{company.config.canReceiveUnpaidRequest &&*/}
+                            {/*<button className="btn btn-accent"*/}
+                            {/*        onClick={confirmRequest(request)}>*/}
+                            {/*    <FormattedMessage id="COMPANY.PAY-CASH"/>*/}
+                            {/*</button>*/}
+                            {/*}*/}
                         </>
                     </>
                 </KCard>

@@ -1,12 +1,11 @@
 import {ApiBaseError} from 'src/app/api/common/api-errors';
-import {RequestModelGetParams} from 'src/app/api/companies';
 import {momentToIso} from 'src/app/shared/util/moment-helpers';
 import {ACTION_TYPES} from 'src/app/store/users/types';
 import {action} from 'typesafe-actions';
 
-
-export const eventsRequest = (request: RequestModelGetParams) =>
-    action(ACTION_TYPES.EVENTS_REQUEST, {start: momentToIso(request.start), end: momentToIso(request.end)})
+//
+// export const eventsRequest = (request: RequestModelGetParams) =>
+//     action(ACTION_TYPES.EVENTS_REQUEST, {start: momentToIso(request.start), end: momentToIso(request.end)})
 
 class Appointment {
 } // TODO: fix here

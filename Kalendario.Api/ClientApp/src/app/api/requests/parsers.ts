@@ -1,4 +1,3 @@
-import {companyParser} from 'src/app/api/companies';
 import {RequestItem, RequestModel} from 'src/app/api/requests';
 
 
@@ -19,7 +18,7 @@ export function requestParser(data: any): RequestModel {
     // todo: fix here.
     return {
         ...data,
-        owner: companyParser(data.owner),
+        owner: null,
         user: null,
         name: data.user?.name,
         items: Object.keys(items).map(k => items[k]),
