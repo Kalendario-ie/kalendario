@@ -1,5 +1,4 @@
 import {CancelToken} from 'axios';
-import * as moment from 'moment';
 import {
     RoleAdminResourceModel,
     RoleGroupAdminResourceModel,

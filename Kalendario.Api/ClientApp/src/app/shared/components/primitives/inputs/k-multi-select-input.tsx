@@ -7,7 +7,7 @@ import { KCheckbox } from './k-checkbox';
 // @ts-ignore
 interface KMultiSelectProps extends KBaseInputProps {
     name: string;
-    value: number[];
+    value: string[];
     options: MultiSelectOption[];
 }
 
@@ -19,7 +19,7 @@ export const KMultiSelectInput: React.FunctionComponent<KMultiSelectProps> = (
         onChange,
         onBlur,
     }) => {
-    const values = new Set<number | string>(value); // TODO: String only.
+    const values = new Set<string>(value);
 
     const handleCheckboxChange = (option: MultiSelectOption) => (e: ChangeEvent<HTMLInputElement>) => {
         if (option.children && isOptionChecked(option)) {

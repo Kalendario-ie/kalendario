@@ -7,7 +7,7 @@ export interface KBaseInputProps extends React.InputHTMLAttributes<any> {
 
 
 export interface SelectOption {
-    id: number | string; //todo: fix here to string only.
+    id: string;
     name: string;
 }
 

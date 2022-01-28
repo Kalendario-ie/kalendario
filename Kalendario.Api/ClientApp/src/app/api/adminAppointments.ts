@@ -1,5 +1,4 @@
 import {CancelToken} from 'axios';
-import {Moment} from 'moment';
 import * as moment from 'moment';
 import {
     AppointmentAdminResourceModel,
@@ -7,7 +6,6 @@ import {
     GetAppointmentHistoryResult,
     UpsertAppointmentCommand
 } from 'src/app/api/api';
-import {ApiListResult} from 'src/app/api/common/api-results';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
 import {BaseModelRequest} from 'src/app/api/common/clients/base-django-api';
 import * as yup from 'yup';

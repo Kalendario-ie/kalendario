@@ -14,9 +14,9 @@ export const KTreeView: React.FunctionComponent<KTreeViewProps> = (
         items,
         renderComponent
     }) => {
-    const [openOptions, setOpenOptions] = useState(new Set<number | string>()); // todo: remove number
+    const [openOptions, setOpenOptions] = useState(new Set<string>());
 
-    const openCloseDrawer = (id: number | string) => {
+    const openCloseDrawer = (id: string) => {
         openOptions.has(id) ? openOptions.delete(id) : openOptions.add(id);
         setOpenOptions(new Set(openOptions));
     }

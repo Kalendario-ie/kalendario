@@ -1,5 +1,4 @@
 import {ApiBaseError} from 'src/app/api/common/api-errors';
-import {momentToIso} from 'src/app/shared/util/moment-helpers';
 import {ACTION_TYPES} from 'src/app/store/users/types';
 import {action} from 'typesafe-actions';
 

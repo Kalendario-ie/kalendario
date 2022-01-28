@@ -1,7 +1,6 @@
 import React from 'react';
 import {useHistory} from "react-router-dom";
-import {CompaniesClient, CompanySearchResourceModel} from 'src/app/api/api';
-import baseApiAxios from 'src/app/api/common/clients/base-api';
+import {CompanySearchResourceModel} from 'src/app/api/api';
 import {companyClient} from 'src/app/api/publicCompanyApi';
 import HomeView from 'src/app/modules/core/home/home-view';
 

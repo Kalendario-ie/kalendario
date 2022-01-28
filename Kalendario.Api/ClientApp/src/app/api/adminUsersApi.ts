@@ -1,10 +1,5 @@
 import {CancelToken} from 'axios';
-import {
-    ApplicationUserAdminResourceModel,
-    UpsertApplicationRoleGroupCommand,
-    UpsertUserCommand,
-    UsersClient
-} from 'src/app/api/api';
+import {ApplicationUserAdminResourceModel, UpsertUserCommand, UsersClient} from 'src/app/api/api';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
 import {BaseModelRequest, BaseQueryParams} from 'src/app/api/common/clients/base-django-api';
 import * as yup from 'yup';
