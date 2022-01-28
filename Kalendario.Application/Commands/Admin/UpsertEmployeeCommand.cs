@@ -10,6 +10,7 @@ using Kalendario.Application.Common.Exceptions;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.Common.Security;
 using Kalendario.Application.ResourceModels.Admin;
+using Kalendario.Application.Validators;
 using Kalendario.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -52,11 +53,8 @@ public class UpsertEmployeeCommand : BaseUpsertAdminCommand<EmployeeAdminResourc
         protected override async Task AdditionalValidation(UpsertEmployeeCommand request,
             CancellationToken cancellationToken)
         {
-            if (await ValidateSchedule(request))
-                throw new ValidationException(new List<ValidationFailure>()
-                {
-                    new(nameof(request.ScheduleId), "Schedule does not exist")
-                });
+            if (request.ScheduleId.HasValue)
+                await ValidationUtils.ThrowIfNotExist<Schedule>(request.ScheduleId.Value, Context, CurrentUserManager);
 
             var services = await Context.Services
                 .Where(s => request.Services.Contains(s.Id) && s.AccountId == CurrentUserManager.CurrentUserAccountId)
@@ -70,16 +68,6 @@ public class UpsertEmployeeCommand : BaseUpsertAdminCommand<EmployeeAdminResourc
                     new(nameof(request.Services), "One or more services do not exist")
                 });
             }
-        }
-
-        private async Task<bool> ValidateSchedule(UpsertEmployeeCommand request)
-        {
-            if (request.ScheduleId == null)
-                return false;
-
-            var schedule = await Context.Schedules.FindAsync(request.ScheduleId);
-
-            return schedule == null || !schedule.AccountId.Equals(CurrentUserManager.CurrentUserAccountId);
         }
     }
 }

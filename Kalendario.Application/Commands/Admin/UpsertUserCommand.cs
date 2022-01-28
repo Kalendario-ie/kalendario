@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using FluentValidation.Results;
 using Kalendario.Application.Authorization;
 using Kalendario.Application.Common.Exceptions;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.Common.Security;
 using Kalendario.Application.ResourceModels.Admin;
+using Kalendario.Application.Validators;
+using Kalendario.Core.Entities;
 using Kalendario.Core.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -48,9 +48,14 @@ public class UpsertUserCommand : IKalendarioProtectedCommand<ApplicationUserAdmi
         public async Task<ApplicationUserAdminResourceModel> Handle(UpsertUserCommand request,
             CancellationToken cancellationToken)
         {
-            await ThrowIfInvalidRoleGroup(request);
-            await ThrowIfInvalidEmployeeId(request);
-            
+            if (request.RoleGroupId.HasValue)
+                await ValidationUtils.ThrowIfNotExist<ApplicationRoleGroup>(request.RoleGroupId.Value, _context,
+                    _currentUserManager);
+
+            if (request.EmployeeId.HasValue)
+                await ValidationUtils.ThrowIfNotExist<Employee>(request.EmployeeId.Value, _context,
+                    _currentUserManager);
+
             if (!string.IsNullOrWhiteSpace(request.Id))
             {
                 var domain = await _userManager.FindByIdAsync(request.Id);
@@ -75,35 +80,6 @@ public class UpsertUserCommand : IKalendarioProtectedCommand<ApplicationUserAdmi
 
             return _mapper.Map<ApplicationUserAdminResourceModel>(newUser);
         }
-
-        private async Task ThrowIfInvalidRoleGroup(UpsertUserCommand request)
-        {
-            if (!request.RoleGroupId.HasValue)
-                return;
-
-            var roleGroup = await _context.RoleGroups.FindAsync(request.RoleGroupId.Value);
-
-            if (roleGroup == null || !roleGroup.AccountId.Equals(_currentUserManager.CurrentUserAccountId))
-                throw new ValidationException(new List<ValidationFailure>()
-                {
-                    new(nameof(request.RoleGroupId), "RoleGroup does not exist")
-                });
-        }
-        
-        private async Task ThrowIfInvalidEmployeeId(UpsertUserCommand request)
-        {
-            if (!request.EmployeeId.HasValue)
-                return;
-
-            var employee = await _context.Employees.FindAsync(request.EmployeeId.Value);
-
-            if (employee == null || !employee.AccountId.Equals(_currentUserManager.CurrentUserAccountId))
-                throw new ValidationException(new List<ValidationFailure>()
-                {
-                    new(nameof(request.EmployeeId), "Employee does not exist")
-                });
-        }
-
 
         private void UpdateDomain(ApplicationUser domain, UpsertUserCommand request)
         {

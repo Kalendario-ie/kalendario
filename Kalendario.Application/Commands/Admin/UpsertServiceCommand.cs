@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using FluentValidation.Results;
 using Kalendario.Application.Commands.Admin.Common;
-using Kalendario.Application.Common.Exceptions;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.Common.Security;
 using Kalendario.Application.ResourceModels.Admin;
+using Kalendario.Application.Validators;
 using Kalendario.Core.Entities;
 
 namespace Kalendario.Application.Commands.Admin;
@@ -48,12 +46,8 @@ public class UpsertServiceCommand : BaseUpsertAdminCommand<ServiceAdminResourceM
         protected override async Task AdditionalValidation(UpsertServiceCommand request,
             CancellationToken cancellationToken)
         {
-            var serviceCategory = await Context.ServiceCategories.FindAsync(request.ServiceCategoryId);
-            if (serviceCategory == null || serviceCategory.AccountId != CurrentUserManager.CurrentUserAccountId)
-                throw new ValidationException(new List<ValidationFailure>()
-                {
-                    new(nameof(request.ServiceCategoryId), "Service Category does not exist")
-                });
+            if (request.ServiceCategoryId.HasValue)
+                await ValidationUtils.ThrowIfNotExist<ServiceCategory>(request.ServiceCategoryId.Value, Context, CurrentUserManager);
         }
     }
 }
