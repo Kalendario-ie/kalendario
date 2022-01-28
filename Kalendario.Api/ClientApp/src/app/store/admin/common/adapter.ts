@@ -169,11 +169,10 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
 
     function* fetchEntities(action: { type: string, payload: QueryActionPayload<TGetQueryParams> }) {
         try {
-            const result: ApiListResult<TEntity> = yield call(client.get, action.payload?.query);
+            const result: ApiListResult<TEntity> = yield call([client, client.get], action.payload?.query);
             yield put(slice.actions.upsertMany(result.entities));
             yield put(slice.actions.setInitialized(true));
         } catch (error) {
-            console.log(error);
             yield put(slice.actions.setApiError(error));
             yield put(slice.actions.setInitialized(false));
         }
@@ -194,7 +193,7 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         yield put(slice.actions.setIsLoading(true));
         yield put(slice.actions.removeAll([]));
         try {
-            const result: ApiListResult<TEntity> = yield call(client.get, action.payload?.query);
+            const result: ApiListResult<TEntity> = yield call([client, client.get], action.payload?.query);
             yield put(slice.actions.setAll(result.entities));
         } catch (error) {
             yield put(slice.actions.setApiError(error));
@@ -205,7 +204,7 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
     function* createEntity(action: { type: string, payload: CreateActionPayload<TUpsertCommand> }) {
         try {
             yield put(slice.actions.setIsSubmitting(true));
-            const entity: TEntity = yield call(client.post, action.payload.command);
+            const entity: TEntity = yield call([client, client.post], action.payload.command);
             yield put(slice.actions.upsertOne(entity));
             yield put(slice.actions.setApiError(null));
             yield put(slice.actions.setEditMode(false));
@@ -219,7 +218,7 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
     function* patchEntity(action: { type: string, payload: PatchActionPayload<TUpsertCommand> }) {
         try {
             yield put(slice.actions.setIsSubmitting(true));
-            const entity: TEntity = yield call(client.put, action.payload.id, action.payload.command);
+            const entity: TEntity = yield call([client, client.put], action.payload.id, action.payload.command);
             yield put(slice.actions.upsertOne(entity));
             yield put(slice.actions.setApiError(null));
             yield put(slice.actions.setEditMode(false));

@@ -3,6 +3,7 @@ import {EmployeeAdminResourceModel, UpsertAppointmentCommand} from 'src/app/api/
 import CreateAppointmentButtons from 'src/app/modules/admin/appointments/employee-panel/create-appointment-buttons';
 import {useSelectPanelEmployees} from 'src/app/modules/admin/appointments/employee-panel/hooks';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
+import AvatarImg from 'src/app/shared/components/primitives/avatar-img';
 import KFiller from 'src/app/shared/components/primitives/k-filler';
 import {useAppSelector} from 'src/app/store';
 import {adminDashboardSelectors} from 'src/app/store/admin/dashboard';
@@ -23,7 +24,7 @@ const EmployeePanelHeader: React.FunctionComponent<EmployeePanelHeaderProps> = (
     return (
         <KFlexColumn className={`${styles.panelItem} py-3`} align={'center'} justify={'center'}>
             {employee.name}
-            {/*<AvatarImg className="m-1" size={4} key={employee.id} src={employee.photoUrl}/>*/}
+            <AvatarImg className="m-1" size={4} key={employee.id} src={employee.photoUrl || ''}/>
             <KFlexRow>
                 <CreateAppointmentButtons employee={employee}
                                           currentDate={currentDate}

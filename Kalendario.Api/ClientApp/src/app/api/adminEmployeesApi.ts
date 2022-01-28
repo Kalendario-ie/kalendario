@@ -6,7 +6,11 @@ import * as yup from 'yup';
 
 const client = new EmployeesClient('', baseApiAxios);
 
-export const adminEmployeeClient: BaseModelRequest<EmployeeAdminResourceModel, UpsertEmployeeCommand, BaseQueryParams> = {
+export interface AdminEmployeesApi extends BaseModelRequest<EmployeeAdminResourceModel, UpsertEmployeeCommand, BaseQueryParams> {
+    employeesUploadFile(id: string, body: Blob | undefined , cancelToken?: CancelToken | undefined): Promise<EmployeeAdminResourceModel>;
+}
+
+export const adminEmployeeClient: AdminEmployeesApi = {
     get(params) {
         return client.employeesGet(params?.search, params?.start, params?.length, params?.cancelToken);
     },
@@ -16,8 +20,11 @@ export const adminEmployeeClient: BaseModelRequest<EmployeeAdminResourceModel, U
     put(id: string, command: UpsertEmployeeCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.employeesUpdate(id, command, cancelToken);
     },
-    delete(id: string , cancelToken?: CancelToken | undefined) {
-        return client.employeesDelete(id, cancelToken)
+    delete(id: string, cancelToken?: CancelToken | undefined) {
+        return client.employeesDelete(id, cancelToken);
+    },
+    employeesUploadFile(id: string, data: Blob | undefined, cancelToken?: CancelToken | undefined) {
+        return client.employeesUploadFile(id, {fileName: '', data}, cancelToken);
     }
 }
 

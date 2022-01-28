@@ -1,5 +1,6 @@
 ﻿using FluentValidation.AspNetCore;
 using Kalendario.Api.Filters;
+using Kalendario.Api.Services;
 using Kalendario.Application;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Infrastructure;
@@ -58,6 +59,8 @@ public class Startup
                 Example = new OpenApiString("00:00:00")
             });
         });
+
+        services.AddScoped<IImageUploaderService, ImageUploaderService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

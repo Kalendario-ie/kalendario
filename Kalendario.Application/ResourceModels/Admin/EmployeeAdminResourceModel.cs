@@ -18,6 +18,8 @@ public class EmployeeAdminResourceModel : IMapFrom<Employee>
 
     public string PhoneNumber { get; set; }
 
+    public string PhotoUrl { get; set; }
+
     public Guid? ScheduleId { get; set; }
 
     public List<Guid> Services { get; set; }

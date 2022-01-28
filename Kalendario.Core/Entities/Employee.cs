@@ -12,6 +12,8 @@ namespace Kalendario.Core.Entities
 
         public string PhoneNumber { get; set; }
 
+        public string PhotoUrl { get; set; }
+
         public Guid? ScheduleId { get; set; }
 
         public Schedule Schedule { get; set; }
