@@ -20,3 +20,11 @@ export function momentIsToday(date: Moment): boolean {
 export function momentToday(): Moment {
     return moment();
 }
+
+export function addHours(date: Moment, time: string): string {
+    const momentTime = moment.utc(time, 'HH:mm')
+    return date.clone()
+        .add(momentTime.hour(), 'hour')
+        .add(momentTime.minutes(), 'minutes')
+        .toISOString();
+}

@@ -8,7 +8,25 @@ import {BaseActions, BaseSelectors, CommandAndBaseActions} from 'src/app/store/a
 export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     baseSelectors: BaseSelectors<TEntity>,
     baseActions: CommandAndBaseActions<TUpsertCommand>,
-    EditContainer: React.FunctionComponent<AdminEditContainerProps<TUpsertCommand>>
+    editContainer: React.FunctionComponent<AdminEditContainerProps<TUpsertCommand>>
+): [(command: TUpsertCommand, id?: string | undefined) => void, JSX.Element, TEntity | undefined] {
+    const dispatch = useAppDispatch();
+    const handleSubmit = (command: TUpsertCommand, id: string | undefined): void => {
+        if (!id) {
+            dispatch(baseActions.createEntity({command}));
+        } else {
+            dispatch(baseActions.patchEntity({id, command}));
+        }
+    }
+
+    return useEditModal2(baseSelectors, baseActions, editContainer, handleSubmit);
+}
+
+export function useEditModal2<TEntity extends IReadModel, TUpsertCommand>(
+    baseSelectors: BaseSelectors<TEntity>,
+    baseActions: BaseActions,
+    EditContainer: React.FunctionComponent<AdminEditContainerProps<TUpsertCommand>>,
+    handleSubmit: (command: TUpsertCommand, id: string | undefined) => void
 ): [(command: TUpsertCommand, id?: string | undefined) => void, JSX.Element, TEntity | undefined] {
     const [selectedEntityId, setSelectedEntityId] = useState<string | undefined>();
     const [selectedEntity, setSelectedEntity] = useState<TUpsertCommand | null>(null);
@@ -21,14 +39,6 @@ export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     const handleEditCancel = () => {
         setSelectedEntity(null);
         dispatch(baseActions.setEditMode(false));
-    }
-
-    const handleSubmit = (command: TUpsertCommand, id: string | undefined): void => {
-        if (!id) {
-            dispatch(baseActions.createEntity({command}));
-        } else {
-            dispatch(baseActions.patchEntity({id, command}));
-        }
     }
 
     const openModal = React.useMemo(() =>

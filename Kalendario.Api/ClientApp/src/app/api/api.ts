@@ -113,6 +113,16 @@ export interface IAppointmentsClient {
      */
     appointmentsDelete(id: string): Promise<void>;
     /**
+     * @param body (optional)
+     * @return Success
+     */
+    appointmentsCreateTimeLock(body: UpsertTimeLockCommand | undefined): Promise<AppointmentAdminResourceModel>;
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    appointmentsUpdateTimeLock(id: string, body: UpsertTimeLockCommand | undefined): Promise<AppointmentAdminResourceModel>;
+    /**
      * @return Success
      */
     appointmentsHistory(id: string): Promise<GetAppointmentHistoryResult>;
@@ -365,6 +375,121 @@ export class AppointmentsClient implements IAppointmentsClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<void>(<any>null);
+    }
+
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    appointmentsCreateTimeLock(body: UpsertTimeLockCommand | undefined , cancelToken?: CancelToken | undefined): Promise<AppointmentAdminResourceModel> {
+        let url_ = this.baseUrl + "/api/Appointments/lock";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processAppointmentsCreateTimeLock(_response);
+        });
+    }
+
+    protected processAppointmentsCreateTimeLock(response: AxiosResponse): Promise<AppointmentAdminResourceModel> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<AppointmentAdminResourceModel>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<AppointmentAdminResourceModel>(<any>null);
+    }
+
+    /**
+     * @param body (optional)
+     * @return Success
+     */
+    appointmentsUpdateTimeLock(id: string, body: UpsertTimeLockCommand | undefined , cancelToken?: CancelToken | undefined): Promise<AppointmentAdminResourceModel> {
+        let url_ = this.baseUrl + "/api/Appointments/lock/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "PUT",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processAppointmentsUpdateTimeLock(_response);
+        });
+    }
+
+    protected processAppointmentsUpdateTimeLock(response: AxiosResponse): Promise<AppointmentAdminResourceModel> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<AppointmentAdminResourceModel>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<AppointmentAdminResourceModel>(<any>null);
     }
 
     /**
@@ -3140,6 +3265,14 @@ export interface UpsertServiceCommand {
     price: number;
     duration: string;
     serviceCategoryId: string | undefined;
+}
+
+export interface UpsertTimeLockCommand {
+    start: moment.Moment;
+    end: moment.Moment;
+    employeeId: string;
+    internalNotes: string | undefined;
+    ignoreTimeClashes: boolean;
 }
 
 export interface UpsertUserCommand {

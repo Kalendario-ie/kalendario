@@ -28,6 +28,21 @@ public class AppointmentsController : ApiControllerBase
         command.Id = id;
         return await Mediator.Send(command);
     }
+    
+    
+    [HttpPost("lock")]
+    public async Task<ActionResult<AppointmentAdminResourceModel>> CreateTimeLock([FromBody] UpsertTimeLockCommand command)
+    {
+        return await Mediator.Send(command);
+    }
+
+    [HttpPut("lock/{id}")]
+    public async Task<ActionResult<AppointmentAdminResourceModel>> UpdateTimeLock(Guid id,
+        [FromBody] UpsertTimeLockCommand command)
+    {
+        command.Id = id;
+        return await Mediator.Send(command);
+    }
 
     [HttpGet("history/{id}")]
     public async Task<ActionResult<GetAppointmentHistoryResult>> History(Guid id)

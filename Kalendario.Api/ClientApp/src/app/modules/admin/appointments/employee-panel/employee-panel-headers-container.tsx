@@ -1,5 +1,5 @@
 import React from 'react';
-import {EmployeeAdminResourceModel, UpsertAppointmentCommand} from 'src/app/api/api';
+import {EmployeeAdminResourceModel, UpsertAppointmentCommand, UpsertTimeLockCommand} from 'src/app/api/api';
 import CreateAppointmentButtons from 'src/app/modules/admin/appointments/employee-panel/create-appointment-buttons';
 import {useSelectPanelEmployees} from 'src/app/modules/admin/appointments/employee-panel/hooks';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
@@ -12,12 +12,14 @@ import styles from './employee-panel.module.scss';
 interface EmployeePanelHeaderProps {
     employee: EmployeeAdminResourceModel;
     onCreateClick: (entity: UpsertAppointmentCommand) => void;
+    onCreateLockClick: (entity: UpsertTimeLockCommand) => void;
 }
 
 const EmployeePanelHeader: React.FunctionComponent<EmployeePanelHeaderProps> = (
     {
         employee,
-        onCreateClick
+        onCreateClick,
+        onCreateLockClick
     }) => {
     const currentDate = useAppSelector(adminDashboardSelectors.selectCurrentDate);
 
@@ -29,6 +31,7 @@ const EmployeePanelHeader: React.FunctionComponent<EmployeePanelHeaderProps> = (
                 <CreateAppointmentButtons employee={employee}
                                           currentDate={currentDate}
                                           onCreateClick={onCreateClick}
+                                          onCreateLockClick={onCreateLockClick}
                                           hour={0}
                                           minute={0}/>
             </KFlexRow>
@@ -38,11 +41,13 @@ const EmployeePanelHeader: React.FunctionComponent<EmployeePanelHeaderProps> = (
 
 interface EmployeePanelHeadersContainerProps {
     onCreateClick: (entity: UpsertAppointmentCommand) => void;
+    onCreateLockClick: (entity: UpsertTimeLockCommand) => void;
 }
 
 export const EmployeePanelHeadersContainer: React.FunctionComponent<EmployeePanelHeadersContainerProps> = (
     {
-        onCreateClick
+        onCreateClick,
+        onCreateLockClick
     }) => {
     const employees = useSelectPanelEmployees();
 
@@ -51,8 +56,10 @@ export const EmployeePanelHeadersContainer: React.FunctionComponent<EmployeePane
             <KFiller className={`sticky-top-left bg-white-gray ${styles.borderRight}`}>
                 <div className={styles.sideItem}/>
             </KFiller>
-            {employees.map(employee =>
-                <EmployeePanelHeader key={employee.id} employee={employee} onCreateClick={onCreateClick}/>
+            {employees.map(employee => <EmployeePanelHeader key={employee.id}
+                                                            employee={employee}
+                                                            onCreateClick={onCreateClick}
+                                                            onCreateLockClick={onCreateLockClick}/>
             )}
         </KFlexRow>
     )

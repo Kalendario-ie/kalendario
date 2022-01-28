@@ -1,6 +1,6 @@
 import React from 'react';
 import {getFramesForDate, isAvailable} from 'src/app/api/adminSchedulesApi';
-import {EmployeeAdminResourceModel, UpsertAppointmentCommand} from 'src/app/api/api';
+import {EmployeeAdminResourceModel, UpsertAppointmentCommand, UpsertTimeLockCommand} from 'src/app/api/api';
 import {useSelectPanelEmployees} from 'src/app/modules/admin/appointments/employee-panel/hooks';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import KShowOnHoverContainer from 'src/app/shared/components/primitives/containers/k-show-on-hover-container';
@@ -39,12 +39,14 @@ const PanelHours: React.FunctionComponent = () => {
 interface EmployeePanelProps {
     employee: EmployeeAdminResourceModel;
     onCreateClick: (entity: UpsertAppointmentCommand) => void;
+    onCreateLockClick: (entity: UpsertTimeLockCommand) => void;
 }
 
 const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
     {
         employee,
-        onCreateClick
+        onCreateClick,
+        onCreateLockClick
     }) => {
     const currentDate = useAppSelector(adminDashboardSelectors.selectCurrentDate);
     const schedule = useAppSelector(state => scheduleSelectors.selectById(state, employee.scheduleId || ''));
@@ -68,6 +70,7 @@ const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
                     >
                         <CreateAppointmentButtons employee={employee}
                                                   onCreateClick={onCreateClick}
+                                                  onCreateLockClick={onCreateLockClick}
                                                   currentDate={currentDate}
                                                   hour={hour}
                                                   minute={0}/>
@@ -77,6 +80,7 @@ const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
                     >
                         <CreateAppointmentButtons employee={employee}
                                                   onCreateClick={onCreateClick}
+                                                  onCreateLockClick={onCreateLockClick}
                                                   currentDate={currentDate}
                                                   hour={hour}
                                                   minute={30}/>
@@ -88,10 +92,11 @@ const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
 }
 
 export interface EmployeePanelsBodyContainerProps {
-    onSelect: (command: UpsertAppointmentCommand, id?: string) => void
+    onSelect: (command: UpsertAppointmentCommand, id?: string) => void;
+    onLockClick: (entity: UpsertTimeLockCommand) => void;
 }
 
-export const EmployeePanelsBodyContainer: React.FunctionComponent<EmployeePanelsBodyContainerProps> = ({onSelect}) => {
+export const EmployeePanelsBodyContainer: React.FunctionComponent<EmployeePanelsBodyContainerProps> = ({onSelect, onLockClick}) => {
     const employees = useSelectPanelEmployees();
     return (
         <KFlexRow>
@@ -99,7 +104,7 @@ export const EmployeePanelsBodyContainer: React.FunctionComponent<EmployeePanels
             {employees.map(employee =>
                 <React.Fragment key={employee.id}>
                     <EventsContainer onSelect={onSelect} employee={employee}/>
-                    <EmployeePanelBody onCreateClick={onSelect} employee={employee}/>
+                    <EmployeePanelBody onCreateClick={onSelect} onCreateLockClick={onLockClick} employee={employee}/>
                 </React.Fragment>
             )}
         </KFlexRow>

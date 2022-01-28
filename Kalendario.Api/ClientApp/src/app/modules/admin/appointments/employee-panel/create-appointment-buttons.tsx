@@ -1,12 +1,13 @@
 import {Moment} from 'moment';
 import React from 'react';
-import {upsertAppointmentCommandParser} from 'src/app/api/adminAppointments';
-import {EmployeeAdminResourceModel, UpsertAppointmentCommand} from 'src/app/api/api';
+import {upsertAppointmentCommandParser, upsertTimeLockCommandParser} from 'src/app/api/adminAppointments';
+import {EmployeeAdminResourceModel, UpsertAppointmentCommand, UpsertTimeLockCommand} from 'src/app/api/api';
 import {KIconButton} from 'src/app/shared/components/primitives/buttons';
 
 interface CreateAppointmentButtonsProps {
     employee: EmployeeAdminResourceModel;
     onCreateClick: (entity: UpsertAppointmentCommand) => void;
+    onCreateLockClick: (entity: UpsertTimeLockCommand) => void;
     currentDate: Moment;
     hour: number;
     minute: number;
@@ -16,6 +17,7 @@ const CreateAppointmentButtons: React.FunctionComponent<CreateAppointmentButtons
     {
         employee,
         onCreateClick,
+        onCreateLockClick,
         currentDate,
         hour,
         minute
@@ -23,16 +25,18 @@ const CreateAppointmentButtons: React.FunctionComponent<CreateAppointmentButtons
     const employeeId = employee.id;
     const selectedTime = () => currentDate.clone().add(hour, 'hour').add(minute, 'minute');
     const handleAddClick = () => onCreateClick({
-        ...upsertAppointmentCommandParser(null)
-        , employeeId, start: selectedTime(), end: selectedTime()
+        ...upsertAppointmentCommandParser(null),
+        employeeId, start: selectedTime(), end: selectedTime()
     });
-    // const handleLockClick = () =>
-    //     onCreateClick(blankEmployeeEvent(employeeId, selectedTime().add(minute, 'minute')))();
+    const handleLockClick = () => onCreateLockClick({
+        ...upsertTimeLockCommandParser(null),
+        employeeId, start: selectedTime(), end: selectedTime()
+    });
 
     return (
         <>
             <KIconButton color="primary" icon={'plus'} onClick={handleAddClick}/>
-            {/*<KIconButton color="accent" icon={'lock'} onClick={handleLockClick}/>*/}
+            <KIconButton color="accent" icon={'lock'} onClick={handleLockClick}/>
         </>
     )
 }
