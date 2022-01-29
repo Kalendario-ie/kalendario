@@ -1,12 +1,12 @@
 import React from 'react';
-import {upsertCustomerCommandParser} from 'src/app/api/adminCustomerApi';
+import {adminCustomerClient, upsertCustomerCommandParser} from 'src/app/api/adminCustomerApi';
 import {PermissionModel} from 'src/app/api/auth';
 import CustomerUpsertForm from 'src/app/modules/admin/customers/customer-upsert-form';
 import CustomersTable from 'src/app/modules/admin/customers/customers-table';
 import {CUSTOMER_URLS} from 'src/app/modules/admin/customers/customers-urls';
 import AdminListEditContainer from 'src/app/shared/admin/admin-list-edit-container';
 import {useAppDispatch} from 'src/app/store';
-import {customerActions, customerSelectors} from 'src/app/store/admin/customers';
+import {customerActions, customerSelectors, customerSlice} from 'src/app/store/admin/customers';
 
 
 const CustomersContainer: React.FunctionComponent = () => {
@@ -20,6 +20,9 @@ const CustomersContainer: React.FunctionComponent = () => {
     return (
         <AdminListEditContainer baseSelectors={customerSelectors}
                                 baseActions={customerActions}
+                                actions={customerSlice.actions}
+                                onCreate={adminCustomerClient.post}
+                                onUpdate={adminCustomerClient.put}
                                 filter={filter}
                                 parser={upsertCustomerCommandParser}
                                 modelType={PermissionModel.customer}

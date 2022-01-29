@@ -8,12 +8,14 @@ const {
     adapter,
     reducer,
     sagas,
-    selectors
+    selectors,
+    slice
 } = kCreateBaseStore(storeName, adminUsersClient, (state) => state.adminUsers);
 
 export {reducer as userReducer}
 export {actions as userActions}
 export {adapter as userAdapter}
 export {selectors as userSelectors}
+export {slice as userSlice}
 export {sagas as adminUserSaga}
 

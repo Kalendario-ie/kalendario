@@ -1,11 +1,11 @@
 import React from 'react';
-import {upsertUserRequestParser} from 'src/app/api/adminUsersApi';
+import {adminUsersClient, upsertUserRequestParser} from 'src/app/api/adminUsersApi';
 import {PermissionModel} from 'src/app/api/auth';
 import UsersTable from 'src/app/modules/admin/users/users-table';
 import UsersUpsertForm from 'src/app/modules/admin/users/users-upsert-form';
 import AdminListEditContainer from 'src/app/shared/admin/admin-list-edit-container';
 import {useAppDispatch} from 'src/app/store';
-import {userActions, userSelectors} from 'src/app/store/admin/users';
+import {userActions, userSelectors, userSlice} from 'src/app/store/admin/users';
 
 
 const UsersContainer: React.FunctionComponent = () => {
@@ -18,6 +18,9 @@ const UsersContainer: React.FunctionComponent = () => {
     return (
             <AdminListEditContainer baseSelectors={userSelectors}
                                     baseActions={userActions}
+                                    actions={userSlice.actions}
+                                    onCreate={adminUsersClient.post}
+                                    onUpdate={adminUsersClient.put}
                                     filter={filter}
                                     parser={upsertUserRequestParser}
                                     modelType={PermissionModel.user}

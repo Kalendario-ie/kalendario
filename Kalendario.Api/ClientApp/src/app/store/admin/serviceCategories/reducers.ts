@@ -10,12 +10,14 @@ const {
     adapter,
     reducer,
     sagas,
-    selectors
+    selectors,
+    slice,
 } = kCreateBaseStore<ServiceCategoryAdminResourceModel, UpsertServiceCategoryCommand, BaseQueryParams>(storeName, adminServiceCategoryClient, (state) => state.adminServiceCategories);
 
 export {reducer as serviceCategoryReducer}
 export {actions as serviceCategoryActions}
 export {adapter as serviceCategoryAdapter}
 export {selectors as serviceCategorySelectors}
+export {slice as serviceCategorySlice}
 export {sagas as adminServiceCategorySaga}
 

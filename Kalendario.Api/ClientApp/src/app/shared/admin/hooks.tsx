@@ -1,52 +1,61 @@
+import {CaseReducers} from '@reduxjs/toolkit/src/createReducer';
+import {CaseReducerActions, SliceCaseReducers} from '@reduxjs/toolkit/src/createSlice';
 import React, {useEffect, useState} from 'react';
+import {ApiValidationError} from 'src/app/api/common/api-errors';
 import {IReadModel} from 'src/app/api/common/models';
 import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import KModal from 'src/app/shared/components/modal/k-modal';
 import {useAppDispatch, useAppSelector} from 'src/app/store';
-import {BaseActions, BaseSelectors, CommandAndBaseActions} from 'src/app/store/admin/common/adapter';
+import {BaseActions, BaseSelectors} from 'src/app/store/admin/common/adapter';
 
 export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     baseSelectors: BaseSelectors<TEntity>,
-    baseActions: CommandAndBaseActions<TUpsertCommand>,
-    editContainer: React.FunctionComponent<AdminEditContainerProps<TUpsertCommand>>
-): [(command: TUpsertCommand, id?: string | undefined) => void, JSX.Element, TEntity | undefined] {
-    const dispatch = useAppDispatch();
-    const handleSubmit = (command: TUpsertCommand, id: string | undefined): void => {
-        if (!id) {
-            dispatch(baseActions.createEntity({command}));
-        } else {
-            dispatch(baseActions.patchEntity({id, command}));
-        }
-    }
-
-    return useEditModal2(baseSelectors, baseActions, editContainer, handleSubmit);
-}
-
-export function useEditModal2<TEntity extends IReadModel, TUpsertCommand>(
-    baseSelectors: BaseSelectors<TEntity>,
-    baseActions: BaseActions,
+    actions: CaseReducerActions<SliceCaseReducers<any>>,
     EditContainer: React.FunctionComponent<AdminEditContainerProps<TUpsertCommand>>,
-    handleSubmit: (command: TUpsertCommand, id: string | undefined) => void
+    onCreate: (command: TUpsertCommand) => Promise<TEntity>,
+    onUpdate: (id: string, command: TUpsertCommand) => Promise<TEntity>
 ): [(command: TUpsertCommand, id?: string | undefined) => void, JSX.Element, TEntity | undefined] {
     const [selectedEntityId, setSelectedEntityId] = useState<string | undefined>();
     const [selectedEntity, setSelectedEntity] = useState<TUpsertCommand | null>(null);
-    const apiError = useAppSelector(baseSelectors.selectApiError);
-    const editMode = useAppSelector(baseSelectors.selectEditMode);
-    const createdEntity = useAppSelector(baseSelectors.selectCreatedEntity);
-    const isSubmitting = useAppSelector(baseSelectors.selectIsSubmitting);
+    const [createdEntity, setCreatedEntity] = useState<TEntity | undefined>();
+    const [apiError, setApiError] = useState<ApiValidationError | null>(null);
+    const [editMode, setEditMode] = useState(false);
     const dispatch = useAppDispatch();
+
+    const isSubmitting = useAppSelector(baseSelectors.selectIsSubmitting);
 
     const handleEditCancel = () => {
         setSelectedEntity(null);
-        dispatch(baseActions.setEditMode(false));
+        setEditMode(false);
     }
 
     const openModal = React.useMemo(() =>
         (entity: TUpsertCommand, id?: string | undefined) => {
             setSelectedEntity(entity);
             setSelectedEntityId(id);
-            dispatch(baseActions.setEditMode(true));
-        }, [baseActions, dispatch])
+            setEditMode(true);
+            setCreatedEntity(undefined);
+
+        }, [])
+
+    const handleSubmit = (command: TUpsertCommand, id: string | undefined): void => {
+        setApiError(null);
+
+        if (!id) {
+            onCreate(command)
+                .then(entity => {
+                    dispatch(actions.upsertOne(entity));
+                    setEditMode(false);
+                    setCreatedEntity(entity);
+                }).catch(error => setApiError(error));
+        } else {
+            onUpdate(id, command)
+                .then(entity => {
+                    dispatch(actions.upsertOne(entity));
+                    setEditMode(false);
+                }).catch(error => setApiError(error));
+        }
+    }
 
     const modal = <KModal body={<EditContainer id={selectedEntityId}
                                                command={selectedEntity!}

@@ -8,12 +8,14 @@ const {
     adapter,
     reducer,
     sagas,
-    selectors
+    selectors,
+    slice
 } = kCreateBaseStore(storeName, adminScheduleClient, (state) => state.adminSchedules);
 
 export {reducer as scheduleReducer}
 export {actions as scheduleActions}
 export {adapter as scheduleAdapter}
 export {selectors as scheduleSelectors}
+export {slice as scheduleSlice}
 export {sagas as adminScheduleSaga}
 

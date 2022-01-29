@@ -18,7 +18,7 @@ interface FormikCustomerInput {
 
 export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> = ({initialCustomer}) => {
     const [customer, setCustomer] = useState<CustomerAdminResourceModel | undefined>(initialCustomer);
-    const [openModal, modal, createdCustomer] = useEditModal(customerSelectors, customerActions, CustomerUpsertForm);
+    const [openModal, modal, createdCustomer] = useEditModal(customerSelectors, customerSlice.actions, CustomerUpsertForm, adminCustomerClient.post, adminCustomerClient.put);
     const dispatch = useAppDispatch();
     const formik = useFormikContext();
     const {setValue} = formik.getFieldHelpers('customerId');

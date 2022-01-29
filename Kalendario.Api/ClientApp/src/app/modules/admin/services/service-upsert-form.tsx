@@ -1,5 +1,5 @@
 import React from 'react';
-import {upsertServiceCategoryCommandParser} from 'src/app/api/adminServiceCategoryApi';
+import {adminServiceCategoryClient, upsertServiceCategoryCommandParser} from 'src/app/api/adminServiceCategoryApi';
 import {upsertServiceCommandValidation} from 'src/app/api/adminServicesApi';
 import {UpsertServiceCommand} from 'src/app/api/api';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
@@ -9,7 +9,11 @@ import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
 import {KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import {useAppSelector} from 'src/app/store';
-import {serviceCategoryActions, serviceCategorySelectors} from 'src/app/store/admin/serviceCategories';
+import {
+    serviceCategoryActions,
+    serviceCategorySelectors,
+    serviceCategorySlice
+} from 'src/app/store/admin/serviceCategories';
 import ServiceCategoryUpsertForm from './service-category-upsert-form';
 
 const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertServiceCommand>> = (
@@ -22,7 +26,7 @@ const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertS
         onCancel
     }) => {
     const serviceCategories = useAppSelector(serviceCategorySelectors.selectAll)
-    const [openModal, modal] = useEditModal(serviceCategorySelectors, serviceCategoryActions, ServiceCategoryUpsertForm);
+    const [openModal, modal] = useEditModal(serviceCategorySelectors, serviceCategorySlice.actions, ServiceCategoryUpsertForm, adminServiceCategoryClient.post, adminServiceCategoryClient.put);
 
     const serviceCategory = (id: string) => upsertServiceCategoryCommandParser(serviceCategories.find(sc => sc.id === id) || null)
 

@@ -1,3 +1,4 @@
+import {CaseReducerActions, SliceCaseReducers} from '@reduxjs/toolkit/src/createSlice';
 import React, {useEffect} from 'react';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
 import {IReadModel} from 'src/app/api/common/models';
@@ -13,6 +14,7 @@ import AdminButton from './admin-button';
 interface AdminListEditContainerProps<TEntity, TUpsertCommand> {
     baseSelectors: BaseSelectors<TEntity>;
     baseActions: CommandAndBaseActions<TUpsertCommand>;
+    actions: CaseReducerActions<SliceCaseReducers<any>>;
     modelType: PermissionModel;
     filter?: (value: string | undefined) => void;
     detailsUrl?: string;
@@ -20,12 +22,15 @@ interface AdminListEditContainerProps<TEntity, TUpsertCommand> {
     EditContainer: React.FunctionComponent<AdminEditContainerProps<TUpsertCommand>>;
     ListContainer: React.FunctionComponent<AdminTableContainerProps<TEntity>>;
     parser: (entity:  TEntity | null) => TUpsertCommand;
+    onCreate: (command: TUpsertCommand) => Promise<TEntity>;
+    onUpdate: (id: string, command: TUpsertCommand) => Promise<TEntity>;
 }
 
 function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
     {
         baseSelectors,
         baseActions,
+        actions,
         filter,
         detailsUrl,
         initializeStore = true,
@@ -33,10 +38,12 @@ function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
         EditContainer,
         ListContainer,
         parser,
+        onCreate,
+        onUpdate
     }: AdminListEditContainerProps<TEntity, TUpsertCommand>) {
     const dispatch = useAppDispatch();
     const entities = useAppSelector(baseSelectors.selectAll)
-    const [openModal, formModal] = useEditModal(baseSelectors, baseActions, EditContainer);
+    const [openModal, formModal] = useEditModal(baseSelectors, actions, EditContainer, onCreate, onUpdate);
     const history = useKHistory();
 
     useEffect(() => {

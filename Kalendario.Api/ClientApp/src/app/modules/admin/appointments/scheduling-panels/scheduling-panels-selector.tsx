@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {upsertSchedulingPanelCommandParser} from 'src/app/api/adminSchedulingPanels';
+import {adminSchedulingPanelsClient, upsertSchedulingPanelCommandParser} from 'src/app/api/adminSchedulingPanels';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
 import SchedulingPanelForm from 'src/app/modules/admin/appointments/scheduling-panels/scheduling-panel-form';
 import AdminButton from 'src/app/shared/admin/admin-button';
@@ -10,7 +10,7 @@ import {KTextButton} from 'src/app/shared/components/primitives/buttons';
 import {useKHistory, useQueryParams} from 'src/app/shared/util/router-extensions';
 import {useAppDispatch} from 'src/app/store';
 import {adminDashboardActions} from 'src/app/store/admin/dashboard';
-import {schedulingPanelActions, schedulingPanelSelectors} from 'src/app/store/admin/panels';
+import {schedulingPanelActions, schedulingPanelSelectors, schedulingPanelSlice} from 'src/app/store/admin/panels';
 
 
 const SchedulingPanelsSelector: React.FunctionComponent = () => {
@@ -18,7 +18,7 @@ const SchedulingPanelsSelector: React.FunctionComponent = () => {
     const schedulingPanels = useSelectAll(schedulingPanelSelectors, schedulingPanelActions);
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
     const [setDeleteId, confirmDeleteModal] = UseConfirmationModalWithDispatch(schedulingPanelActions.deleteEntity);
-    const [openModal, formModal] = useEditModal(schedulingPanelSelectors, schedulingPanelActions, SchedulingPanelForm);
+    const [openModal, formModal] = useEditModal(schedulingPanelSelectors, schedulingPanelSlice.actions, SchedulingPanelForm, adminSchedulingPanelsClient.post, adminSchedulingPanelsClient.put);
     const params = useQueryParams();
     const history = useKHistory();
 

@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, {useContext, useEffect, useState} from 'react';
-import {upsertAppointmentCommandParser} from 'src/app/api/adminAppointments';
+import {adminAppointmentClient, upsertAppointmentCommandParser} from 'src/app/api/adminAppointments';
 import {AppointmentAdminResourceModel, CustomerAdminResourceModel} from 'src/app/api/api';
 import {PermissionModel} from 'src/app/api/auth';
 import AppointmentUpsertForm from 'src/app/modules/admin/appointments/forms/appointment-upsert-form';
@@ -12,7 +12,7 @@ import {KSelectColumnFilter} from 'src/app/shared/components/tables/k-select-col
 import KTable from 'src/app/shared/components/tables/k-table';
 import {momentToIso} from 'src/app/shared/util/moment-helpers';
 import {useAppDispatch} from 'src/app/store';
-import {appointmentActions, appointmentSelectors} from 'src/app/store/admin/appointments';
+import {adminAppointmentSlice, appointmentActions, appointmentSelectors} from 'src/app/store/admin/appointments';
 import {employeeActions, employeeSelectors} from 'src/app/store/admin/employees';
 import {serviceActions, serviceSelectors} from 'src/app/store/admin/services';
 
@@ -97,8 +97,11 @@ const CustomerAppointments: React.FunctionComponent<CustomerAppointmentsProps> =
         <CustomerContext.Provider value={customer}>
             <AdminListEditContainer baseSelectors={appointmentSelectors}
                                     baseActions={appointmentActions}
+                                    actions={adminAppointmentSlice.actions}
                                     initializeStore={false}
                                     parser={upsertAppointmentCommandParser}
+                                    onCreate={adminAppointmentClient.post}
+                                    onUpdate={adminAppointmentClient.put}
                                     modelType={PermissionModel.appointment}
                                     EditContainer={AppointmentUpsertForm}
                                     ListContainer={CustomerAppointmentsTable}/>

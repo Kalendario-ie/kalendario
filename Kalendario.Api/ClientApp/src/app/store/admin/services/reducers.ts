@@ -10,7 +10,8 @@ const {
     adapter,
     reducer,
     sagas,
-    selectors
+    selectors,
+    slice
 } = kCreateBaseStore(storeName, adminServiceClient, (state) => state.adminServices);
 
 const selectServicesWithCategories = createSelector(
@@ -38,5 +39,6 @@ export const serviceSelectors = {
 export {reducer as serviceReducer}
 export {actions as serviceActions}
 export {adapter as serviceAdapter}
+export {slice as serviceSlice}
 export {sagas as adminServiceSaga}
 
