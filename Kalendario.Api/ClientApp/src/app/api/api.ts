@@ -3000,6 +3000,7 @@ export class WeatherForecastClient implements IWeatherForecastClient {
 
 export interface ApplicationUserAdminResourceModel {
     id: string;
+    readonly name: string;
     userName: string | undefined;
     email: string | undefined;
     roleGroupId: string | undefined;
@@ -3014,6 +3015,7 @@ export interface ApplicationUserAdminResourceModelGetAllResult {
 
 export interface AppointmentAdminResourceModel {
     id: string;
+    readonly name: string;
     customerId: string | undefined;
     customer: CustomerAdminResourceModel;
     employeeId: string | undefined;
@@ -3031,6 +3033,7 @@ export interface AppointmentHistoryAdminResourceModel {
     date: moment.Moment;
     entityState: string | undefined;
     id: string;
+    readonly name: string;
     customer: CustomerAdminResourceModel;
     employee: EmployeeAdminResourceModel;
     service: ServiceAdminResourceModel;

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Core.Entities;
 
@@ -7,6 +9,8 @@ namespace Kalendario.Application.ResourceModels.Admin;
 public class AppointmentAdminResourceModel : IMapFrom<Appointment>
 {
     public Guid Id { get; set; }
+
+    [Required] public string Name => $"{Start}_{End}";
 
     public Guid? CustomerId { get; set; }
     public CustomerAdminResourceModel Customer { get; set; }

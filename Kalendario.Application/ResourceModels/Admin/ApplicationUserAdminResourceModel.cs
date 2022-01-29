@@ -9,6 +9,8 @@ public class ApplicationUserAdminResourceModel : IMapFrom<ApplicationUser>
 {
     [Required] public string Id { get; set; }
 
+    [Required] public string Name => UserName;
+
     public string UserName { get; set; }
 
     public string Email { get; set; }
