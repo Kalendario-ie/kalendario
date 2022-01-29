@@ -199,6 +199,16 @@ public class Testing
 
         return await context.FindAsync<TEntity>(keyValues);
     }
+    
+    public static async Task<TEntity?> IgnoreQueryFiltersAndFindAsync<TEntity>(Guid id)
+        where TEntity : BaseEntity
+    {
+        using var scope = _scopeFactory.CreateScope();
+
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        return await context.Set<TEntity>().IgnoreQueryFilters().FirstOrDefaultAsync(entity => entity.Id == id);
+    }
 
     public static async Task<TEntity?> FirstOrDefaultAsync<TEntity>(Guid id,
         IEnumerable<Expression<Func<TEntity, object>>> navigationPropertyPaths)
