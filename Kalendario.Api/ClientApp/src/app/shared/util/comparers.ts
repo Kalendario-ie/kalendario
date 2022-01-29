@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {AppointmentAdminResourceModel} from 'src/app/api/api';
 import {IReadModel} from 'src/app/api/common/models';
 
@@ -8,5 +9,5 @@ export const compareByName = (a: IReadModel, b: IReadModel): number => {
 
 
 export const compareByStartDate = (a: AppointmentAdminResourceModel, b: AppointmentAdminResourceModel): number => {
-    return a.start.diff(b.start);
+    return moment.utc(a.start).diff(moment.utc(b.start));
 }

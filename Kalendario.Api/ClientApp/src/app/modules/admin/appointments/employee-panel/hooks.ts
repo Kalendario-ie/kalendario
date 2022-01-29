@@ -21,8 +21,8 @@ export function useReloadAppointmentsEffect() {
 
     useEffect(() => {
         const query: AppointmentsGetParams = {
-            fromDate: currentDate,
-            toDate: currentDate.clone().add(1, 'day'),
+            fromDate: currentDate.toISOString(),
+            toDate: currentDate.clone().add(1, 'day').toISOString(),
             employeeIds: selectedPanel?.employeeIds || [],
             customerId: undefined,
         };

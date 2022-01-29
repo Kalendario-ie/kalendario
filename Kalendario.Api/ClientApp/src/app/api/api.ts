@@ -9,8 +9,6 @@
 
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelToken } from 'axios';
 
-import * as moment from 'moment';
-
 export interface IAccountsClient {
     /**
      * @param body (optional)
@@ -97,7 +95,7 @@ export interface IAppointmentsClient {
      * @param employeeIds (optional)
      * @return Success
      */
-    appointmentsGet(fromDate: moment.Moment | undefined, toDate: moment.Moment | undefined, customerId: string | undefined, employeeIds: string[] | undefined): Promise<GetAppointmentsResult>;
+    appointmentsGet(fromDate: string | undefined, toDate: string | undefined, customerId: string | undefined, employeeIds: string[] | undefined): Promise<GetAppointmentsResult>;
     /**
      * @param body (optional)
      * @return Success
@@ -148,16 +146,16 @@ export class AppointmentsClient implements IAppointmentsClient {
      * @param employeeIds (optional)
      * @return Success
      */
-    appointmentsGet(fromDate: moment.Moment | undefined, toDate: moment.Moment | undefined, customerId: string | undefined, employeeIds: string[] | undefined , cancelToken?: CancelToken | undefined): Promise<GetAppointmentsResult> {
+    appointmentsGet(fromDate: string | undefined, toDate: string | undefined, customerId: string | undefined, employeeIds: string[] | undefined , cancelToken?: CancelToken | undefined): Promise<GetAppointmentsResult> {
         let url_ = this.baseUrl + "/api/Appointments?";
         if (fromDate === null)
             throw new Error("The parameter 'fromDate' cannot be null.");
         else if (fromDate !== undefined)
-            url_ += "FromDate=" + encodeURIComponent(fromDate ? "" + fromDate.toJSON() : "") + "&";
+            url_ += "FromDate=" + encodeURIComponent("" + fromDate) + "&";
         if (toDate === null)
             throw new Error("The parameter 'toDate' cannot be null.");
         else if (toDate !== undefined)
-            url_ += "ToDate=" + encodeURIComponent(toDate ? "" + toDate.toJSON() : "") + "&";
+            url_ += "ToDate=" + encodeURIComponent("" + toDate) + "&";
         if (customerId === null)
             throw new Error("The parameter 'customerId' cannot be null.");
         else if (customerId !== undefined)
@@ -3022,27 +3020,27 @@ export interface AppointmentAdminResourceModel {
     employee: EmployeeAdminResourceModel;
     serviceId: string | undefined;
     service: ServiceAdminResourceModel;
-    start: moment.Moment;
-    end: moment.Moment;
+    start: string;
+    end: string;
     price: number;
     internalNotes: string | undefined;
 }
 
 export interface AppointmentHistoryAdminResourceModel {
     user: ApplicationUserAdminResourceModel;
-    date: moment.Moment;
+    date: string;
     entityState: string | undefined;
     id: string;
     readonly name: string;
     customer: CustomerAdminResourceModel;
     employee: EmployeeAdminResourceModel;
     service: ServiceAdminResourceModel;
-    start: moment.Moment | undefined;
-    end: moment.Moment | undefined;
+    start: string | undefined;
+    end: string | undefined;
     price: number;
     internalNotes: string | undefined;
-    dateCreated: moment.Moment | undefined;
-    dateModified: moment.Moment | undefined;
+    dateCreated: string | undefined;
+    dateModified: string | undefined;
 }
 
 export interface Colour {
@@ -3217,8 +3215,8 @@ export interface UpsertApplicationRoleGroupCommand {
 }
 
 export interface UpsertAppointmentCommand {
-    start: moment.Moment;
-    end: moment.Moment | undefined;
+    start: string;
+    end: string | undefined;
     internalNotes: string | undefined;
     customerId: string;
     employeeId: string;
@@ -3271,8 +3269,8 @@ export interface UpsertServiceCommand {
 }
 
 export interface UpsertTimeLockCommand {
-    start: moment.Moment;
-    end: moment.Moment;
+    start: string;
+    end: string;
     employeeId: string;
     internalNotes: string | undefined;
     ignoreTimeClashes: boolean;
@@ -3286,7 +3284,7 @@ export interface UpsertUserCommand {
 }
 
 export interface WeatherForecast {
-    date: moment.Moment;
+    date: string;
     temperatureC: number;
     readonly temperatureF: number;
     summary: string | undefined;

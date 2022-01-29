@@ -13,8 +13,8 @@ import * as yup from 'yup';
 const client = new AppointmentsClient('', baseApiAxios);
 
 export interface AppointmentsGetParams {
-    fromDate: moment.Moment | undefined;
-    toDate: moment.Moment | undefined;
+    fromDate: string | undefined;
+    toDate: string | undefined;
     customerId: string | undefined;
     employeeIds: string[];
     cancelToken?: CancelToken | undefined;
@@ -53,8 +53,8 @@ export const adminAppointmentClient: AppointmentClient = {
 
 export function upsertAppointmentCommandParser(appointment: AppointmentAdminResourceModel | null): UpsertAppointmentCommand {
     return appointment == null ? {
-        start: moment.utc(),
-        end: moment.utc(),
+        start: moment.utc().toISOString(),
+        end: moment.utc().toISOString(),
         customerId: '',
         employeeId: '',
         serviceId: '',
@@ -73,8 +73,8 @@ export function upsertAppointmentCommandParser(appointment: AppointmentAdminReso
 
 export function upsertTimeLockCommandParser(appointment: AppointmentAdminResourceModel | null): UpsertTimeLockCommand {
     return appointment == null ? {
-        start: moment.utc(),
-        end: moment.utc(),
+        start: moment.utc().toISOString(),
+        end: moment.utc().toISOString(),
         employeeId: '',
         ignoreTimeClashes: false,
         internalNotes: '',

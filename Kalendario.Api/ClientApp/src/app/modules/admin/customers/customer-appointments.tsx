@@ -37,8 +37,8 @@ const CustomerAppointmentsTable: React.FunctionComponent<AdminTableContainerProp
         dispatch(appointmentActions
             .fetchEntitiesWithSetAll({
                 query: {
-                    fromDate: start,
-                    toDate: end,
+                    fromDate: start.toISOString(),
+                    toDate: end.toISOString(),
                     customerId: customer?.id,
                     employeeIds: []
                 }

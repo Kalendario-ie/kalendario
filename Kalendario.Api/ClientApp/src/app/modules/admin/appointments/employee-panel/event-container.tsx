@@ -97,7 +97,7 @@ const EventsContainer: React.FunctionComponent<EventsContainerProps> = (
 }
 
 const isOverlapping = (currentAppointment: AppointmentAdminResourceModel, previousAppointment: AppointmentAdminResourceModel): boolean => {
-    return currentAppointment.start.isBefore(previousAppointment.end);
+    return moment.utc(currentAppointment.start).isBefore(moment.utc(previousAppointment.end));
 }
 
 export default EventsContainer;

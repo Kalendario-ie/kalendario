@@ -113,12 +113,12 @@ interface EmployeeDashboardAppointmentsProps {
 }
 
 const EmployeeDashboardAppointment: React.FunctionComponent<EmployeeDashboardAppointmentsProps> = ({appointment}) => {
-    const start = appointment.start.format('HH:mm')
-    const end = appointment.end.format('HH:mm')
+    const start = moment.utc(appointment.start).format('HH:mm')
+    const end = moment.utc(appointment.end).format('HH:mm')
 
     // const customerNotes = 'customerNotes' in appointment ? appointment.customerNotes : '';
-    const customerName = 'customer' in appointment ? appointment.customer : ''; // todo customer?.name
-    const serviceName = 'service' in appointment ? appointment.service?.toString() : ''; //todo fix here.
+    const customerName = 'customer' in appointment ? appointment.customer.name : '';
+    const serviceName = 'service' in appointment ? appointment.service?.name : '';
 
     return (
         <KFlexColumn key={appointment.id}>

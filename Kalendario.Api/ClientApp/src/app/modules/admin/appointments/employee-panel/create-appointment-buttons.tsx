@@ -26,11 +26,11 @@ const CreateAppointmentButtons: React.FunctionComponent<CreateAppointmentButtons
     const selectedTime = () => currentDate.clone().add(hour, 'hour').add(minute, 'minute');
     const handleAddClick = () => onCreateClick({
         ...upsertAppointmentCommandParser(null),
-        employeeId, start: selectedTime(), end: selectedTime()
+        employeeId, start: selectedTime().toISOString(), end: selectedTime().toISOString()
     });
     const handleLockClick = () => onCreateLockClick({
         ...upsertTimeLockCommandParser(null),
-        employeeId, start: selectedTime(), end: selectedTime()
+        employeeId, start: selectedTime().toISOString(), end: selectedTime().toISOString()
     });
 
     return (
