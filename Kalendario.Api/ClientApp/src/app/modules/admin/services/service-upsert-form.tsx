@@ -22,7 +22,6 @@ const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertS
         command,
         apiError,
         onSubmit,
-        isSubmitting,
         onCancel
     }) => {
     const serviceCategories = useAppSelector(serviceCategorySelectors.selectAll)
@@ -35,7 +34,6 @@ const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertS
                      apiError={apiError}
                      onSubmit={(values => onSubmit(values, id))}
                      onCancel={onCancel}
-                     isSubmitting={isSubmitting}
                      validationSchema={upsertServiceCommandValidation}
         >
             {(formik) =>

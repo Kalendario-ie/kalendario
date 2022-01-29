@@ -21,20 +21,12 @@ import {PayloadAction} from 'typesafe-actions';
 interface BaseState<TEntity> extends EntityState<TEntity> {
     isInitialized: boolean;
     isLoading: boolean;
-    apiError: ApiBaseError | null;
-    editMode: boolean;
-    isSubmitting: boolean;
-    createdEntityId: number | null;
 }
 
 export interface BaseSelectors<TEntity> extends EntitySelectors<TEntity, any> {
     selectByIds: OutputParametricSelector<any, string[], NonNullable<TEntity>[], (res1: Dictionary<TEntity>, res2: string[]) => NonNullable<TEntity>[]>;
     selectIsInitialized: (state: any) => boolean;
-    selectApiError: (state: any) => ApiBaseError | null;
-    selectEditMode: (state: any) => boolean;
     selectIsLoading: (state: any) => boolean;
-    selectIsSubmitting: (state: any) => boolean;
-    selectCreatedEntity: (state: any) => TEntity | undefined;
 }
 
 export interface PatchActionPayload<TUpsertCommand> {
@@ -50,8 +42,8 @@ export interface QueryActionPayload<TGetQueryParams> {
     query: TGetQueryParams;
 }
 
-export interface ExtendedBaseActions<TUpsertCommand, TGetQueryParams>
-    extends BaseActions, CommandActions<TUpsertCommand>, QueryActions<TGetQueryParams> {
+export interface ExtendedBaseActions<TGetQueryParams>
+    extends BaseActions, QueryActions<TGetQueryParams> {
 }
 
 export interface QueryActions<TGetQueryParams> {
@@ -59,20 +51,10 @@ export interface QueryActions<TGetQueryParams> {
     fetchEntitiesWithSetAll: ActionCreatorWithPayload<QueryActionPayload<TGetQueryParams>>;
 }
 
-export interface CommandActions<TUpsertCommand> {
-    createEntity: ActionCreatorWithPayload<CreateActionPayload<TUpsertCommand>>;
-    patchEntity: ActionCreatorWithPayload<PatchActionPayload<TUpsertCommand>>;
-}
-
-export interface CommandAndBaseActions<TUpsertCommand> extends CommandActions<TUpsertCommand>, BaseActions {
-}
-
 export interface BaseActions {
     initializeStore: ActionCreatorWithoutPayload;
     fetchEntity: ActionCreatorWithPayload<string>;
     deleteEntity: ActionCreatorWithPayload<string>;
-    setEditMode: ActionCreatorWithPayload<boolean>;
-    setIsSubmitting: ActionCreatorWithPayload<boolean>;
 }
 
 
@@ -87,16 +69,12 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         sortComparer: compareByName,
     })
 
-    const actions: ExtendedBaseActions<TUpsertCommand, TGetQueryParams> = {
+    const actions: ExtendedBaseActions<TGetQueryParams> = {
         initializeStore: createAction<void>(`${sliceName}/initializeStore`),
         fetchEntities: createAction<QueryActionPayload<TGetQueryParams>>(`${sliceName}/fetchEntities`),
         fetchEntity: createAction<string>(`${sliceName}/fetchEntity`),
         fetchEntitiesWithSetAll: createAction<QueryActionPayload<TGetQueryParams>>(`${sliceName}/fetchEntitiesWithSetAll`),
-        createEntity: createAction<CreateActionPayload<TUpsertCommand>>(`${sliceName}/createEntity`),
-        patchEntity: createAction<PatchActionPayload<TUpsertCommand>>(`${sliceName}/patchEntity`),
         deleteEntity: createAction<string>(`${sliceName}/deleteEntity`),
-        setEditMode: createAction<any>(`${sliceName}/setEditMode`),
-        setIsSubmitting: createAction<any>(`${sliceName}/setIsSubmitting`),
     }
 
     const slice = createSlice({
@@ -123,23 +101,8 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
             setInitialized: (state, action) => {
                 state.isInitialized = action.payload
             },
-            setApiError: (state, action) => {
-                state.apiError = action.payload
-            },
-            setEditMode: (state, action) => {
-                state.editMode = action.payload;
-                if (action.payload) {
-                    state.isSubmitting = false;
-                }
-            },
-            setCreatedEntityId: (state, action: PayloadAction<string, number>) => {
-                state.createdEntityId = action.payload;
-            },
             setIsLoading: (state, action: PayloadAction<string, boolean>) => {
                 state.isLoading = action.payload;
-            },
-            setIsSubmitting: (state, action: PayloadAction<string, boolean>) => {
-                state.isSubmitting = action.payload;
             }
         }
     });
@@ -153,12 +116,7 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
             (entities, ids: number[] | string[]) => ids.map(id => entities[id]!).filter(service => !!service)
         ),
         selectIsInitialized: createSelector(selector, store => store.isInitialized),
-        selectApiError: createSelector(selector, store => store.apiError),
-        selectEditMode: createSelector(selector, store => store.editMode),
         selectIsLoading: createSelector(selector, store => store.isLoading),
-        selectIsSubmitting: createSelector(selector, store => store.isSubmitting),
-        selectCreatedEntity: createSelector(selector, store =>
-            store.createdEntityId ? store.entities[store.createdEntityId] : undefined),
     }
 
     function* initializeStore(action: { type: string, payload: QueryActionPayload<TGetQueryParams> }) {
@@ -201,35 +159,6 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         yield put(slice.actions.setIsLoading(false));
     }
 
-    function* createEntity(action: { type: string, payload: CreateActionPayload<TUpsertCommand> }) {
-        try {
-            yield put(slice.actions.setIsSubmitting(true));
-            const entity: TEntity = yield call([client, client.post], action.payload.command);
-            yield put(slice.actions.upsertOne(entity));
-            yield put(slice.actions.setApiError(null));
-            yield put(slice.actions.setEditMode(false));
-            yield put(slice.actions.setCreatedEntityId(entity.id));
-        } catch (error) {
-            yield put(slice.actions.setApiError(error));
-            yield put(slice.actions.setIsSubmitting(false));
-        }
-    }
-
-    function* patchEntity(action: { type: string, payload: PatchActionPayload<TUpsertCommand> }) {
-        try {
-            yield put(slice.actions.setIsSubmitting(true));
-            const entity: TEntity = yield call([client, client.put], action.payload.id, action.payload.command);
-            yield put(slice.actions.upsertOne(entity));
-            yield put(slice.actions.setApiError(null));
-            yield put(slice.actions.setEditMode(false));
-        } catch (error: any) {
-            if (error?.status === 400) {
-                yield put(slice.actions.setApiError(error.errors));
-            }
-            yield put(slice.actions.setIsSubmitting(false));
-        }
-    }
-
     function* deleteEntity(action: { type: string, payload: string }) {
         try {
             yield call(client.delete, action.payload);
@@ -246,8 +175,6 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         yield takeEvery(actions.fetchEntities.type, fetchEntities);
         yield takeEvery(actions.fetchEntity.type, fetchEntity);
         yield takeEvery(actions.fetchEntitiesWithSetAll.type, fetchEntitiesWithSetAll);
-        yield takeEvery(actions.createEntity.type, createEntity);
-        yield takeEvery(actions.patchEntity.type, patchEntity);
         yield takeEvery(actions.deleteEntity.type, deleteEntity);
     }
 

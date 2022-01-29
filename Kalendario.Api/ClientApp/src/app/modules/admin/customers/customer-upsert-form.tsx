@@ -10,7 +10,6 @@ const CustomerUpsertForm: React.FunctionComponent<AdminEditContainerProps<Upsert
         command,
         apiError,
         onSubmit,
-        isSubmitting,
         onCancel
     }) => {
 
@@ -18,7 +17,6 @@ const CustomerUpsertForm: React.FunctionComponent<AdminEditContainerProps<Upsert
         <KFormikForm initialValues={command}
                      apiError={apiError}
                      onSubmit={(values => onSubmit(values, id))}
-                     isSubmitting={isSubmitting}
                      onCancel={onCancel}
                      validationSchema={upsertCustomerCommandValidation}
         >

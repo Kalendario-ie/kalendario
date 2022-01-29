@@ -12,13 +12,11 @@ const ScheduleUpsertForm: React.FunctionComponent<AdminEditContainerProps<Upsert
         command,
         apiError,
         onSubmit,
-        isSubmitting,
         onCancel
     }) => {
     return (
         <KFormikForm initialValues={command}
                      apiError={apiError}
-                     isSubmitting={isSubmitting}
                      onSubmit={(values => onSubmit(values, id))}
                      onCancel={onCancel}>
             <KFormikInput name="name"/>

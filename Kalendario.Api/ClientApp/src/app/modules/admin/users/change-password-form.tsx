@@ -12,15 +12,13 @@ import KModal from 'src/app/shared/components/modal/k-modal';
 
 interface ChangePasswordFormProps {
     apiError: ApiValidationError | null;
-    isSubmitting: boolean;
-    onSubmit: (value: ChangeUserPasswordRequest) => void;
+    onSubmit: (value: ChangeUserPasswordRequest) => Promise<any>;
     onCancel: () => void;
 }
 
 const ChangePasswordForm: React.FunctionComponent<ChangePasswordFormProps> = (
     {
         apiError,
-        isSubmitting,
         onSubmit,
         onCancel
     }) => {
@@ -30,7 +28,6 @@ const ChangePasswordForm: React.FunctionComponent<ChangePasswordFormProps> = (
                      apiError={apiError}
                      onSubmit={onSubmit}
                      onCancel={onCancel}
-                     isSubmitting={isSubmitting}
                      validationSchema={ChangeUserPasswordValidation}
         >
             <KFormikInput name="password1" type="password"/>
@@ -47,7 +44,6 @@ interface ChangePasswordContainerProps {
 const ChangePasswordContainer: React.FunctionComponent<ChangePasswordContainerProps> = ({id}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [apiError, setApiError] = useState<ApiValidationError | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleButtonClick = () => {
         setIsOpen(true)
@@ -57,7 +53,7 @@ const ChangePasswordContainer: React.FunctionComponent<ChangePasswordContainerPr
         setIsOpen(false);
     }
     const handleSubmit = (form: ChangeUserPasswordRequest) => {
-        setIsSubmitting(true);
+        return Promise.resolve();
         // adminUserClient.changePassword(id, form)
         //     .then(() => setIsOpen(false))
         //     .catch(apiError => setApiError(apiError))
@@ -66,7 +62,6 @@ const ChangePasswordContainer: React.FunctionComponent<ChangePasswordContainerPr
 
     const form = <ChangePasswordForm
         apiError={apiError}
-        isSubmitting={isSubmitting}
         onSubmit={handleSubmit}
         onCancel={handleCancel}/>
 

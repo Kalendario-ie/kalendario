@@ -1,4 +1,3 @@
-import {CaseReducers} from '@reduxjs/toolkit/src/createReducer';
 import {CaseReducerActions, SliceCaseReducers} from '@reduxjs/toolkit/src/createSlice';
 import React, {useEffect, useState} from 'react';
 import {ApiValidationError} from 'src/app/api/common/api-errors';
@@ -22,8 +21,6 @@ export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     const [editMode, setEditMode] = useState(false);
     const dispatch = useAppDispatch();
 
-    const isSubmitting = useAppSelector(baseSelectors.selectIsSubmitting);
-
     const handleEditCancel = () => {
         setSelectedEntity(null);
         setEditMode(false);
@@ -38,30 +35,27 @@ export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
 
         }, [])
 
-    const handleSubmit = (command: TUpsertCommand, id: string | undefined): void => {
+    const handleSubmit = (command: TUpsertCommand, id: string | undefined): Promise<any> => {
         setApiError(null);
 
-        if (!id) {
-            onCreate(command)
+        return (!id)
+            ? onCreate(command)
                 .then(entity => {
                     dispatch(actions.upsertOne(entity));
                     setEditMode(false);
                     setCreatedEntity(entity);
-                }).catch(error => setApiError(error));
-        } else {
-            onUpdate(id, command)
+                }).catch(error => setApiError(error))
+            : onUpdate(id, command)
                 .then(entity => {
                     dispatch(actions.upsertOne(entity));
                     setEditMode(false);
-                }).catch(error => setApiError(error));
-        }
+                }).catch(error => setApiError(error))
     }
 
     const modal = <KModal body={<EditContainer id={selectedEntityId}
                                                command={selectedEntity!}
                                                apiError={apiError}
                                                onSubmit={handleSubmit}
-                                               isSubmitting={isSubmitting}
                                                onCancel={handleEditCancel}/>}
                           isOpen={editMode}/>
 

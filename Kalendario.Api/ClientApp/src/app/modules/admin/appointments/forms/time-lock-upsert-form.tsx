@@ -14,7 +14,6 @@ const TimeLockUpsertForm: React.FunctionComponent<AdminEditContainerProps<Upsert
         id,
         command,
         apiError,
-        isSubmitting,
         onSubmit,
         onCancel
     }) => {
@@ -25,7 +24,6 @@ const TimeLockUpsertForm: React.FunctionComponent<AdminEditContainerProps<Upsert
             <KFormikForm initialValues={command}
                          onSubmit={(values => onSubmit(values, id))}
                          apiError={apiError}
-                         isSubmitting={isSubmitting}
                          onCancel={onCancel}
                          validationSchema={upsertTimeLockCommandValidation}
             >

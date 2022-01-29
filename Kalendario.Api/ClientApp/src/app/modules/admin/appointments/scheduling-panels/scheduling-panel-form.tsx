@@ -11,7 +11,6 @@ const SchedulingPanelForm: React.FunctionComponent<AdminEditContainerProps<Upser
         command,
         apiError,
         onSubmit,
-        isSubmitting,
         onCancel
     }) => {
     const employees = useSelectAll(employeeSelectors, employeeActions);
@@ -20,7 +19,6 @@ const SchedulingPanelForm: React.FunctionComponent<AdminEditContainerProps<Upser
         <KFormikForm initialValues={command}
                      apiError={apiError}
                      onSubmit={(values => onSubmit(values, id))}
-                     isSubmitting={isSubmitting}
                      onCancel={onCancel}
         >
             <KFormikInput name="name"/>

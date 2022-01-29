@@ -10,8 +10,7 @@ export interface KFormikFormProps<Values> {
     initialValues: Values;
     apiError: ApiValidationError | null;
     validationSchema?: any | (() => any);
-    onSubmit: (values: Values, formikHelpers: FormikHelpers<Values>) => void;
-    isSubmitting: boolean;
+    onSubmit: (values: Values, formikHelpers: FormikHelpers<Values>) => Promise<any>;
     onCancel?: () => void;
     children: ((props: FormikProps<Values>) => React.ReactNode) | React.ReactNode;
     errors?: string[];
@@ -22,7 +21,6 @@ export function KFormikForm<Values>(
         initialValues,
         apiError,
         onSubmit,
-        isSubmitting,
         onCancel,
         children,
         validationSchema
@@ -39,9 +37,6 @@ export function KFormikForm<Values>(
                 validationSchema={validationSchema}
                 onSubmit={onSubmit}>
             {(formik) => {
-                if (formik.isSubmitting !== isSubmitting) {
-                    formik.setSubmitting(isSubmitting);
-                }
                 return (
                     <Form className="is-invalid" onSubmit={(e) => {
                         e.preventDefault();

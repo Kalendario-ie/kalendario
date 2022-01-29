@@ -4,8 +4,7 @@ export interface AdminEditContainerProps<TUpsertCommand> {
     id: string | undefined;
     command: TUpsertCommand;
     apiError: ApiValidationError | null;
-    onSubmit: (values: TUpsertCommand, id: string | undefined) => void;
-    isSubmitting: boolean;
+    onSubmit: (values: TUpsertCommand, id: string | undefined) => Promise<any>;
     onCancel: () => void;
 }
 

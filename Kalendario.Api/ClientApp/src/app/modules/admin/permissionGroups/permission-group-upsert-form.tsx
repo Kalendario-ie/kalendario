@@ -14,7 +14,6 @@ const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps
         command,
         apiError,
         onSubmit,
-        isSubmitting,
         onCancel
     }) => {
     const dispatch = useAppDispatch();
@@ -28,7 +27,6 @@ const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps
         <KFormikForm initialValues={command}
                      apiError={apiError}
                      onSubmit={(values => onSubmit(values, id))}
-                     isSubmitting={isSubmitting}
                      onCancel={onCancel}
                      validationSchema={UpsertPermissionRequestValidation}
         >
