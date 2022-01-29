@@ -1,4 +1,6 @@
-﻿using Kalendario.Application.Commands.Admin.Common;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Kalendario.Application.Commands.Admin.Common;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Application.Common.Security;
 using Kalendario.Core.Entities;
@@ -13,6 +15,11 @@ public class DeleteScheduleCommand : BaseDeleteAdminCommand
         public Handler(IKalendarioDbContext context, ICurrentUserManager currentUserManager)
             : base(context, currentUserManager)
         {
+        }
+
+        protected override Task ExtraDeletes(DeleteScheduleCommand request, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
     }
 }

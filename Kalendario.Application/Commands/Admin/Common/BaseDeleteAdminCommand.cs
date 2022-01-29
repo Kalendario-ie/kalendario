@@ -20,8 +20,8 @@ public abstract class BaseDeleteAdminCommand : IKalendarioProtectedCommand<Unit>
         where TRequest : BaseDeleteAdminCommand
         where TDomain : AccountEntity, new()
     {
-        private readonly IKalendarioDbContext Context;
-        private readonly ICurrentUserManager CurrentUserManager;
+        protected IKalendarioDbContext Context;
+        protected readonly ICurrentUserManager CurrentUserManager;
 
         public BaseDeleteAdminCommandHandler(IKalendarioDbContext context, ICurrentUserManager currentUserManager)
         {
@@ -41,10 +41,14 @@ public abstract class BaseDeleteAdminCommand : IKalendarioProtectedCommand<Unit>
             }
 
             Context.Set<TDomain>().Remove(domain);
+
+            await ExtraDeletes(request, cancellationToken);
             
             await Context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }
+
+        protected abstract Task ExtraDeletes(TRequest request, CancellationToken cancellationToken);
     }
 }

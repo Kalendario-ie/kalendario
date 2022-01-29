@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Kalendario.Application.Commands.Admin;
@@ -51,13 +54,31 @@ public class DeleteServiceCommandTests : TestBase
         await AssertDeleteFlag(false);
     }
 
-
     [Test]
     public async Task ValidCommand_ShouldSetDeletedFlagTrue()
     {
         await RunAsAdministratorAsync(typeof(Service), Service.DeleteRole, Constants.CurrentUserAccountId);
         await FluentActions.Invoking(() => SendAsync(DeleteServiceCommand)).Invoke();
         await AssertDeleteFlag(true);
+    }
+    
+    [Test]
+    public async Task DeleteServiceCommand_ShouldDelete_EmployeeService_Entries()
+    {
+        var employeeId = await AddAsync(Entities.TestEmployee(new []{_serviceId}));
+        var employee = await FirstOrDefaultAsync(employeeId, 
+            new List<Expression<Func<Employee, object>>> {employee => employee.EmployeeServices});
+        var employeeServiceId = employee.EmployeeServices.First().Id;
+        var employeeServiceBeforeDelete = await FindAsync<EmployeeService>(employeeServiceId);
+        Assert.IsNotNull(employeeServiceBeforeDelete);
+        Assert.AreEqual(_serviceId, employeeServiceBeforeDelete.ServiceId);
+        
+        await RunAsAdministratorAsync(typeof(Service), Service.DeleteRole, Constants.CurrentUserAccountId);
+        await FluentActions.Invoking(() => SendAsync(DeleteServiceCommand)).Invoke();
+        await AssertDeleteFlag(true);
+        
+        var employeeServiceAfterDelete = await FindAsync<EmployeeService>(employeeServiceId);
+        Assert.IsNull(employeeServiceAfterDelete);
     }
 
     private async Task AssertDeleteFlag(bool flag)
