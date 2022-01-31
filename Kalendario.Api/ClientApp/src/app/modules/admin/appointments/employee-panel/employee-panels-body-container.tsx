@@ -1,6 +1,11 @@
 import React from 'react';
 import {getFramesForDate, isAvailable} from 'src/app/api/adminSchedulesApi';
-import {EmployeeAdminResourceModel, UpsertAppointmentCommand, UpsertTimeLockCommand} from 'src/app/api/api';
+import {
+    AppointmentAdminResourceModel,
+    EmployeeAdminResourceModel,
+    UpsertAppointmentCommand,
+    UpsertTimeLockCommand
+} from 'src/app/api/api';
 import {useSelectPanelEmployees} from 'src/app/modules/admin/appointments/employee-panel/hooks';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import KShowOnHoverContainer from 'src/app/shared/components/primitives/containers/k-show-on-hover-container';
@@ -92,11 +97,12 @@ const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
 }
 
 export interface EmployeePanelsBodyContainerProps {
-    onSelect: (command: UpsertAppointmentCommand, id?: string) => void;
-    onLockClick: (entity: UpsertTimeLockCommand) => void;
+    onSelect: (entity: AppointmentAdminResourceModel) => void;
+    onCreateClick: (command: UpsertAppointmentCommand) => void;
+    onLockClick: (command: UpsertTimeLockCommand) => void;
 }
 
-export const EmployeePanelsBodyContainer: React.FunctionComponent<EmployeePanelsBodyContainerProps> = ({onSelect, onLockClick}) => {
+export const EmployeePanelsBodyContainer: React.FunctionComponent<EmployeePanelsBodyContainerProps> = ({onSelect, onCreateClick, onLockClick}) => {
     const employees = useSelectPanelEmployees();
     return (
         <KFlexRow>
@@ -104,7 +110,7 @@ export const EmployeePanelsBodyContainer: React.FunctionComponent<EmployeePanels
             {employees.map(employee =>
                 <React.Fragment key={employee.id}>
                     <EventsContainer onSelect={onSelect} employee={employee}/>
-                    <EmployeePanelBody onCreateClick={onSelect} onCreateLockClick={onLockClick} employee={employee}/>
+                    <EmployeePanelBody onCreateClick={onCreateClick} onCreateLockClick={onLockClick} employee={employee}/>
                 </React.Fragment>
             )}
         </KFlexRow>

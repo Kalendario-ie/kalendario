@@ -1,5 +1,10 @@
 import React from 'react';
-import {adminAppointmentClient} from 'src/app/api/adminAppointments';
+import {
+    adminAppointmentClient,
+    upsertAppointmentCommandParser,
+    upsertTimeLockCommandParser
+} from 'src/app/api/adminAppointments';
+import {AppointmentAdminResourceModel} from 'src/app/api/api';
 import SchedulingDateSelectorContainer
     from 'src/app/modules/admin/appointments/date-selector/scheduling-date-selector-container';
 import TimeLineContainer from 'src/app/modules/admin/appointments/employee-panel/TimeLineContainer';
@@ -23,10 +28,16 @@ const AppointmentsContainer: React.FunctionComponent = () => {
     useInitializeEffect(scheduleActions);
     useReloadAppointmentsEffect();
 
-    const [openModal, formModal] =
+    const [openAppointmentUpsertForm, formModal] =
         useEditModal(appointmentSelectors, adminAppointmentSlice.actions, AppointmentUpsertForm, adminAppointmentClient.post, adminAppointmentClient.put);
-    const [openTimeLockModal, timeLockFormModal] =
+    const [openTimeLockUpsertForm, timeLockFormModal] =
         useEditModal(appointmentSelectors, adminAppointmentSlice.actions, TimeLockUpsertForm, adminAppointmentClient.createTimeLock, adminAppointmentClient.updateTimeLock);
+
+    const onSelect = (appointment: AppointmentAdminResourceModel) =>
+        (appointment.serviceId != null)
+            ? openAppointmentUpsertForm(upsertAppointmentCommandParser(appointment), appointment.id)
+            : openTimeLockUpsertForm(upsertTimeLockCommandParser(appointment), appointment.id);
+
 
     return (
         <KFlexColumn>
@@ -39,10 +50,12 @@ const AppointmentsContainer: React.FunctionComponent = () => {
                 <KFlexRow>
                     <SchedulingDateSelectorContainer/>
                 </KFlexRow>
-                <EmployeePanelHeadersContainer onCreateClick={openModal} onCreateLockClick={openTimeLockModal}/>
+                <EmployeePanelHeadersContainer onCreateClick={openAppointmentUpsertForm}
+                                               onCreateLockClick={openTimeLockUpsertForm}/>
             </KFlexColumn>
             <TimeLineContainer/>
-            <EmployeePanelsBodyContainer onSelect={openModal} onLockClick={openTimeLockModal}/>
+            <EmployeePanelsBodyContainer onSelect={onSelect} onCreateClick={openAppointmentUpsertForm}
+                                         onLockClick={openTimeLockUpsertForm}/>
         </KFlexColumn>
     )
 }

@@ -61,7 +61,7 @@ const Event: React.FunctionComponent<EventProps> = (
 
 interface EventsContainerProps {
     employee: EmployeeAdminResourceModel;
-    onSelect: (entity: UpsertAppointmentCommand, id: string) => void
+    onSelect: (entity: AppointmentAdminResourceModel) => void
 }
 
 const EventsContainer: React.FunctionComponent<EventsContainerProps> = (
@@ -89,7 +89,7 @@ const EventsContainer: React.FunctionComponent<EventsContainerProps> = (
                        isOverlapping={index > 0 ? isOverlapping(appointment, employeeAppointments[index - 1]) : false}
                        order={index}
                        appointment={appointment}
-                       onClick={() => onSelect(upsertAppointmentCommandParser(appointment), appointment.id)}
+                       onClick={() => onSelect(appointment)}
                 />
             )}
         </div>
