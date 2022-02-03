@@ -1,6 +1,7 @@
 import {CaseReducerActions, SliceCaseReducers} from '@reduxjs/toolkit/src/createSlice';
 import React, {useEffect} from 'react';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
+import {BaseModelRequestDelete} from 'src/app/api/common/clients/base-django-api';
 import {IReadModel} from 'src/app/api/common/models';
 import AdminDeleteButton from 'src/app/shared/admin/delete-button';
 import {useEditModal} from 'src/app/shared/admin/hooks';
@@ -19,6 +20,7 @@ interface AdminListEditContainerProps<TEntity> {
     filter?: (value: string | undefined) => void;
     detailsUrl?: string;
     initializeStore?: boolean;
+    client: BaseModelRequestDelete;
     EditContainer: React.FunctionComponent<AdminFormProps<TEntity>>;
     ListContainer: React.FunctionComponent<AdminTableContainerProps<TEntity>>;
 }
@@ -32,6 +34,7 @@ function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
         detailsUrl,
         initializeStore = true,
         modelType,
+        client,
         EditContainer,
         ListContainer,
     }: AdminListEditContainerProps<TEntity>) {
@@ -68,7 +71,8 @@ function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
                                  onClick={() => openModal(value.row.original)}/>
                     <AdminDeleteButton entity={value.row.original}
                                   modelType={modelType}
-                                  baseActions={baseActions}/>
+                                       onSuccess={() => dispatch(actions.removeOne(value.row.original.id))}
+                                       client={client}/>
                 </KFlexRow>
             )
             // eslint-disable-next-line react-hooks/exhaustive-deps

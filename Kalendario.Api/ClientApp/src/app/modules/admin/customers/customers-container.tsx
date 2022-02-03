@@ -1,4 +1,5 @@
 import React from 'react';
+import {adminCustomerClient} from 'src/app/api/adminCustomerApi';
 import {PermissionModel} from 'src/app/api/auth';
 import CustomerUpsertForm from 'src/app/modules/admin/customers/customer-upsert-form';
 import CustomersTable from 'src/app/modules/admin/customers/customers-table';
@@ -21,6 +22,7 @@ const CustomersContainer: React.FunctionComponent = () => {
                                 baseActions={customerActions}
                                 actions={customerSlice.actions}
                                 filter={filter}
+                                client={adminCustomerClient}
                                 modelType={PermissionModel.customer}
                                 detailsUrl={CUSTOMER_URLS.DETAILS}
                                 EditContainer={CustomerUpsertForm}

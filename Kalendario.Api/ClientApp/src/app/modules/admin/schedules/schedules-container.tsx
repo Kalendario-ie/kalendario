@@ -1,4 +1,5 @@
 import React from 'react';
+import {adminScheduleClient} from 'src/app/api/adminSchedulesApi';
 import {PermissionModel} from 'src/app/api/auth';
 import ScheduleUpsertForm from 'src/app/modules/admin/schedules/schedule-upsert-form';
 import SchedulesTable from 'src/app/modules/admin/schedules/schedules-table';
@@ -14,6 +15,7 @@ const SchedulesContainer: React.FunctionComponent<SchedulesContainerProps> = () 
             <AdminListEditContainer baseSelectors={scheduleSelectors}
                                     baseActions={scheduleActions}
                                     actions={scheduleSlice.actions}
+                                    client={adminScheduleClient}
                                     modelType={PermissionModel.schedule}
                                     EditContainer={ScheduleUpsertForm}
                                     ListContainer={SchedulesTable}/>

@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import {FormattedMessage} from 'react-intl';
-import {AnyAction} from 'redux';
 import KModal, {KModalButtonProps} from 'src/app/shared/components/modal/k-modal';
-import {useAppDispatch} from 'src/app/store';
 
 interface ConfirmationModalProps {
     messageId?: string;
@@ -11,7 +9,7 @@ interface ConfirmationModalProps {
     onCancel: () => void;
 }
 
-const DeleteConfirmationModal: React.FunctionComponent<ConfirmationModalProps> = (
+const ConfirmationModal: React.FunctionComponent<ConfirmationModalProps> = (
     {
         messageId = "COMMON.SURE-DELETE",
         isOpen,
@@ -43,29 +41,28 @@ const DeleteConfirmationModal: React.FunctionComponent<ConfirmationModalProps> =
 }
 
 
-export function useConfirmationModal(onConfirm: (id: string) => void): [(id: string) => void, JSX.Element] {
+export function useConfirmationModal(
+    onConfirm: (id: string) => Promise<any>,
+    onSuccess: () => void,
+): [(id: string) => void, JSX.Element] {
     const [id, setId] = useState<string | null>(null);
 
     const handleConfirm = () => {
-        onConfirm(id!);
-        setId(null);
+        onConfirm(id!).then(() => {
+            setId(null);
+            onSuccess();
+        });
     }
 
     const handleCancel = () => {
         setId(null);
     }
 
-    const modal = <DeleteConfirmationModal isOpen={!!id}
-                                           onConfirm={handleConfirm}
-                                           onCancel={handleCancel}/>
+    const modal = <ConfirmationModal isOpen={!!id}
+                                     onConfirm={handleConfirm}
+                                     onCancel={handleCancel}/>
 
     return [setId, modal]
 }
 
-export function UseConfirmationModalWithDispatch(onConfirm: (id: string) => AnyAction): [(id: string) => void, JSX.Element] {
-    const dispatch = useAppDispatch();
-    const handleConfirmClick = (id: string) => dispatch(onConfirm(id));
-    return useConfirmationModal(handleConfirmClick);
-}
-
-export default DeleteConfirmationModal;
+export default ConfirmationModal;

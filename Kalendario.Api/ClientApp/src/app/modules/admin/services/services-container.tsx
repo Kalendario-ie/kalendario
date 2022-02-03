@@ -1,4 +1,5 @@
 import React from 'react';
+import {adminServiceClient} from 'src/app/api/adminServicesApi';
 import {PermissionModel} from 'src/app/api/auth';
 import ServiceUpsertForm from 'src/app/modules/admin/services/service-upsert-form';
 import ServicesTable from 'src/app/modules/admin/services/services-table';
@@ -14,6 +15,7 @@ const ServicesContainer: React.FunctionComponent<ServicesContainerProps> = () =>
         <AdminListEditContainer baseSelectors={serviceSelectors}
                                 baseActions={serviceActions}
                                 actions={serviceSlice.actions}
+                                client={adminServiceClient}
                                 modelType={PermissionModel.service}
                                 EditContainer={ServiceUpsertForm}
                                 ListContainer={ServicesTable}/>

@@ -29,15 +29,6 @@ export interface BaseSelectors<TEntity> extends EntitySelectors<TEntity, any> {
     selectIsLoading: (state: any) => boolean;
 }
 
-export interface PatchActionPayload<TUpsertCommand> {
-    id: string,
-    command: TUpsertCommand
-}
-
-export interface CreateActionPayload<TUpsertCommand> {
-    command: TUpsertCommand
-}
-
 export interface QueryActionPayload<TGetQueryParams> {
     query: TGetQueryParams;
 }
@@ -54,7 +45,6 @@ export interface QueryActions<TGetQueryParams> {
 export interface BaseActions {
     initializeStore: ActionCreatorWithoutPayload;
     fetchEntity: ActionCreatorWithPayload<string>;
-    deleteEntity: ActionCreatorWithPayload<string>;
 }
 
 
@@ -74,7 +64,6 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         fetchEntities: createAction<QueryActionPayload<TGetQueryParams>>(`${sliceName}/fetchEntities`),
         fetchEntity: createAction<string>(`${sliceName}/fetchEntity`),
         fetchEntitiesWithSetAll: createAction<QueryActionPayload<TGetQueryParams>>(`${sliceName}/fetchEntitiesWithSetAll`),
-        deleteEntity: createAction<string>(`${sliceName}/deleteEntity`),
     }
 
     const slice = createSlice({
@@ -82,10 +71,6 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         initialState: adapter.getInitialState({
             isInitialized: false,
             isLoading: false,
-            apiError: null,
-            editMode: false,
-            createdEntityId: null,
-            isSubmitting: false,
         }) as BaseState<TEntity>,
         reducers: {
             // @ts-ignore
@@ -156,21 +141,11 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         yield put(slice.actions.setIsLoading(false));
     }
 
-    function* deleteEntity(action: { type: string, payload: string }) {
-        try {
-            yield call(client.delete, action.payload);
-            yield put(slice.actions.removeOne(action.payload));
-        } catch (error) {
-            // yield put(slice.actions.setApiError(error));
-        }
-    }
-
     function* sagas() {
         yield takeEvery(actions.initializeStore.type, initializeStore);
         yield takeEvery(actions.fetchEntities.type, fetchEntities);
         yield takeEvery(actions.fetchEntity.type, fetchEntity);
         yield takeEvery(actions.fetchEntitiesWithSetAll.type, fetchEntitiesWithSetAll);
-        yield takeEvery(actions.deleteEntity.type, deleteEntity);
     }
 
     return {

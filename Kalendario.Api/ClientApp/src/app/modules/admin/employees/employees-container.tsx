@@ -1,4 +1,5 @@
 import React from 'react';
+import {adminEmployeeClient} from 'src/app/api/adminEmployeesApi';
 import {PermissionModel} from 'src/app/api/auth';
 import EmployeeUpsertForm from 'src/app/modules/admin/employees/employee-upsert-form';
 import EmployeesTable from 'src/app/modules/admin/employees/employees-table';
@@ -11,6 +12,7 @@ const EmployeesContainer: React.FunctionComponent = () => {
         <AdminListEditContainer baseSelectors={employeeSelectors}
                                 baseActions={employeeActions}
                                 actions={employeeReducerActions}
+                                client={adminEmployeeClient}
                                 modelType={PermissionModel.employee}
                                 EditContainer={EmployeeUpsertForm}
                                 ListContainer={EmployeesTable}/>

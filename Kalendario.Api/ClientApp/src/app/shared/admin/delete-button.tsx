@@ -1,30 +1,32 @@
 import React from 'react';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
+import {BaseModelRequestDelete} from 'src/app/api/common/clients/base-django-api';
 import {IReadModel} from 'src/app/api/common/models';
 import AdminButton from 'src/app/shared/admin/admin-button';
-import {UseConfirmationModalWithDispatch} from 'src/app/shared/components/modal/delete-confirmation-modal';
-import {BaseActions} from 'src/app/store/admin/common/adapter';
+import {useConfirmationModal} from 'src/app/shared/components/modal/confirmation-modal';
 
 interface DeleteButtonProps {
     entity: IReadModel;
     modelType: PermissionModel;
-    baseActions: BaseActions;
+    client: BaseModelRequestDelete;
+    onSuccess: () => void;
 }
 
 const DeleteButton: React.FunctionComponent<DeleteButtonProps> = (
     {
         entity,
         modelType,
-        baseActions
+        client,
+        onSuccess
     }) => {
-    const [setDeleteId, confirmDeleteModal] = UseConfirmationModalWithDispatch(baseActions.deleteEntity);
+    const [setDeleteId, modal] = useConfirmationModal(id => client.delete(id), onSuccess);
 
     const handleDeleteClick = (id: string) => () => {
         setDeleteId(id);
     }
     return (
         <>
-            {confirmDeleteModal}
+            {modal}
             <AdminButton type={PermissionType.delete}
                          model={modelType}
                          onClick={handleDeleteClick(entity.id)}/>

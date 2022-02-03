@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
+import {adminSchedulingPanelsClient} from 'src/app/api/adminSchedulingPanels';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
 import SchedulingPanelForm from 'src/app/modules/admin/appointments/scheduling-panels/scheduling-panel-form';
 import AdminButton from 'src/app/shared/admin/admin-button';
 import {useEditModal, useSelectAll} from 'src/app/shared/admin/hooks';
 import {KFlexRow} from 'src/app/shared/components/flex';
-import {UseConfirmationModalWithDispatch} from 'src/app/shared/components/modal/delete-confirmation-modal';
+import {useConfirmationModal} from 'src/app/shared/components/modal/confirmation-modal';
 import {KTextButton} from 'src/app/shared/components/primitives/buttons';
 import {useKHistory, useQueryParams} from 'src/app/shared/util/router-extensions';
 import {useAppDispatch} from 'src/app/store';
@@ -16,7 +17,8 @@ const SchedulingPanelsSelector: React.FunctionComponent = () => {
     const dispatch = useAppDispatch();
     const schedulingPanels = useSelectAll(schedulingPanelSelectors, schedulingPanelActions);
     const [selectedIndex, setSelectedIndex] = useState<number>(0);
-    const [setDeleteId, confirmDeleteModal] = UseConfirmationModalWithDispatch(schedulingPanelActions.deleteEntity);
+    const [setDeleteId, confirmDeleteModal] = useConfirmationModal(id => adminSchedulingPanelsClient.delete(id),
+        () => dispatch(schedulingPanelSlice.actions.removeOne(schedulingPanels[selectedIndex].id)));
     const [openModal, formModal] = useEditModal(schedulingPanelSelectors, schedulingPanelSlice.actions, SchedulingPanelForm);
     const params = useQueryParams();
     const history = useKHistory();
@@ -24,7 +26,7 @@ const SchedulingPanelsSelector: React.FunctionComponent = () => {
     useEffect(() => {
         let panelId = +(params['panel'] || selectedIndex);
         if (schedulingPanels.length > 0) {
-            if (panelId > schedulingPanels.length) {
+            if (panelId >= schedulingPanels.length) {
                 panelId = 0;
             }
             setSelectedIndex(panelId);

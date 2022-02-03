@@ -1,5 +1,6 @@
 import moment from 'moment';
 import React, {useContext, useEffect, useState} from 'react';
+import {adminAppointmentClient} from 'src/app/api/adminAppointments';
 import {AppointmentAdminResourceModel, CustomerAdminResourceModel} from 'src/app/api/api';
 import {PermissionModel} from 'src/app/api/auth';
 import AppointmentUpsertForm from 'src/app/modules/admin/appointments/forms/appointment-upsert-form';
@@ -95,6 +96,7 @@ const CustomerAppointments: React.FunctionComponent<CustomerAppointmentsProps> =
         <CustomerContext.Provider value={customer}>
             <AdminListEditContainer baseSelectors={appointmentSelectors}
                                     baseActions={appointmentActions}
+                                    client={adminAppointmentClient}
                                     actions={adminAppointmentSlice.actions}
                                     initializeStore={false}
                                     modelType={PermissionModel.appointment}
