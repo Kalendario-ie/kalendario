@@ -1,9 +1,13 @@
 import {useFormikContext} from 'formik';
 import React, {useEffect, useState} from 'react';
-import {upsertAppointmentCommandValidation} from 'src/app/api/adminAppointments';
-import {UpsertAppointmentCommand} from 'src/app/api/api';
+import {
+    adminAppointmentClient,
+    upsertAppointmentCommandParser,
+    upsertAppointmentCommandValidation
+} from 'src/app/api/adminAppointments';
+import {AppointmentAdminResourceModel} from 'src/app/api/api';
 import AppointmentUpsertFormWrapper from 'src/app/modules/admin/appointments/forms/appointment-upsert-form-wrapper';
-import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
+import {AdminFormProps, useHandleSubmit} from 'src/app/shared/admin/interfaces';
 import {KFormikCustomerInput, KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import KFormikStartEndTimeInput from 'src/app/shared/components/forms/k-formik-start-end-time-input';
 import {compareByName} from 'src/app/shared/util/comparers';
@@ -58,21 +62,21 @@ function ServicesInput() {
 }
 
 
-const AppointmentUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertAppointmentCommand>> = (
+const AppointmentUpsertForm: React.FunctionComponent<AdminFormProps<AppointmentAdminResourceModel>> = (
     {
-        id,
-        command,
-        apiError,
-        onSubmit,
-        onCancel
+        entity,
+        onCancel,
+        onSuccess
     }) => {
     const employees = useAppSelector(employeeSelectors.selectAll);
-    const selectedAppointment = useAppSelector(store => appointmentSelectors.selectById(store, id || ''))
+    const selectedAppointment = useAppSelector(store => appointmentSelectors.selectById(store, entity?.id || ''))
+    const {apiError, handleSubmit} = useHandleSubmit(adminAppointmentClient, entity, onSuccess);
+
 
     return (
-        <AppointmentUpsertFormWrapper id={id}>
-            <KFormikForm initialValues={command}
-                         onSubmit={(values => onSubmit(values, id))}
+        <AppointmentUpsertFormWrapper id={entity?.id}>
+            <KFormikForm initialValues={upsertAppointmentCommandParser(entity)}
+                         onSubmit={handleSubmit}
                          apiError={apiError}
                          onCancel={onCancel}
                          validationSchema={upsertAppointmentCommandValidation}

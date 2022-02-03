@@ -1,8 +1,5 @@
-import axios, {AxiosResponse, CancelToken} from 'axios';
-import {UpsertCustomerCommand} from 'src/app/api/api';
+import {CancelToken} from 'axios';
 import {ApiListResult} from '../api-results';
-import {convertMoment} from '../helpers';
-import baseApiAxios from './base-api';
 
 export interface BaseQueryParams {
     search: string | undefined;
@@ -11,10 +8,21 @@ export interface BaseQueryParams {
     cancelToken?: CancelToken | undefined;
 }
 
-export interface BaseModelRequest<TResourceModel, TUpsertCommand, TGetQueryParams> {
+export interface BaseModelRequest<TResourceModel, TUpsertCommand, TGetQueryParams> extends BaseModelRequestGet<TGetQueryParams, TResourceModel>,
+    BaseModelRequestPostPut<TResourceModel, TUpsertCommand>,
+    BaseModelRequestDelete {
+}
+
+export interface BaseModelRequestGet<TGetQueryParams, TResourceModel> {
     get: (params: TGetQueryParams) => Promise<ApiListResult<TResourceModel>>;
-    // detail: (id: number, params?: {}) => Promise<TResourceModel>;
+}
+
+
+export interface BaseModelRequestDelete {
+    delete: (id: string, cancelToken?: CancelToken | undefined) => Promise<void>;
+}
+
+export interface BaseModelRequestPostPut<TResourceModel, TUpsertCommand> {
     post: (body: TUpsertCommand | undefined, cancelToken?: CancelToken | undefined) => Promise<TResourceModel>;
     put: (id: string, command: TUpsertCommand | undefined, cancelToken?: CancelToken | undefined) => Promise<TResourceModel>;
-    delete: (id: string , cancelToken?: CancelToken | undefined) => Promise<void>;
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import {adminUsersClient, upsertUserRequestParser} from 'src/app/api/adminUsersApi';
 import {PermissionModel} from 'src/app/api/auth';
 import UsersTable from 'src/app/modules/admin/users/users-table';
 import UsersUpsertForm from 'src/app/modules/admin/users/users-upsert-form';
@@ -19,10 +18,7 @@ const UsersContainer: React.FunctionComponent = () => {
             <AdminListEditContainer baseSelectors={userSelectors}
                                     baseActions={userActions}
                                     actions={userSlice.actions}
-                                    onCreate={adminUsersClient.post}
-                                    onUpdate={adminUsersClient.put}
                                     filter={filter}
-                                    parser={upsertUserRequestParser}
                                     modelType={PermissionModel.user}
                                     EditContainer={UsersUpsertForm}
                                     ListContainer={UsersTable}/>

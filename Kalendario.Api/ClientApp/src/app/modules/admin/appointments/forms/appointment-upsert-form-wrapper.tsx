@@ -1,12 +1,8 @@
 import React, {useState} from 'react';
-import {AppointmentAdminResourceModel} from 'src/app/api/api';
-import {PermissionModel} from 'src/app/api/auth';
 import AppointmentHistoryContainer from 'src/app/modules/admin/appointments/appointment-history-container';
-import DeleteButton from 'src/app/shared/admin/delete-button';
 import {useInitializeEffect} from 'src/app/shared/admin/hooks';
 import {KFlexRow} from 'src/app/shared/components/flex';
 import {KIconButton} from 'src/app/shared/components/primitives/buttons';
-import {appointmentActions} from 'src/app/store/admin/appointments';
 import {serviceActions} from 'src/app/store/admin/services';
 
 interface AppointmentUpsertFormWrapperProps {

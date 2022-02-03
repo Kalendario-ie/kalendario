@@ -1,34 +1,33 @@
 import React from 'react';
-import {UpsertUserRequestValidation} from 'src/app/api/adminUsersApi';
-import {UpsertUserCommand} from 'src/app/api/api';
+import {adminUsersClient, upsertUserRequestParser, UpsertUserRequestValidation} from 'src/app/api/adminUsersApi';
+import {ApplicationUserAdminResourceModel} from 'src/app/api/api';
 import ChangePasswordForm from 'src/app/modules/admin/users/change-password-form';
 import {useSelectAll} from 'src/app/shared/admin/hooks';
-import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
+import {AdminFormProps, useHandleSubmit} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import {employeeActions, employeeSelectors} from 'src/app/store/admin/employees';
 import {permissionGroupActions, permissionGroupSelectors} from 'src/app/store/admin/permissionGroups';
 
 
-const UsersUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertUserCommand>> = (
+const UsersUpsertForm: React.FunctionComponent<AdminFormProps<ApplicationUserAdminResourceModel>> = (
     {
-        id,
-        command,
-        apiError,
-        onSubmit,
+        entity,
+        onSuccess,
         onCancel
     }) => {
     const employees = useSelectAll(employeeSelectors, employeeActions);
     const groups = useSelectAll(permissionGroupSelectors, permissionGroupActions);
+    const {apiError, handleSubmit} = useHandleSubmit(adminUsersClient, entity, onSuccess);
 
     return (
-        <KFormikForm initialValues={command}
+        <KFormikForm initialValues={upsertUserRequestParser(entity)}
                      apiError={apiError}
-                     onSubmit={(values => onSubmit(values, id))}
+                     onSubmit={handleSubmit}
                      onCancel={onCancel}
                      validationSchema={UpsertUserRequestValidation}
         >
-            {id &&
-            <ChangePasswordForm id={id}/>
+            {entity?.id &&
+            <ChangePasswordForm id={entity.id}/>
             }
             <KFormikInput name="userName"/>
             <KFormikInput name="email"/>

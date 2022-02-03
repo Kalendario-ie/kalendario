@@ -1,6 +1,5 @@
 import moment from 'moment';
 import React, {useContext, useEffect, useState} from 'react';
-import {adminAppointmentClient, upsertAppointmentCommandParser} from 'src/app/api/adminAppointments';
 import {AppointmentAdminResourceModel, CustomerAdminResourceModel} from 'src/app/api/api';
 import {PermissionModel} from 'src/app/api/auth';
 import AppointmentUpsertForm from 'src/app/modules/admin/appointments/forms/appointment-upsert-form';
@@ -10,7 +9,6 @@ import {AdminTableContainerProps} from 'src/app/shared/admin/interfaces';
 import {KDateInput} from 'src/app/shared/components/primitives/inputs';
 import {KSelectColumnFilter} from 'src/app/shared/components/tables/k-select-column-filter';
 import KTable from 'src/app/shared/components/tables/k-table';
-import {momentToIso} from 'src/app/shared/util/moment-helpers';
 import {useAppDispatch} from 'src/app/store';
 import {adminAppointmentSlice, appointmentActions, appointmentSelectors} from 'src/app/store/admin/appointments';
 import {employeeActions, employeeSelectors} from 'src/app/store/admin/employees';
@@ -99,9 +97,6 @@ const CustomerAppointments: React.FunctionComponent<CustomerAppointmentsProps> =
                                     baseActions={appointmentActions}
                                     actions={adminAppointmentSlice.actions}
                                     initializeStore={false}
-                                    parser={upsertAppointmentCommandParser}
-                                    onCreate={adminAppointmentClient.post}
-                                    onUpdate={adminAppointmentClient.put}
                                     modelType={PermissionModel.appointment}
                                     EditContainer={AppointmentUpsertForm}
                                     ListContainer={CustomerAppointmentsTable}/>

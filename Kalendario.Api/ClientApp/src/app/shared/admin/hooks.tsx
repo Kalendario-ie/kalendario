@@ -1,23 +1,18 @@
-import {CaseReducerActions, SliceCaseReducers} from '@reduxjs/toolkit/src/createSlice';
+import {CaseReducerActions, SliceCaseReducers} from '@reduxjs/toolkit';
 import React, {useEffect, useState} from 'react';
-import {ApiValidationError} from 'src/app/api/common/api-errors';
 import {IReadModel} from 'src/app/api/common/models';
-import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
+import {AdminFormProps} from 'src/app/shared/admin/interfaces';
 import KModal from 'src/app/shared/components/modal/k-modal';
 import {useAppDispatch, useAppSelector} from 'src/app/store';
 import {BaseActions, BaseSelectors} from 'src/app/store/admin/common/adapter';
 
-export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
+export function useEditModal<TEntity extends IReadModel>(
     baseSelectors: BaseSelectors<TEntity>,
     actions: CaseReducerActions<SliceCaseReducers<any>>,
-    EditContainer: React.FunctionComponent<AdminEditContainerProps<TUpsertCommand>>,
-    onCreate: (command: TUpsertCommand) => Promise<TEntity>,
-    onUpdate: (id: string, command: TUpsertCommand) => Promise<TEntity>
-): [(command: TUpsertCommand, id?: string | undefined) => void, JSX.Element, TEntity | undefined] {
-    const [selectedEntityId, setSelectedEntityId] = useState<string | undefined>();
-    const [selectedEntity, setSelectedEntity] = useState<TUpsertCommand | null>(null);
+    EditContainer: React.FunctionComponent<AdminFormProps<TEntity>>,
+): [(command: TEntity | null) => void, JSX.Element, TEntity | undefined] {
+    const [selectedEntity, setSelectedEntity] = useState<TEntity | null>(null);
     const [createdEntity, setCreatedEntity] = useState<TEntity | undefined>();
-    const [apiError, setApiError] = useState<ApiValidationError | null>(null);
     const [editMode, setEditMode] = useState(false);
     const dispatch = useAppDispatch();
 
@@ -27,39 +22,27 @@ export function useEditModal<TEntity extends IReadModel, TUpsertCommand>(
     }
 
     const openModal = React.useMemo(() =>
-        (entity: TUpsertCommand, id?: string | undefined) => {
+        (entity: TEntity | null) => {
             setSelectedEntity(entity);
-            setSelectedEntityId(id);
             setEditMode(true);
             setCreatedEntity(undefined);
 
         }, [])
 
-    const handleSubmit = (command: TUpsertCommand, id: string | undefined): Promise<any> => {
-        setApiError(null);
-
-        return (!id)
-            ? onCreate(command)
-                .then(entity => {
-                    dispatch(actions.upsertOne(entity));
-                    setEditMode(false);
-                    setCreatedEntity(entity);
-                }).catch(error => setApiError(error))
-            : onUpdate(id, command)
-                .then(entity => {
-                    dispatch(actions.upsertOne(entity));
-                    setEditMode(false);
-                }).catch(error => setApiError(error))
+    const onSuccess = (entity: TEntity) => {
+        dispatch(actions.upsertOne(entity));
+        setEditMode(false);
+        if (!!selectedEntity) {
+            setCreatedEntity(entity);
+        }
     }
 
-    const modal = <KModal body={<EditContainer id={selectedEntityId}
-                                               command={selectedEntity!}
-                                               apiError={apiError}
-                                               onSubmit={handleSubmit}
-                                               onCancel={handleEditCancel}/>}
-                          isOpen={editMode}/>
+    const formModal = <KModal body={<EditContainer entity={selectedEntity}
+                                                   onSuccess={onSuccess}
+                                                   onCancel={handleEditCancel}/>}
+                              isOpen={editMode}/>
 
-    return [openModal, modal, createdEntity]
+    return [openModal, formModal, createdEntity]
 }
 
 

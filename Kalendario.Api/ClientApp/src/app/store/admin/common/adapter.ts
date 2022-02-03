@@ -4,13 +4,13 @@ import {
     createAction,
     createEntityAdapter,
     createSelector,
-    createSlice, Dictionary,
+    createSlice,
+    Dictionary,
     EntitySelectors,
     EntityState,
     OutputParametricSelector
 } from '@reduxjs/toolkit';
 import {call, put, select, takeEvery} from 'redux-saga/effects';
-import {ApiBaseError} from 'src/app/api/common/api-errors';
 import {ApiListResult} from 'src/app/api/common/api-results';
 import {BaseModelRequest} from 'src/app/api/common/clients/base-django-api';
 import {IReadModel} from 'src/app/api/common/models';
@@ -131,7 +131,6 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
             yield put(slice.actions.upsertMany(result.entities));
             yield put(slice.actions.setInitialized(true));
         } catch (error) {
-            yield put(slice.actions.setApiError(error));
             yield put(slice.actions.setInitialized(false));
         }
     }
@@ -142,7 +141,6 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
             // const entity: TEntity = yield call(client.detail, action.payload);
             // yield put(slice.actions.upsertOne(entity));
         } catch (error) {
-            yield put(slice.actions.setApiError(error));
         }
         yield put(slice.actions.setIsLoading(false));
     }
@@ -154,7 +152,6 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
             const result: ApiListResult<TEntity> = yield call([client, client.get], action.payload?.query);
             yield put(slice.actions.setAll(result.entities));
         } catch (error) {
-            yield put(slice.actions.setApiError(error));
         }
         yield put(slice.actions.setIsLoading(false));
     }
@@ -163,10 +160,8 @@ export function kCreateBaseStore<TEntity extends IReadModel, TUpsertCommand, TGe
         try {
             yield call(client.delete, action.payload);
             yield put(slice.actions.removeOne(action.payload));
-            yield put(slice.actions.setApiError(null));
-            yield put(slice.actions.setEditMode(false));
         } catch (error) {
-            yield put(slice.actions.setApiError(error));
+            // yield put(slice.actions.setApiError(error));
         }
     }
 

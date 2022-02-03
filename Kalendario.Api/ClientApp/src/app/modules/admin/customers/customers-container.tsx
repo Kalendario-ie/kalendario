@@ -1,5 +1,4 @@
 import React from 'react';
-import {adminCustomerClient, upsertCustomerCommandParser} from 'src/app/api/adminCustomerApi';
 import {PermissionModel} from 'src/app/api/auth';
 import CustomerUpsertForm from 'src/app/modules/admin/customers/customer-upsert-form';
 import CustomersTable from 'src/app/modules/admin/customers/customers-table';
@@ -21,10 +20,7 @@ const CustomersContainer: React.FunctionComponent = () => {
         <AdminListEditContainer baseSelectors={customerSelectors}
                                 baseActions={customerActions}
                                 actions={customerSlice.actions}
-                                onCreate={adminCustomerClient.post}
-                                onUpdate={adminCustomerClient.put}
                                 filter={filter}
-                                parser={upsertCustomerCommandParser}
                                 modelType={PermissionModel.customer}
                                 detailsUrl={CUSTOMER_URLS.DETAILS}
                                 EditContainer={CustomerUpsertForm}

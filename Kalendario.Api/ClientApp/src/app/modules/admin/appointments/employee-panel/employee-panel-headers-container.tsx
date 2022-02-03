@@ -1,5 +1,5 @@
 import React from 'react';
-import {EmployeeAdminResourceModel, UpsertAppointmentCommand, UpsertTimeLockCommand} from 'src/app/api/api';
+import {AppointmentAdminResourceModel, EmployeeAdminResourceModel} from 'src/app/api/api';
 import CreateAppointmentButtons from 'src/app/modules/admin/appointments/employee-panel/create-appointment-buttons';
 import {useSelectPanelEmployees} from 'src/app/modules/admin/appointments/employee-panel/hooks';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
@@ -11,8 +11,8 @@ import styles from './employee-panel.module.scss';
 
 interface EmployeePanelHeaderProps {
     employee: EmployeeAdminResourceModel;
-    onCreateClick: (entity: UpsertAppointmentCommand) => void;
-    onCreateLockClick: (entity: UpsertTimeLockCommand) => void;
+    onCreateClick: (entity: AppointmentAdminResourceModel) => void;
+    onCreateLockClick: (entity: AppointmentAdminResourceModel) => void;
 }
 
 const EmployeePanelHeader: React.FunctionComponent<EmployeePanelHeaderProps> = (
@@ -40,8 +40,8 @@ const EmployeePanelHeader: React.FunctionComponent<EmployeePanelHeaderProps> = (
 }
 
 interface EmployeePanelHeadersContainerProps {
-    onCreateClick: (entity: UpsertAppointmentCommand) => void;
-    onCreateLockClick: (entity: UpsertTimeLockCommand) => void;
+    onCreateClick: (entity: AppointmentAdminResourceModel) => void;
+    onCreateLockClick: (entity: AppointmentAdminResourceModel) => void;
 }
 
 export const EmployeePanelHeadersContainer: React.FunctionComponent<EmployeePanelHeadersContainerProps> = (

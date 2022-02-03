@@ -1,11 +1,6 @@
 import React from 'react';
 import {getFramesForDate, isAvailable} from 'src/app/api/adminSchedulesApi';
-import {
-    AppointmentAdminResourceModel,
-    EmployeeAdminResourceModel,
-    UpsertAppointmentCommand,
-    UpsertTimeLockCommand
-} from 'src/app/api/api';
+import {AppointmentAdminResourceModel, EmployeeAdminResourceModel} from 'src/app/api/api';
 import {useSelectPanelEmployees} from 'src/app/modules/admin/appointments/employee-panel/hooks';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import KShowOnHoverContainer from 'src/app/shared/components/primitives/containers/k-show-on-hover-container';
@@ -43,8 +38,8 @@ const PanelHours: React.FunctionComponent = () => {
 
 interface EmployeePanelProps {
     employee: EmployeeAdminResourceModel;
-    onCreateClick: (entity: UpsertAppointmentCommand) => void;
-    onCreateLockClick: (entity: UpsertTimeLockCommand) => void;
+    onCreateClick: (entity: AppointmentAdminResourceModel) => void;
+    onCreateLockClick: (entity: AppointmentAdminResourceModel) => void;
 }
 
 const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
@@ -98,8 +93,8 @@ const EmployeePanelBody: React.FunctionComponent<EmployeePanelProps> = (
 
 export interface EmployeePanelsBodyContainerProps {
     onSelect: (entity: AppointmentAdminResourceModel) => void;
-    onCreateClick: (command: UpsertAppointmentCommand) => void;
-    onLockClick: (command: UpsertTimeLockCommand) => void;
+    onCreateClick: (command: AppointmentAdminResourceModel) => void;
+    onLockClick: (command: AppointmentAdminResourceModel) => void;
 }
 
 export const EmployeePanelsBodyContainer: React.FunctionComponent<EmployeePanelsBodyContainerProps> = ({onSelect, onCreateClick, onLockClick}) => {

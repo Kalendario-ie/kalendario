@@ -1,5 +1,4 @@
 import React from 'react';
-import {adminServiceClient, upsertServiceCommandParser} from 'src/app/api/adminServicesApi';
 import {PermissionModel} from 'src/app/api/auth';
 import ServiceUpsertForm from 'src/app/modules/admin/services/service-upsert-form';
 import ServicesTable from 'src/app/modules/admin/services/services-table';
@@ -15,9 +14,6 @@ const ServicesContainer: React.FunctionComponent<ServicesContainerProps> = () =>
         <AdminListEditContainer baseSelectors={serviceSelectors}
                                 baseActions={serviceActions}
                                 actions={serviceSlice.actions}
-                                onCreate={adminServiceClient.post}
-                                onUpdate={adminServiceClient.put}
-                                parser={upsertServiceCommandParser}
                                 modelType={PermissionModel.service}
                                 EditContainer={ServiceUpsertForm}
                                 ListContainer={ServicesTable}/>

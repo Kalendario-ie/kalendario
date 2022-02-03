@@ -1,9 +1,4 @@
 import React from 'react';
-import {
-    adminAppointmentClient,
-    upsertAppointmentCommandParser,
-    upsertTimeLockCommandParser
-} from 'src/app/api/adminAppointments';
 import {AppointmentAdminResourceModel} from 'src/app/api/api';
 import SchedulingDateSelectorContainer
     from 'src/app/modules/admin/appointments/date-selector/scheduling-date-selector-container';
@@ -29,14 +24,12 @@ const AppointmentsContainer: React.FunctionComponent = () => {
     useReloadAppointmentsEffect();
 
     const [openAppointmentUpsertForm, formModal] =
-        useEditModal(appointmentSelectors, adminAppointmentSlice.actions, AppointmentUpsertForm, adminAppointmentClient.post, adminAppointmentClient.put);
+        useEditModal(appointmentSelectors, adminAppointmentSlice.actions, AppointmentUpsertForm);
     const [openTimeLockUpsertForm, timeLockFormModal] =
-        useEditModal(appointmentSelectors, adminAppointmentSlice.actions, TimeLockUpsertForm, adminAppointmentClient.createTimeLock, adminAppointmentClient.updateTimeLock);
+        useEditModal(appointmentSelectors, adminAppointmentSlice.actions, TimeLockUpsertForm);
 
     const onSelect = (appointment: AppointmentAdminResourceModel) =>
-        (appointment.serviceId != null)
-            ? openAppointmentUpsertForm(upsertAppointmentCommandParser(appointment), appointment.id)
-            : openTimeLockUpsertForm(upsertTimeLockCommandParser(appointment), appointment.id);
+        (appointment.serviceId != null) ? openAppointmentUpsertForm(appointment) : openTimeLockUpsertForm(appointment);
 
 
     return (

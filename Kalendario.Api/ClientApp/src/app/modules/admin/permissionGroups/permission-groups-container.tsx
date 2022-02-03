@@ -1,5 +1,4 @@
 import React from 'react';
-import {adminPermissionGroupClient, upsertPermissionGroupRequestParser} from 'src/app/api/adminRoleGroupsApi';
 import {PermissionModel} from 'src/app/api/auth';
 import PermissionGroupUpsertForm from 'src/app/modules/admin/permissionGroups/permission-group-upsert-form';
 import PermissionGroupsTable from 'src/app/modules/admin/permissionGroups/permission-groups-table';
@@ -16,9 +15,6 @@ const PermissionGroupsContainer: React.FunctionComponent = () => {
             <AdminListEditContainer baseSelectors={permissionGroupSelectors}
                                     baseActions={permissionGroupActions}
                                     actions={permissionGroupSlice.actions}
-                                    onCreate={adminPermissionGroupClient.post}
-                                    onUpdate={adminPermissionGroupClient.put}
-                                    parser={upsertPermissionGroupRequestParser}
                                     modelType={PermissionModel.groupprofile}
                                     EditContainer={PermissionGroupUpsertForm}
                                     ListContainer={PermissionGroupsTable}/>

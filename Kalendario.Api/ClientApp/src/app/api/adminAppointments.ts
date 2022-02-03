@@ -7,7 +7,7 @@ import {
     UpsertAppointmentCommand, UpsertTimeLockCommand
 } from 'src/app/api/api';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
-import {BaseModelRequest} from 'src/app/api/common/clients/base-django-api';
+import {BaseModelRequest, BaseModelRequestPostPut} from 'src/app/api/common/clients/base-django-api';
 import * as yup from 'yup';
 
 const client = new AppointmentsClient('', baseApiAxios);
@@ -22,8 +22,6 @@ export interface AppointmentsGetParams {
 
 export interface AppointmentClient extends BaseModelRequest<AppointmentAdminResourceModel, UpsertAppointmentCommand, AppointmentsGetParams> {
     history: (id: string, cancelToken?: CancelToken | undefined) => Promise<GetAppointmentHistoryResult>;
-    createTimeLock: (body: UpsertTimeLockCommand | undefined , cancelToken?: CancelToken | undefined) => Promise<AppointmentAdminResourceModel>;
-    updateTimeLock: (id: string, body: UpsertTimeLockCommand | undefined , cancelToken?: CancelToken | undefined) => Promise<AppointmentAdminResourceModel>
 }
 
 export const adminAppointmentClient: AppointmentClient = {
@@ -39,15 +37,18 @@ export const adminAppointmentClient: AppointmentClient = {
     history(id: string, cancelToken?: CancelToken | undefined) {
         return client.appointmentsHistory(id, cancelToken);
     },
-    delete(id: string , cancelToken?: CancelToken | undefined) {
+    delete(id: string, cancelToken?: CancelToken | undefined) {
         return client.appointmentsDelete(id, cancelToken)
-    },
-    createTimeLock(body: UpsertTimeLockCommand | undefined , cancelToken?: CancelToken | undefined) {
+    }
+}
+
+export const adminTimeLockClient: BaseModelRequestPostPut<AppointmentAdminResourceModel, UpsertTimeLockCommand> = {
+    post(body: UpsertTimeLockCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.appointmentsCreateTimeLock(body, cancelToken)
     },
-    updateTimeLock(id: string, body: UpsertTimeLockCommand | undefined , cancelToken?: CancelToken | undefined) {
+    put(id: string, body: UpsertTimeLockCommand | undefined, cancelToken?: CancelToken | undefined) {
         return client.appointmentsUpdateTimeLock(id, body, cancelToken)
-    },
+    }
 }
 
 
@@ -105,3 +106,21 @@ export const upsertTimeLockCommandValidation = yup.object().shape({
 export const appointmentClient = {
 //     ...baseModelRequest(userUrl, customerRequestAppointmentParser),
 }
+
+export const blankAppointment = (employeeId: string, start: string, end: string): AppointmentAdminResourceModel =>  ({
+// @ts-ignore
+    customer: undefined,
+// @ts-ignore
+    employee: undefined,
+// @ts-ignore
+    service: undefined,
+    customerId: undefined,
+    id: '',
+    internalNotes: undefined,
+    name: '',
+    price: 0,
+    serviceId: undefined,
+    employeeId,
+    start,
+    end
+})

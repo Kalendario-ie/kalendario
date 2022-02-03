@@ -1,22 +1,25 @@
 import React from 'react';
-import {upsertCustomerCommandValidation} from 'src/app/api/adminCustomerApi';
-import {UpsertCustomerCommand} from 'src/app/api/api';
-import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
+import {
+    adminCustomerClient,
+    upsertCustomerCommandParser,
+    upsertCustomerCommandValidation
+} from 'src/app/api/adminCustomerApi';
+import {CustomerAdminResourceModel} from 'src/app/api/api';
+import {AdminFormProps, useHandleSubmit} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 
-const CustomerUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertCustomerCommand>> = (
+const CustomerUpsertForm: React.FunctionComponent<AdminFormProps<CustomerAdminResourceModel>> = (
     {
-        id,
-        command,
-        apiError,
-        onSubmit,
+        entity,
+        onSuccess,
         onCancel
     }) => {
+    const {apiError, handleSubmit} = useHandleSubmit(adminCustomerClient, entity, onSuccess);
 
     return (
-        <KFormikForm initialValues={command}
+        <KFormikForm initialValues={upsertCustomerCommandParser(entity)}
                      apiError={apiError}
-                     onSubmit={(values => onSubmit(values, id))}
+                     onSubmit={handleSubmit}
                      onCancel={onCancel}
                      validationSchema={upsertCustomerCommandValidation}
         >

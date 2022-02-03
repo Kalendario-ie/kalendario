@@ -1,32 +1,35 @@
 import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {UpsertPermissionRequestValidation} from 'src/app/api/adminRoleGroupsApi';
-import {UpsertApplicationRoleGroupCommand} from 'src/app/api/api';
-import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
+import {
+    adminPermissionGroupClient,
+    upsertPermissionGroupRequestParser,
+    UpsertPermissionRequestValidation
+} from 'src/app/api/adminRoleGroupsApi';
+import {RoleGroupAdminResourceModel} from 'src/app/api/api';
+import {AdminFormProps, useHandleSubmit} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import {useAppDispatch} from 'src/app/store';
 import {permissionsActions, permissionSelectors} from 'src/app/store/admin/permissions';
 
 
-const PermissionGroupUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertApplicationRoleGroupCommand>> = (
+const PermissionGroupUpsertForm: React.FunctionComponent<AdminFormProps<RoleGroupAdminResourceModel>> = (
     {
-        id,
-        command,
-        apiError,
-        onSubmit,
+        entity,
+        onSuccess,
         onCancel
     }) => {
     const dispatch = useAppDispatch();
     const permissions = useSelector(permissionSelectors.selectAll)
+    const {apiError, handleSubmit} = useHandleSubmit(adminPermissionGroupClient, entity, onSuccess);
 
     useEffect(() => {
         dispatch(permissionsActions.initializeStore());
     }, [dispatch]);
 
     return (
-        <KFormikForm initialValues={command}
+        <KFormikForm initialValues={upsertPermissionGroupRequestParser(entity)}
                      apiError={apiError}
-                     onSubmit={(values => onSubmit(values, id))}
+                     onSubmit={handleSubmit}
                      onCancel={onCancel}
                      validationSchema={UpsertPermissionRequestValidation}
         >

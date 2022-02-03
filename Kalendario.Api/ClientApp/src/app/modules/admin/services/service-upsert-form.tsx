@@ -1,44 +1,44 @@
 import React from 'react';
-import {adminServiceCategoryClient, upsertServiceCategoryCommandParser} from 'src/app/api/adminServiceCategoryApi';
-import {upsertServiceCommandValidation} from 'src/app/api/adminServicesApi';
-import {UpsertServiceCommand} from 'src/app/api/api';
+import {
+    adminServiceClient,
+    upsertServiceCommandParser,
+    upsertServiceCommandValidation
+} from 'src/app/api/adminServicesApi';
+import {ServiceAdminResourceModel} from 'src/app/api/api';
 import {PermissionModel, PermissionType} from 'src/app/api/auth';
 import AdminButton from 'src/app/shared/admin/admin-button';
 import {useEditModal} from 'src/app/shared/admin/hooks';
-import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
+import {AdminFormProps, useHandleSubmit} from 'src/app/shared/admin/interfaces';
 import {KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import {useAppSelector} from 'src/app/store';
-import {
-    serviceCategoryActions,
-    serviceCategorySelectors,
-    serviceCategorySlice
-} from 'src/app/store/admin/serviceCategories';
+import {serviceCategorySelectors, serviceCategorySlice} from 'src/app/store/admin/serviceCategories';
 import ServiceCategoryUpsertForm from './service-category-upsert-form';
 
-const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertServiceCommand>> = (
+const ServiceUpsertForm: React.FunctionComponent<AdminFormProps<ServiceAdminResourceModel>> = (
     {
-        id,
-        command,
-        apiError,
-        onSubmit,
+        entity,
+        onSuccess,
         onCancel
     }) => {
     const serviceCategories = useAppSelector(serviceCategorySelectors.selectAll)
-    const [openModal, modal] = useEditModal(serviceCategorySelectors, serviceCategorySlice.actions, ServiceCategoryUpsertForm, adminServiceCategoryClient.post, adminServiceCategoryClient.put);
+    const [openModal, formModal] = useEditModal(serviceCategorySelectors, serviceCategorySlice.actions, ServiceCategoryUpsertForm);
+    const {apiError, handleSubmit} = useHandleSubmit(adminServiceClient, entity, onSuccess);
 
-    const serviceCategory = (id: string) => upsertServiceCategoryCommandParser(serviceCategories.find(sc => sc.id === id) || null)
+
+
+    const serviceCategory = (id: string) => serviceCategories.find(sc => sc.id === id) || null
 
     return (
-        <KFormikForm initialValues={command}
+        <KFormikForm initialValues={upsertServiceCommandParser(entity)}
                      apiError={apiError}
-                     onSubmit={(values => onSubmit(values, id))}
+                     onSubmit={handleSubmit}
                      onCancel={onCancel}
                      validationSchema={upsertServiceCommandValidation}
         >
             {(formik) =>
                 <>
-                    {modal}
+                    {formModal}
                     <KFlexRow align={'center'} justify={'center'}>
                         <KFormikInput className="flex-fill" name="serviceCategoryId" as={'select'} options={serviceCategories}/>
                         <AdminButton type={PermissionType.change}
@@ -46,7 +46,7 @@ const ServiceUpsertForm: React.FunctionComponent<AdminEditContainerProps<UpsertS
                                      onClick={() => openModal(serviceCategory(formik.getFieldProps('category').value))}/>
                         <AdminButton type={PermissionType.add}
                                      model={PermissionModel.servicecategory}
-                                     onClick={() => openModal(upsertServiceCategoryCommandParser(null))}/>
+                                     onClick={() => openModal(null)}/>
                     </KFlexRow>
                     <KFormikInput name="name"/>
                     <KFormikInput name="duration" type="time"/>

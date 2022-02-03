@@ -18,8 +18,7 @@ interface FormikCustomerInput {
 
 export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> = ({initialCustomer}) => {
     const [customer, setCustomer] = useState<CustomerAdminResourceModel | undefined>(initialCustomer);
-    const [openModal, modal, createdCustomer] = useEditModal(customerSelectors, customerSlice.actions, CustomerUpsertForm, adminCustomerClient.post, adminCustomerClient.put);
-    const dispatch = useAppDispatch();
+    const [openModal, formModal, createdCustomer] = useEditModal(customerSelectors, customerSlice.actions, CustomerUpsertForm);
     const formik = useFormikContext();
     const {setValue} = formik.getFieldHelpers('customerId');
 
@@ -29,7 +28,6 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
             setValue(createdCustomer.id);
         }
         return () => {
-            dispatch(customerSlice.actions.setCreatedEntityId(null))
         }
         // the below is disabled because setValue will cause an infinite loop if added to deps.
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,7 +47,7 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
 
     return (
         <FormGroup>
-            {modal}
+            {formModal}
             <Label>Customer</Label>
             <FormGroup>
                 <KFlexRow align={'center'}>
@@ -66,7 +64,7 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
                                  }
                                  onChange={navigateToPage}
                                  loadOptions={promiseOptions}/>
-                    <KIconButton color="primary" icon={'plus'} onClick={() => openModal(upsertCustomerCommandParser(null))}/>
+                    <KIconButton color="primary" icon={'plus'} onClick={() => openModal(null)}/>
                 </KFlexRow>
             </FormGroup>
 

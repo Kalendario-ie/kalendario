@@ -1,24 +1,24 @@
 import React from 'react';
-import {UpsertSchedulingPanelCommand} from 'src/app/api/api';
+import {adminSchedulingPanelsClient, upsertSchedulingPanelCommandParser} from 'src/app/api/adminSchedulingPanels';
+import {SchedulingPanelAdminResourceModel} from 'src/app/api/api';
 import {useSelectAll} from 'src/app/shared/admin/hooks';
-import {AdminEditContainerProps} from 'src/app/shared/admin/interfaces';
+import {AdminFormProps, useHandleSubmit} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import {employeeActions, employeeSelectors} from 'src/app/store/admin/employees';
 
-const SchedulingPanelForm: React.FunctionComponent<AdminEditContainerProps<UpsertSchedulingPanelCommand>> = (
+const SchedulingPanelForm: React.FunctionComponent<AdminFormProps<SchedulingPanelAdminResourceModel>> = (
     {
-        id,
-        command,
-        apiError,
-        onSubmit,
+        entity,
+        onSuccess,
         onCancel
     }) => {
     const employees = useSelectAll(employeeSelectors, employeeActions);
+    const {apiError, handleSubmit} = useHandleSubmit(adminSchedulingPanelsClient, entity, onSuccess);
 
     return (
-        <KFormikForm initialValues={command}
+        <KFormikForm initialValues={upsertSchedulingPanelCommandParser(entity)}
                      apiError={apiError}
-                     onSubmit={(values => onSubmit(values, id))}
+                     onSubmit={handleSubmit}
                      onCancel={onCancel}
         >
             <KFormikInput name="name"/>
