@@ -8,18 +8,15 @@ import {useEditModal} from 'src/app/shared/admin/hooks';
 import {AdminFormProps, AdminTableContainerProps} from 'src/app/shared/admin/interfaces';
 import {useKHistory} from 'src/app/shared/util/router-extensions';
 import {useAppDispatch, useAppSelector} from 'src/app/store';
-import {BaseActions, BaseSelectors} from 'src/app/store/admin/common/adapter';
 import {KFlexRow} from '../components/flex';
 import AdminButton from './admin-button';
 
 interface AdminListEditContainerProps<TEntity> {
-    baseSelectors: BaseSelectors<TEntity>;
-    baseActions: BaseActions;
+    entities: TEntity[];
     actions: CaseReducerActions<SliceCaseReducers<any>>;
     modelType: PermissionModel;
     filter?: (value: string | undefined) => void;
     detailsUrl?: string;
-    initializeStore?: boolean;
     client: BaseModelRequestDelete;
     EditContainer: React.FunctionComponent<AdminFormProps<TEntity>>;
     ListContainer: React.FunctionComponent<AdminTableContainerProps<TEntity>>;
@@ -27,28 +24,18 @@ interface AdminListEditContainerProps<TEntity> {
 
 function AdminListEditContainer<TEntity extends IReadModel, TUpsertCommand>(
     {
-        baseSelectors,
-        baseActions,
         actions,
+        entities,
         filter,
         detailsUrl,
-        initializeStore = true,
         modelType,
         client,
         EditContainer,
         ListContainer,
     }: AdminListEditContainerProps<TEntity>) {
     const dispatch = useAppDispatch();
-    const entities = useAppSelector(baseSelectors.selectAll)
-    const [openModal, formModal] = useEditModal(baseSelectors, actions, EditContainer);
+    const [openModal, formModal] = useEditModal(actions, EditContainer);
     const history = useKHistory();
-
-    useEffect(() => {
-        if (initializeStore) {
-            dispatch(baseActions.initializeStore());
-        }
-    }, [baseActions, dispatch, initializeStore]);
-
 
     const buttonsColumn = React.useMemo(() =>
         ({

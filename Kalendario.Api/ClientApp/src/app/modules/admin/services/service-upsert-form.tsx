@@ -12,7 +12,7 @@ import {AdminFormProps, useHandleSubmit} from 'src/app/shared/admin/interfaces';
 import {KFlexRow} from 'src/app/shared/components/flex';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
 import {useAppSelector} from 'src/app/store';
-import {serviceCategorySelectors, serviceCategorySlice} from 'src/app/store/admin/serviceCategories';
+import {serviceCategoryActions, serviceCategorySelectors} from 'src/app/store/admin/serviceCategories';
 import ServiceCategoryUpsertForm from './service-category-upsert-form';
 
 const ServiceUpsertForm: React.FunctionComponent<AdminFormProps<ServiceAdminResourceModel>> = (
@@ -22,10 +22,8 @@ const ServiceUpsertForm: React.FunctionComponent<AdminFormProps<ServiceAdminReso
         onCancel
     }) => {
     const serviceCategories = useAppSelector(serviceCategorySelectors.selectAll)
-    const [openModal, formModal] = useEditModal(serviceCategorySelectors, serviceCategorySlice.actions, ServiceCategoryUpsertForm);
+    const [openModal, formModal] = useEditModal(serviceCategoryActions, ServiceCategoryUpsertForm);
     const {apiError, handleSubmit} = useHandleSubmit(adminServiceClient, entity, onSuccess);
-
-
 
     const serviceCategory = (id: string) => serviceCategories.find(sc => sc.id === id) || null
 

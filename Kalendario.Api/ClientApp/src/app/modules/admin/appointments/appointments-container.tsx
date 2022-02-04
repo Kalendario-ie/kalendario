@@ -6,11 +6,11 @@ import TimeLineContainer from 'src/app/modules/admin/appointments/employee-panel
 import AppointmentUpsertForm from 'src/app/modules/admin/appointments/forms/appointment-upsert-form';
 import TimeLockUpsertForm from 'src/app/modules/admin/appointments/forms/time-lock-upsert-form';
 import SchedulingPanelsSelector from 'src/app/modules/admin/appointments/scheduling-panels/scheduling-panels-selector';
-import {useEditModal, useInitializeEffect} from 'src/app/shared/admin/hooks';
+import {useEditModal} from 'src/app/shared/admin/hooks';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
-import {adminAppointmentSlice, appointmentSelectors} from 'src/app/store/admin/appointments';
-import {employeeActions} from 'src/app/store/admin/employees';
-import {scheduleActions} from 'src/app/store/admin/schedules';
+import {appointmentActions} from 'src/app/store/admin/appointments';
+import {useInitializeEmployees} from 'src/app/store/admin/employees';
+import {useInitializeSchedules} from 'src/app/store/admin/schedules';
 import {
     EmployeePanelHeadersContainer,
     EmployeePanelsBodyContainer,
@@ -19,14 +19,12 @@ import {
 
 
 const AppointmentsContainer: React.FunctionComponent = () => {
-    useInitializeEffect(employeeActions);
-    useInitializeEffect(scheduleActions);
+    useInitializeEmployees();
+    useInitializeSchedules();
     useReloadAppointmentsEffect();
 
-    const [openAppointmentUpsertForm, formModal] =
-        useEditModal(appointmentSelectors, adminAppointmentSlice.actions, AppointmentUpsertForm);
-    const [openTimeLockUpsertForm, timeLockFormModal] =
-        useEditModal(appointmentSelectors, adminAppointmentSlice.actions, TimeLockUpsertForm);
+    const [openAppointmentUpsertForm, formModal] = useEditModal(appointmentActions, AppointmentUpsertForm);
+    const [openTimeLockUpsertForm, timeLockFormModal] = useEditModal(appointmentActions, TimeLockUpsertForm);
 
     const onSelect = (appointment: AppointmentAdminResourceModel) =>
         (appointment.serviceId != null) ? openAppointmentUpsertForm(appointment) : openTimeLockUpsertForm(appointment);

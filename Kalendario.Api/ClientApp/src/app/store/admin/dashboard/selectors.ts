@@ -1,6 +1,6 @@
 import {createSelector} from '@reduxjs/toolkit';
 import {stringToMoment} from 'src/app/shared/util/moment-helpers';
-import {schedulingPanelSelectors} from 'src/app/store/admin/panels';
+import {panelSelectors} from 'src/app/store/admin/panels';
 import {RootState} from 'src/app/store/store';
 
 
@@ -24,7 +24,7 @@ const selectSelectedPanelId = createSelector(
 const selectSelectedPanel = createSelector(
     (state) => state,
     selectSelectedPanelId,
-    (state, id) => id ? schedulingPanelSelectors.selectById(state, id) : null
+    (state, id) => id ? panelSelectors.selectById(state, id) : null
 )
 
 const selectPanelHours = createSelector(

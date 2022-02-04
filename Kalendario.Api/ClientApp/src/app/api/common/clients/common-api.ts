@@ -25,7 +25,6 @@ export const setupAuthHandlers = (apiAxios: AxiosInstance) => {
                 config._retry = true;
                 return authService.signIn()
                     .then(res => {
-                        console.log(res)
                         return authService.getAccessToken()
                             .then(access_token => {
                                 if (access_token) {

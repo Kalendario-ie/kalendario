@@ -74,7 +74,7 @@ const AppointmentUpsertForm: React.FunctionComponent<AdminFormProps<AppointmentA
 
 
     return (
-        <AppointmentUpsertFormWrapper id={entity?.id}>
+        <AppointmentUpsertFormWrapper entity={entity} onDelete={onCancel}>
             <KFormikForm initialValues={upsertAppointmentCommandParser(entity)}
                          onSubmit={handleSubmit}
                          apiError={apiError}

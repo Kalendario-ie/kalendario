@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux';
 import {
     adminEmployeeClient,
@@ -8,10 +8,9 @@ import {
 import {EmployeeAdminResourceModel} from 'src/app/api/api';
 import {AdminFormProps, useHandleSubmit} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
-import {useAppDispatch} from 'src/app/store';
-import {scheduleActions, scheduleSelectors} from 'src/app/store/admin/schedules';
-import {serviceCategoryActions} from 'src/app/store/admin/serviceCategories';
-import {serviceActions, serviceSelectors} from 'src/app/store/admin/services';
+import {scheduleSelectors, useInitializeSchedules} from 'src/app/store/admin/schedules';
+import {useInitializeServiceCategories} from 'src/app/store/admin/serviceCategories';
+import {selectServicesWithCategories, useInitializeServices} from 'src/app/store/admin/services';
 
 const EmployeeUpsertForm: React.FunctionComponent<AdminFormProps<EmployeeAdminResourceModel>> = (
     {
@@ -20,16 +19,12 @@ const EmployeeUpsertForm: React.FunctionComponent<AdminFormProps<EmployeeAdminRe
         onCancel
     }) => {
     const schedules = useSelector(scheduleSelectors.selectAll)
-    const services = useSelector(serviceSelectors.selectServicesWithCategories)
+    const services = useSelector(selectServicesWithCategories)
     const {apiError, handleSubmit} = useHandleSubmit(adminEmployeeClient, entity, onSuccess);
 
-    const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        dispatch(scheduleActions.initializeStore());
-        dispatch(serviceActions.initializeStore());
-        dispatch(serviceCategoryActions.initializeStore());
-    }, [dispatch]);
+    useInitializeSchedules();
+    useInitializeServices();
+    useInitializeServiceCategories();
 
     return (
         <KFormikForm initialValues={upsertEmployeeCommandParser(entity)}

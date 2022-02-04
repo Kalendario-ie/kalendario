@@ -2,15 +2,14 @@ import {useFormikContext} from 'formik';
 import React, {useEffect, useState} from 'react';
 import AsyncSelect from 'react-select/async';
 import {FormGroup, Label} from 'reactstrap';
-import {adminCustomerClient, upsertCustomerCommandParser} from 'src/app/api/adminCustomerApi';
+import {adminCustomerClient} from 'src/app/api/adminCustomerApi';
 import {CustomerAdminResourceModel} from 'src/app/api/api';
 import CustomerUpsertForm from 'src/app/modules/admin/customers/customer-upsert-form';
 import {useEditModal} from 'src/app/shared/admin/hooks';
 import {KFlexColumn, KFlexRow, KFlexSpacer} from 'src/app/shared/components/flex';
 import {KIconButton} from 'src/app/shared/components/primitives/buttons';
 import KIcon from 'src/app/shared/components/primitives/k-icon';
-import {useAppDispatch} from 'src/app/store';
-import {customerActions, customerSelectors, customerSlice} from 'src/app/store/admin/customers';
+import {customerActions} from 'src/app/store/admin/customers';
 
 interface FormikCustomerInput {
     initialCustomer: CustomerAdminResourceModel | undefined;
@@ -18,7 +17,7 @@ interface FormikCustomerInput {
 
 export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> = ({initialCustomer}) => {
     const [customer, setCustomer] = useState<CustomerAdminResourceModel | undefined>(initialCustomer);
-    const [openModal, formModal, createdCustomer] = useEditModal(customerSelectors, customerSlice.actions, CustomerUpsertForm);
+    const [openModal, formModal, createdCustomer] = useEditModal(customerActions, CustomerUpsertForm);
     const formik = useFormikContext();
     const {setValue} = formik.getFieldHelpers('customerId');
 

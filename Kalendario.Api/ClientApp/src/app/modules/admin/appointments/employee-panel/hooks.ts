@@ -1,7 +1,7 @@
 import {Duration, Moment} from 'moment';
 import {useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {AppointmentsGetParams} from 'src/app/api/adminAppointments';
+import {adminAppointmentClient, AppointmentsGetParams} from 'src/app/api/adminAppointments';
 import {useAppDispatch, useAppSelector} from 'src/app/store';
 import {appointmentActions} from 'src/app/store/admin/appointments';
 import {adminDashboardSelectors} from 'src/app/store/admin/dashboard';
@@ -20,13 +20,20 @@ export function useReloadAppointmentsEffect() {
     const dispatch = useAppDispatch();
 
     useEffect(() => {
+        dispatch(appointmentActions.setIsLoading(true));
+
         const query: AppointmentsGetParams = {
             fromDate: currentDate.toISOString(),
             toDate: currentDate.clone().add(1, 'day').toISOString(),
             employeeIds: selectedPanel?.employeeIds || [],
             customerId: undefined,
         };
-        dispatch(appointmentActions.fetchEntitiesWithSetAll({query}));
+
+        adminAppointmentClient.get(query)
+            .then(result => {
+                dispatch(appointmentActions.setAll(result.entities || []));
+                dispatch(appointmentActions.setIsLoading(false));
+            });
 
     }, [selectedPanel, currentDate, dispatch]);
 

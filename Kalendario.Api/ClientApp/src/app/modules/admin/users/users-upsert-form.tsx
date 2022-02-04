@@ -2,11 +2,10 @@ import React from 'react';
 import {adminUsersClient, upsertUserRequestParser, UpsertUserRequestValidation} from 'src/app/api/adminUsersApi';
 import {ApplicationUserAdminResourceModel} from 'src/app/api/api';
 import ChangePasswordForm from 'src/app/modules/admin/users/change-password-form';
-import {useSelectAll} from 'src/app/shared/admin/hooks';
 import {AdminFormProps, useHandleSubmit} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
-import {employeeActions, employeeSelectors} from 'src/app/store/admin/employees';
-import {permissionGroupActions, permissionGroupSelectors} from 'src/app/store/admin/permissionGroups';
+import {useInitializeEmployees} from 'src/app/store/admin/employees';
+import {useInitializePermissionGroups} from 'src/app/store/admin/permissionGroups';
 
 
 const UsersUpsertForm: React.FunctionComponent<AdminFormProps<ApplicationUserAdminResourceModel>> = (
@@ -15,8 +14,9 @@ const UsersUpsertForm: React.FunctionComponent<AdminFormProps<ApplicationUserAdm
         onSuccess,
         onCancel
     }) => {
-    const employees = useSelectAll(employeeSelectors, employeeActions);
-    const groups = useSelectAll(permissionGroupSelectors, permissionGroupActions);
+    useInitializeEmployees();
+    const [isEmployeesInitialized, employees] = useInitializeEmployees();
+    const [_, groups] = useInitializePermissionGroups();
     const {apiError, handleSubmit} = useHandleSubmit(adminUsersClient, entity, onSuccess);
 
     return (

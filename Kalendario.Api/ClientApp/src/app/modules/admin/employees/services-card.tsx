@@ -2,8 +2,13 @@ import React, {useEffect} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {KCard, KTreeView} from 'src/app/shared/components/primitives/containers';
 import {useAppDispatch, useAppSelector} from 'src/app/store';
-import {serviceCategoryActions} from 'src/app/store/admin/serviceCategories';
-import {serviceActions, serviceSelectors} from 'src/app/store/admin/services';
+import {serviceCategoryActions, useInitializeServiceCategories} from 'src/app/store/admin/serviceCategories';
+import {
+    selectServicesWithCategoriesByIds,
+    serviceActions,
+    serviceSelectors,
+    useInitializeServices
+} from 'src/app/store/admin/services';
 
 interface ServicesCardProps {
     serviceIds: string[];
@@ -13,15 +18,11 @@ const ServicesCard: React.FunctionComponent<ServicesCardProps> = (
     {
         serviceIds
     }) => {
-    const dispatch = useAppDispatch();
     const categories = useAppSelector((state: any) =>
-        serviceSelectors.selectServicesWithCategoriesByIds(state, serviceIds))
+        selectServicesWithCategoriesByIds(state, serviceIds))
 
-    useEffect(() => {
-        dispatch(serviceActions.initializeStore())
-        dispatch(serviceCategoryActions.initializeStore())
-    }, [dispatch]);
-
+    useInitializeServices();
+    useInitializeServiceCategories();
 
     return (
         <KCard

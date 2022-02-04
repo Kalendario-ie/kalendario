@@ -8,7 +8,7 @@ import KTable from 'src/app/shared/components/tables/k-table';
 import {ExpanderColumn} from 'src/app/shared/components/tables/k-table-row-expander';
 import KTextColumnFilter from 'src/app/shared/components/tables/k-text-column-filter';
 import {useAppDispatch} from 'src/app/store';
-import {employeeReducerActions} from 'src/app/store/admin/employees';
+import {employeeActions} from 'src/app/store/admin/employees';
 
 const EmployeesTable: React.FunctionComponent<AdminTableContainerProps<EmployeeAdminResourceModel>> = (
     {
@@ -23,7 +23,7 @@ const EmployeesTable: React.FunctionComponent<AdminTableContainerProps<EmployeeA
         const handleFileSubmit = (entity: EmployeeAdminResourceModel, file: File) => adminEmployeeClient
                 .employeesUploadFile(entity.id, file)
                 .then(res => {
-                    dispatch(employeeReducerActions.upsertOne(res));
+                    dispatch(employeeActions.upsertOne(res));
                     return true;
                 }).catch(error => false);
 

@@ -1,13 +1,11 @@
 import {CaseReducerActions, SliceCaseReducers} from '@reduxjs/toolkit';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {IReadModel} from 'src/app/api/common/models';
 import {AdminFormProps} from 'src/app/shared/admin/interfaces';
 import KModal from 'src/app/shared/components/modal/k-modal';
-import {useAppDispatch, useAppSelector} from 'src/app/store';
-import {BaseActions, BaseSelectors} from 'src/app/store/admin/common/adapter';
+import {useAppDispatch} from 'src/app/store';
 
 export function useEditModal<TEntity extends IReadModel>(
-    baseSelectors: BaseSelectors<TEntity>,
     actions: CaseReducerActions<SliceCaseReducers<any>>,
     EditContainer: React.FunctionComponent<AdminFormProps<TEntity>>,
 ): [(command: TEntity | null) => void, JSX.Element, TEntity | undefined] {
@@ -43,24 +41,4 @@ export function useEditModal<TEntity extends IReadModel>(
                               isOpen={editMode}/>
 
     return [openModal, formModal, createdEntity]
-}
-
-
-export function useSelectAll<TEntity>(baseSelectors: BaseSelectors<TEntity>, baseActions: BaseActions) {
-    const dispatch = useAppDispatch();
-    useEffect(() => {
-        dispatch(baseActions.initializeStore());
-    }, [baseActions, dispatch]);
-    return useAppSelector(baseSelectors.selectAll);
-}
-
-/**
- * a shortcut effect to dispatch the initialize store action
- * @param baseActions The base action for the store that needs to be initialized
- */
-export function useInitializeEffect(baseActions: BaseActions) {
-    const dispatch = useAppDispatch();
-    useEffect(() => {
-        dispatch(baseActions.initializeStore());
-    }, [baseActions, dispatch]);
 }

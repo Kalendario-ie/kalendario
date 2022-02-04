@@ -23,7 +23,7 @@ const TimeLockUpsertForm: React.FunctionComponent<AdminFormProps<AppointmentAdmi
     const {apiError, handleSubmit} = useHandleSubmit(adminTimeLockClient, entity, onSuccess);
 
     return (
-        <AppointmentUpsertFormWrapper id={entity?.id}>
+        <AppointmentUpsertFormWrapper entity={entity} onDelete={onCancel}>
             <KFormikForm initialValues={upsertTimeLockCommandParser(entity)}
                          onSubmit={handleSubmit}
                          apiError={apiError}

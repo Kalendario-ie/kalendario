@@ -5,15 +5,14 @@ import {AppointmentAdminResourceModel, CustomerAdminResourceModel} from 'src/app
 import {PermissionModel} from 'src/app/api/auth';
 import AppointmentUpsertForm from 'src/app/modules/admin/appointments/forms/appointment-upsert-form';
 import AdminListEditContainer from 'src/app/shared/admin/admin-list-edit-container';
-import {useSelectAll} from 'src/app/shared/admin/hooks';
 import {AdminTableContainerProps} from 'src/app/shared/admin/interfaces';
 import {KDateInput} from 'src/app/shared/components/primitives/inputs';
 import {KSelectColumnFilter} from 'src/app/shared/components/tables/k-select-column-filter';
 import KTable from 'src/app/shared/components/tables/k-table';
 import {useAppDispatch} from 'src/app/store';
-import {adminAppointmentSlice, appointmentActions, appointmentSelectors} from 'src/app/store/admin/appointments';
-import {employeeActions, employeeSelectors} from 'src/app/store/admin/employees';
-import {serviceActions, serviceSelectors} from 'src/app/store/admin/services';
+import {appointmentActions} from 'src/app/store/admin/appointments';
+import {useInitializeEmployees} from 'src/app/store/admin/employees';
+import {useInitializeServices} from 'src/app/store/admin/services';
 
 
 const CustomerAppointmentsTable: React.FunctionComponent<AdminTableContainerProps<AppointmentAdminResourceModel>> = (
@@ -25,23 +24,20 @@ const CustomerAppointmentsTable: React.FunctionComponent<AdminTableContainerProp
     const [start, setStart] = useState(moment.utc().subtract(1, 'week').startOf('day'));
     const [end, setEnd] = useState(moment.utc().add(1, 'week').startOf('day'));
 
-    const services = useSelectAll(serviceSelectors, serviceActions);
-    const employees = useSelectAll(employeeSelectors, employeeActions);
+    const [, services] = useInitializeServices();
+    const [, employees] = useInitializeEmployees();
 
     const dispatch = useAppDispatch();
 
     const customer = useContext(CustomerContext);
 
     useEffect(() => {
-        dispatch(appointmentActions
-            .fetchEntitiesWithSetAll({
-                query: {
-                    fromDate: start.toISOString(),
-                    toDate: end.toISOString(),
-                    customerId: customer?.id,
-                    employeeIds: []
-                }
-            }));
+        adminAppointmentClient.get({
+            fromDate: start.toISOString(),
+            toDate: end.toISOString(),
+            customerId: customer?.id,
+            employeeIds: []
+        }).then(res => dispatch(appointmentActions.setAll(res.entities || [])))
     }, [start, end, customer, dispatch]);
 
     const columns = React.useMemo(() => [
@@ -91,14 +87,13 @@ const CustomerAppointments: React.FunctionComponent<CustomerAppointmentsProps> =
     {
         customer
     }) => {
+
     return (
 
         <CustomerContext.Provider value={customer}>
-            <AdminListEditContainer baseSelectors={appointmentSelectors}
-                                    baseActions={appointmentActions}
+            <AdminListEditContainer entities={[]}
                                     client={adminAppointmentClient}
-                                    actions={adminAppointmentSlice.actions}
-                                    initializeStore={false}
+                                    actions={appointmentActions}
                                     modelType={PermissionModel.appointment}
                                     EditContainer={AppointmentUpsertForm}
                                     ListContainer={CustomerAppointmentsTable}/>
