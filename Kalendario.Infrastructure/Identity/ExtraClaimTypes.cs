@@ -3,4 +3,5 @@
 public static class ExtraClaimTypes
 {
     public const string AccountId = "AccountId";
+    public const string EmployeeId = "EmployeeId";
 }

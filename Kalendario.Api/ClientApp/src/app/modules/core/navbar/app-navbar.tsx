@@ -19,6 +19,7 @@ import {CompanyDetailsResourceModel} from 'src/app/api/api';
 import {RequestModel} from 'src/app/api/requests';
 import {ADMIN_ROUTES} from 'src/app/modules/admin/urls';
 import {companiesUrls} from 'src/app/modules/companies/paths';
+import {EMPLOYEE_ROUTES} from 'src/app/modules/employee/urls';
 import {USER_ROUTES} from 'src/app/modules/users/urls';
 import AvatarImg from 'src/app/shared/components/primitives/avatar-img';
 import {KIconButton} from 'src/app/shared/components/primitives/buttons';
@@ -105,13 +106,13 @@ const AppNavbar: React.FunctionComponent<AppNavbarProps> = (
                                     </NavLink>
                                 </DropdownItem>
                                 }
-                                {/*{user.employee &&*/}
-                                {/*<DropdownItem>*/}
-                                {/*    <NavLink tag={Link} to={EMPLOYEE_ROUTES.ROOT}>*/}
-                                {/*        <FormattedMessage id={'NAVBAR.EMPLOYEE'}/>*/}
-                                {/*    </NavLink>*/}
-                                {/*</DropdownItem>*/}
-                                {/*}*/}
+                                {user.EmployeeId &&
+                                <DropdownItem>
+                                    <NavLink tag={Link} to={EMPLOYEE_ROUTES.ROOT}>
+                                        <FormattedMessage id={'NAVBAR.EMPLOYEE'}/>
+                                    </NavLink>
+                                </DropdownItem>
+                                }
                                 <DropdownItem divider/>
                                 <DropdownItem>
                                     <NavLink tag={Link} to={logoutPath}>

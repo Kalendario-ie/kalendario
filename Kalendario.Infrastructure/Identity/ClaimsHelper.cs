@@ -9,7 +9,8 @@ public static class ClaimsHelper
     {
         return new Claim[]
         {
-            new(ExtraClaimTypes.AccountId, user.AccountId.ToString() ?? string.Empty)
+            new(ExtraClaimTypes.AccountId, user.AccountId.ToString() ?? string.Empty),
+            new(ExtraClaimTypes.EmployeeId, user.EmployeeId.ToString() ?? string.Empty)
         };
     }
 }
