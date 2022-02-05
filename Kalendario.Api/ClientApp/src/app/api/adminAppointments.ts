@@ -4,7 +4,8 @@ import {
     AppointmentAdminResourceModel,
     AppointmentsClient,
     GetAppointmentHistoryResult,
-    UpsertAppointmentCommand, UpsertTimeLockCommand
+    UpsertAppointmentCommand,
+    UpsertTimeLockCommand
 } from 'src/app/api/api';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
 import {BaseModelRequest, BaseModelRequestPostPut} from 'src/app/api/common/clients/base-django-api';
@@ -102,10 +103,6 @@ export const upsertTimeLockCommandValidation = yup.object().shape({
     employeeId: yup.string().required(),
     ignoreTimeClashes: yup.boolean().default(false)
 });
-
-export const appointmentClient = {
-//     ...baseModelRequest(userUrl, customerRequestAppointmentParser),
-}
 
 export const blankAppointment = (employeeId: string, start: string, end: string): AppointmentAdminResourceModel =>  ({
 // @ts-ignore

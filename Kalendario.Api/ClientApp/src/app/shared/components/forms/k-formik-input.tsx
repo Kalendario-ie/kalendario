@@ -2,7 +2,7 @@ import {ErrorMessage, Field, FieldInputProps, useFormikContext} from 'formik';
 import * as React from 'react';
 import {FormFeedback, FormGroup, Label} from 'reactstrap';
 import {KFormikInputBaseProps} from 'src/app/shared/components/forms/interfaces';
-import {KCheckbox, KColorInput, KDurationInput, KMultiSelectInput} from 'src/app/shared/components/primitives/inputs';
+import {KCheckbox, KColorInput, KMultiSelectInput} from 'src/app/shared/components/primitives/inputs';
 import {MultiSelectOption} from 'src/app/shared/components/primitives/inputs/interfaces';
 import {camelCaseToWords} from 'src/app/shared/util/string-extensions';
 
@@ -19,8 +19,6 @@ function inputAs(as: string,
                      name: string }[] | undefined
 ): string | React.FunctionComponent<any> {
     switch (as) {
-        case 'duration':
-            return KDurationInput
         case 'color':
             return KColorInput
         case 'multi-select':
