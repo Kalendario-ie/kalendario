@@ -30,7 +30,7 @@ export function useEditModal<TEntity extends IReadModel>(
     const onSuccess = (entity: TEntity) => {
         dispatch(actions.upsertOne(entity));
         setEditMode(false);
-        if (!!selectedEntity) {
+        if (!selectedEntity) {
             setCreatedEntity(entity);
         }
     }

@@ -38,7 +38,7 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
         length: 200
     }).then(res => res.entities!);
 
-    const navigateToPage = (selectedCustomer: CustomerAdminResourceModel | null) => {
+    const onChange = (selectedCustomer: CustomerAdminResourceModel | null) => {
         setCustomer(selectedCustomer || undefined);
         setValue(selectedCustomer?.id || null);
     }
@@ -53,7 +53,7 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
                     <AsyncSelect className={"flex-fill"}
                                  cacheOptions
                                  backspaceRemovesValue
-                                 defaultInputValue={initialCustomer?.name}
+                                 value={customer}
                                  getOptionValue={(option) => option.id.toString()}
                                  getOptionLabel={(option) => option.name}
                                  formatOptionLabel={(option) =>
@@ -61,7 +61,7 @@ export const KFormikCustomerInput: React.FunctionComponent<FormikCustomerInput> 
                                          <span className="font-bold">{option.name}</span> {option.email}
                                      </KFlexColumn>
                                  }
-                                 onChange={navigateToPage}
+                                 onChange={onChange}
                                  loadOptions={promiseOptions}/>
                     <KIconButton color="primary" icon={'plus'} onClick={() => openModal(null)}/>
                 </KFlexRow>

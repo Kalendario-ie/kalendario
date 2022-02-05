@@ -89,7 +89,7 @@ export function upsertTimeLockCommandParser(appointment: AppointmentAdminResourc
 }
 
 export const upsertAppointmentCommandValidation = yup.object().shape({
-    internalNotes: yup.string(),
+    internalNotes: yup.string().nullable(),
     employeeId: yup.string().required(),
     customerId: yup.string().required(),
     serviceId: yup.string().required(),
