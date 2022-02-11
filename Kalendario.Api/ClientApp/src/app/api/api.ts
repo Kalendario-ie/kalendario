@@ -2709,6 +2709,145 @@ export class ServicesClient implements IServicesClient {
     }
 }
 
+export interface IUserEmployeeClient {
+    /**
+     * @return Success
+     */
+    userEmployeeGet(): Promise<GetUserEmployeeDetailsResult>;
+    /**
+     * @param fromDate (optional)
+     * @param toDate (optional)
+     * @return Success
+     */
+    userEmployeeAppointments(fromDate: string | undefined, toDate: string | undefined): Promise<GetUserEmployeeAppointmentsResult>;
+}
+
+export class UserEmployeeClient implements IUserEmployeeClient {
+    private instance: AxiosInstance;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(baseUrl?: string, instance?: AxiosInstance) {
+
+        this.instance = instance ? instance : axios.create();
+
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+
+    }
+
+    /**
+     * @return Success
+     */
+    userEmployeeGet(  cancelToken?: CancelToken | undefined): Promise<GetUserEmployeeDetailsResult> {
+        let url_ = this.baseUrl + "/api/UserEmployee";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUserEmployeeGet(_response);
+        });
+    }
+
+    protected processUserEmployeeGet(response: AxiosResponse): Promise<GetUserEmployeeDetailsResult> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<GetUserEmployeeDetailsResult>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<GetUserEmployeeDetailsResult>(<any>null);
+    }
+
+    /**
+     * @param fromDate (optional)
+     * @param toDate (optional)
+     * @return Success
+     */
+    userEmployeeAppointments(fromDate: string | undefined, toDate: string | undefined , cancelToken?: CancelToken | undefined): Promise<GetUserEmployeeAppointmentsResult> {
+        let url_ = this.baseUrl + "/api/UserEmployee/Appointments?";
+        if (fromDate === null)
+            throw new Error("The parameter 'fromDate' cannot be null.");
+        else if (fromDate !== undefined)
+            url_ += "FromDate=" + encodeURIComponent("" + fromDate) + "&";
+        if (toDate === null)
+            throw new Error("The parameter 'toDate' cannot be null.");
+        else if (toDate !== undefined)
+            url_ += "ToDate=" + encodeURIComponent("" + toDate) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processUserEmployeeAppointments(_response);
+        });
+    }
+
+    protected processUserEmployeeAppointments(response: AxiosResponse): Promise<GetUserEmployeeAppointmentsResult> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<GetUserEmployeeAppointmentsResult>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<GetUserEmployeeAppointmentsResult>(<any>null);
+    }
+}
+
 export interface IUsersClient {
     /**
      * @param search (optional)
@@ -3043,13 +3182,25 @@ export interface AppointmentHistoryAdminResourceModel {
     dateModified: string | undefined;
 }
 
+export interface AppointmentUserResourceModel {
+    id: string;
+    readonly name: string;
+    customerId: string | undefined;
+    customer: CustomerUserResourceModel;
+    serviceId: string | undefined;
+    service: ServiceUserResourceModel;
+    start: string;
+    end: string;
+    internalNotes: string | undefined;
+}
+
 export interface Colour {
     readonly code: string | undefined;
 }
 
 export interface CompanyDetailsResourceModel {
     id: string;
-    name: string | undefined;
+    name: string;
     avatar: string | undefined;
     services: ServicePublicResourceModel[] | undefined;
     serviceCategories: ServiceCategoryPublicResourceModel[] | undefined;
@@ -3084,6 +3235,12 @@ export interface CustomerAdminResourceModelGetAllResult {
     totalCount: number;
 }
 
+export interface CustomerUserResourceModel {
+    id: string;
+    name: string;
+    warning: string | undefined;
+}
+
 export interface EmployeeAdminResourceModel {
     id: string;
     name: string;
@@ -3100,6 +3257,16 @@ export interface EmployeeAdminResourceModelGetAllResult {
     totalCount: number;
 }
 
+export interface EmployeeUserResourceModel {
+    id: string;
+    name: string;
+    email: string | undefined;
+    phoneNumber: string | undefined;
+    photoUrl: string | undefined;
+    schedule: ScheduleUserResourceModel;
+    services: ServiceUserResourceModel[] | undefined;
+}
+
 export interface GetAllRolesQuery {
 }
 
@@ -3109,6 +3276,14 @@ export interface GetAppointmentHistoryResult {
 
 export interface GetAppointmentsResult {
     entities: AppointmentAdminResourceModel[] | undefined;
+}
+
+export interface GetUserEmployeeAppointmentsResult {
+    entities: AppointmentUserResourceModel[] | undefined;
+}
+
+export interface GetUserEmployeeDetailsResult {
+    employee: EmployeeUserResourceModel;
 }
 
 export interface RoleAdminResourceModel {
@@ -3131,13 +3306,13 @@ export interface RoleGroupAdminResourceModelGetAllResult {
 export interface ScheduleAdminResourceModel {
     id: string;
     name: string;
-    sunday: ScheduleFrameAdminResourceModel[];
-    monday: ScheduleFrameAdminResourceModel[];
-    tuesday: ScheduleFrameAdminResourceModel[];
-    wednesday: ScheduleFrameAdminResourceModel[];
-    thursday: ScheduleFrameAdminResourceModel[];
-    friday: ScheduleFrameAdminResourceModel[];
-    saturday: ScheduleFrameAdminResourceModel[];
+    sunday: ScheduleFrameResourceModel[];
+    monday: ScheduleFrameResourceModel[];
+    tuesday: ScheduleFrameResourceModel[];
+    wednesday: ScheduleFrameResourceModel[];
+    thursday: ScheduleFrameResourceModel[];
+    friday: ScheduleFrameResourceModel[];
+    saturday: ScheduleFrameResourceModel[];
 }
 
 export interface ScheduleAdminResourceModelGetAllResult {
@@ -3146,9 +3321,21 @@ export interface ScheduleAdminResourceModelGetAllResult {
     totalCount: number;
 }
 
-export interface ScheduleFrameAdminResourceModel {
+export interface ScheduleFrameResourceModel {
     start: string;
     end: string;
+}
+
+export interface ScheduleUserResourceModel {
+    id: string;
+    name: string;
+    sunday: ScheduleFrameResourceModel[];
+    monday: ScheduleFrameResourceModel[];
+    tuesday: ScheduleFrameResourceModel[];
+    wednesday: ScheduleFrameResourceModel[];
+    thursday: ScheduleFrameResourceModel[];
+    friday: ScheduleFrameResourceModel[];
+    saturday: ScheduleFrameResourceModel[];
 }
 
 export interface SchedulingPanelAdminResourceModel {
@@ -3205,6 +3392,14 @@ export interface ServicePublicResourceModel {
     name: string | undefined;
     description: string | undefined;
     price: number;
+    duration: string;
+    serviceCategoryId: string | undefined;
+}
+
+export interface ServiceUserResourceModel {
+    id: string;
+    name: string;
+    description: string | undefined;
     duration: string;
     serviceCategoryId: string | undefined;
 }

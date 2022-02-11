@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Core.Entities;
 
-namespace Kalendario.Application.ResourceModels.Admin;
+namespace Kalendario.Application.ResourceModels.User;
 
-public class ScheduleAdminResourceModel : IMapFrom<Schedule>
+public class ScheduleUserResourceModel : IMapFrom<Schedule>
 {
     public Guid Id { get; set; }
 

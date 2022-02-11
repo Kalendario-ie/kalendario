@@ -3,7 +3,7 @@ import {Moment} from 'moment';
 import {
     CreateScheduleFrame,
     ScheduleAdminResourceModel,
-    ScheduleFrameAdminResourceModel,
+    ScheduleFrameResourceModel,
     SchedulesClient,
     UpsertScheduleCommand,
 } from 'src/app/api/api';
@@ -28,7 +28,7 @@ export const adminScheduleClient: BaseModelRequest<ScheduleAdminResourceModel, U
 }
 
 
-function framesToCreateScheduleFrame(frames: ScheduleFrameAdminResourceModel[]): CreateScheduleFrame[] {
+function framesToCreateScheduleFrame(frames: ScheduleFrameResourceModel[]): CreateScheduleFrame[] {
     return frames;
 }
 
@@ -59,7 +59,7 @@ export const stringToTime = (value: string): { hour: number, minute: number } =>
     return value ? {hour: +value.substring(0, 2), minute: +value.substring(3, 5)} : {hour: 0, minute: 0};
 }
 
-export const isAvailable = (frame: ScheduleFrameAdminResourceModel, hour: number, minute: number): boolean => {
+export const isAvailable = (frame: ScheduleFrameResourceModel, hour: number, minute: number): boolean => {
     const startTime = stringToTime(frame.start);
     const endTime = stringToTime(frame.end);
 
@@ -69,7 +69,7 @@ export const isAvailable = (frame: ScheduleFrameAdminResourceModel, hour: number
     return start <= value && end > value;
 }
 
-export function getFramesForDate(schedule: ScheduleAdminResourceModel, date: Moment): ScheduleFrameAdminResourceModel[] {
+export function getFramesForDate(schedule: ScheduleAdminResourceModel, date: Moment): ScheduleFrameResourceModel[] {
     switch (date.isoWeekday()) {
         case 1:
             return schedule.monday;
@@ -89,6 +89,6 @@ export function getFramesForDate(schedule: ScheduleAdminResourceModel, date: Mom
     return schedule.sunday;
 }
 
-export function frameName(scheduleFrame: ScheduleFrameAdminResourceModel) {
+export function frameName(scheduleFrame: ScheduleFrameResourceModel) {
     return `${scheduleFrame.start} - ${scheduleFrame.end}`;
 }

@@ -4,7 +4,13 @@ import {isMobile} from 'react-device-detect';
 import {useSelector} from 'react-redux';
 import {adminAppointmentClient} from 'src/app/api/adminAppointments';
 import {getFramesForDate} from 'src/app/api/adminSchedulesApi';
-import {AppointmentAdminResourceModel, ScheduleAdminResourceModel} from 'src/app/api/api';
+import {
+    AppointmentAdminResourceModel, AppointmentUserResourceModel,
+    EmployeeUserResourceModel,
+    ScheduleAdminResourceModel,
+    ScheduleUserResourceModel
+} from 'src/app/api/api';
+import {userEmployeeClient} from 'src/app/api/userEmployeeApi';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KIconButton, KRoundedButton} from 'src/app/shared/components/primitives/buttons';
 import {KCard} from 'src/app/shared/components/primitives/containers';
@@ -90,18 +96,14 @@ const EmployeeDashboardDatePicker: React.FunctionComponent<EmployeeDashboardDate
 
 interface EmployeeScheduleViewProps {
     date: Moment;
-    schedule: ScheduleAdminResourceModel;
+    schedule: ScheduleUserResourceModel;
 }
 
 const EmployeeScheduleView: React.FunctionComponent<EmployeeScheduleViewProps> = ({date, schedule}) => {
     const frames = getFramesForDate(schedule, date);
     return (
         <KFlexRow justify="center">
-            {frames.map((frame, index) =>
-                <React.Fragment key={index}>
-                    {index !== 0 ? ' |' : ''} {frame.start}
-                </React.Fragment>
-            )}
+            {frames.map(frame => `${frame.start} - ${frame.end}`).reduce((f1, f2) => `${f1} | ${f2}`)}
             {!frames &&
             <>
                 No shift available
@@ -112,7 +114,7 @@ const EmployeeScheduleView: React.FunctionComponent<EmployeeScheduleViewProps> =
 }
 
 interface EmployeeDashboardAppointmentsProps {
-    appointment: AppointmentAdminResourceModel;
+    appointment: AppointmentUserResourceModel;
 }
 
 const EmployeeDashboardAppointment: React.FunctionComponent<EmployeeDashboardAppointmentsProps> = ({appointment}) => {
@@ -152,19 +154,25 @@ const EmployeeDashboardAppointment: React.FunctionComponent<EmployeeDashboardApp
 
 const EmployeeDashboard: React.FunctionComponent = () => {
     const [currentDate, setCurrentDate] = useState(moment.utc());
-    const [appointments, setAppointments] = useState<AppointmentAdminResourceModel[]>([]);
+    const [appointments, setAppointments] = useState<AppointmentUserResourceModel[]>([]);
+    const [employee, setEmployee] = useState<EmployeeUserResourceModel | null>(null);
+    const [errorState, setErrorState] = useState(false);
     const user = useSelector(selectUser);
 
     useEffect(() => {
-        adminAppointmentClient.get(
-            {
-                customerId: undefined,
-                employeeIds: [user?.id],
-                fromDate: currentDate.clone().startOf('day').toISOString(),
-                toDate: currentDate.clone().endOf('day').toISOString()
-            }).then(res => setAppointments(res.entities || []));
+        userEmployeeClient.userEmployeeAppointments(
+            currentDate.clone().startOf('day').toISOString(),
+            currentDate.clone().endOf('day').toISOString()
+        ).then(res => setAppointments(res.entities || []));
     }, [currentDate, user]);
 
+    useEffect(() => {
+        userEmployeeClient
+            .userEmployeeGet()
+            .then(result => setEmployee(result.employee))
+            .catch(error => setErrorState(true));
+        // TODO: HANDLE ERROR CASE.
+    }, []);
 
     return (
         <KFlexColumn className="h-100vh pt-2" align="center" justify="center">
@@ -178,8 +186,7 @@ const EmployeeDashboard: React.FunctionComponent = () => {
                     <div>
                         <hr/>
                     </div>
-                    {/*<EmployeeScheduleView schedule={employee.schedule} date={currentDate}/>*/}
-                    // TODO: FIX HERE
+                    {employee && <EmployeeScheduleView schedule={employee.schedule} date={currentDate}/>}
                     <div>
                         <hr/>
                     </div>

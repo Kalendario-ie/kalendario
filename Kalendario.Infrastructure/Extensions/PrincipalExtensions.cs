@@ -9,6 +9,11 @@ public static class PrincipalExtensions
     {
         return principal.FindFirst(ExtraClaimTypes.AccountId)?.Value;
     }
+    
+    public static string GetEmployeeId(this ClaimsPrincipal principal)
+    {
+        return principal.FindFirst(ExtraClaimTypes.EmployeeId)?.Value;
+    }
 
     public static string GetUserId(this ClaimsPrincipal principal)
     {

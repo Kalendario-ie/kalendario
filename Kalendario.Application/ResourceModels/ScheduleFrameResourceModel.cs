@@ -3,9 +3,9 @@ using AutoMapper;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Core.Entities;
 
-namespace Kalendario.Application.ResourceModels.Admin;
+namespace Kalendario.Application.ResourceModels;
 
-public class ScheduleFrameAdminResourceModel : IMapFrom<ScheduleFrame>
+public class ScheduleFrameResourceModel : IMapFrom<ScheduleFrame>
 {
     public TimeSpan Start { get; set; }
 
@@ -13,7 +13,7 @@ public class ScheduleFrameAdminResourceModel : IMapFrom<ScheduleFrame>
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<ScheduleFrame, ScheduleFrameAdminResourceModel>()
+        profile.CreateMap<ScheduleFrame, ScheduleFrameResourceModel>()
             .ForMember(rm => rm.Start, e => e.MapFrom(s => s.Start.ToTimeSpan()))
             .ForMember(rm => rm.End, e => e.MapFrom(s => s.End.ToTimeSpan()));
     }

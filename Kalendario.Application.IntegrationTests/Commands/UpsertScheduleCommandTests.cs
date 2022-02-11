@@ -6,7 +6,7 @@ using FluentAssertions;
 using Kalendario.Application.Commands.Admin;
 using Kalendario.Application.Common.Exceptions;
 using Kalendario.Application.IntegrationTests.Common;
-using Kalendario.Application.ResourceModels.Admin;
+using Kalendario.Application.ResourceModels;
 using Kalendario.Core.Entities;
 using NUnit.Framework;
 
@@ -346,7 +346,7 @@ public class UpsertScheduleCommandTests : TestBase
         return ConvertFrames(frames);
     }
 
-    private void AssertFrameTimes(ScheduleFrameAdminResourceModel resourceModel, TimeOnly start, TimeOnly end)
+    private void AssertFrameTimes(ScheduleFrameResourceModel resourceModel, TimeOnly start, TimeOnly end)
     {
         Assert.AreEqual(resourceModel.Start, start.ToTimeSpan());
         Assert.AreEqual(resourceModel.End, end.ToTimeSpan());

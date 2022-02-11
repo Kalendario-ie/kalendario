@@ -14,10 +14,12 @@ public class CurrentUserService : ICurrentUserService
 
         IsAuthenticated = user.Identity.IsAuthenticated;
         UserId = user.GetUserId();
-        AccountId = Guid.TryParse(user.GetAccountId(), out var guid) ? guid : Guid.Empty;
+        AccountId = Guid.TryParse(user.GetAccountId(), out var accountId) ? accountId : Guid.Empty;
+        EmployeeId = Guid.TryParse(user.GetEmployeeId(), out var employeeId) ? employeeId : Guid.Empty;
     }
 
     public string UserId { get; }
     public Guid AccountId { get; }
+    public Guid EmployeeId { get; }
     public bool IsAuthenticated { get; }
 }
