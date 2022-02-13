@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using Kalendario.Application.Common.Interfaces;
 using Kalendario.Core.Entities;
 
@@ -10,7 +10,7 @@ public class CompanyDetailsResourceModel : IMapFrom<Account>
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; }
+    [Required] public string Name { get; set; }
 
     public string Avatar { get; set; }
 
