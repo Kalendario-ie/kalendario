@@ -25,10 +25,6 @@ public class RequestAuthorizationBehaviour<TRequest, TResponse> : IPipelineBehav
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
         RequestHandlerDelegate<TResponse> next)
     {
-        if (!_currentUserService.IsAuthenticated)
-        {
-            throw new UnauthorizedAccessException();
-        }
 
         var authorizeAttributes = request.GetType().GetCustomAttributes<AuthorizeAttribute>();
 
@@ -39,6 +35,11 @@ public class RequestAuthorizationBehaviour<TRequest, TResponse> : IPipelineBehav
 
         if (!authorizeAttributesWithRoles.Any())
             return await next();
+        
+        if (!_currentUserService.IsAuthenticated)
+        {
+            throw new UnauthorizedAccessException();
+        }
 
         var authorized = await authorizeAttributesWithRoles
             .Select(a => a.Roles)
