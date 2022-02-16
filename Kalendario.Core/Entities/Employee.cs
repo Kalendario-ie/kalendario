@@ -21,8 +21,8 @@ namespace Kalendario.Core.Entities
 
         public ICollection<EmployeeService> EmployeeServices { get; set; }
 
-        public ICollection<Appointment> Appointments { get; set; }
-        public ICollection<SchedulingPanel> SchedulingPanels { get; set; }
+        public ICollection<Appointment> Appointments { get; } = new List<Appointment>();
+        public ICollection<SchedulingPanel> SchedulingPanels { get; } = new List<SchedulingPanel>();
         public bool IsDeleted { get; set; }
     }
 }

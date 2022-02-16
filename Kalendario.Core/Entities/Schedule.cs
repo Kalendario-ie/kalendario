@@ -33,7 +33,7 @@ public class Schedule : AccountEntity, ISoftDeletable
         return FramesOf(start.DayOfWeek)
             .Any(frame => frame.Start <= TimeOnly.FromDateTime(start) && frame.End >= TimeOnly.FromDateTime(end));
     }
-    private List<ScheduleFrame> FramesOf(DayOfWeek dayOfWeek)
+    public List<ScheduleFrame> FramesOf(DayOfWeek dayOfWeek)
     {
         return Frames
             .Where(f => f.Offset == dayOfWeek)

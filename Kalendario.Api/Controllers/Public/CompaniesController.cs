@@ -20,4 +20,12 @@ public class CompaniesController : ApiControllerBase
         
         return await Mediator.Send(new FindCompanyQuery() {Name = name});
     }
+    
+        
+    [HttpGet("slots")]
+    public async Task<ActionResult<FindAppointmentAvailabilityResult>> Slots([FromQuery] FindAppointmentAvailabilityQuery query)
+    {
+        
+        return await Mediator.Send(query);
+    }
 }

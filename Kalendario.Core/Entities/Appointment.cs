@@ -14,11 +14,11 @@ namespace Kalendario.Core.Entities
         public Customer Customer { get; set; }
 
         public Guid EmployeeId { get; set; }
-        
+
         public Employee Employee { get; set; }
 
         public Guid? ServiceId { get; set; }
-        
+
         public Service Service { get; set; }
 
         public DateTime Start { get; set; }
@@ -28,12 +28,19 @@ namespace Kalendario.Core.Entities
         public double Price { get; set; }
 
         public string InternalNotes { get; set; }
-        
+
         public new static IEnumerable<string> EntityRoles()
         {
             return BaseEntity.EntityRoles().Append(CanOverbookRole);
         }
 
         public bool IsDeleted { get; set; }
+
+        public bool IsBetweenDates(DateTime fromDate, DateTime toDate)
+        {
+            return Start >= fromDate && Start <= toDate ||
+                   End >= fromDate && End <= toDate ||
+                   Start <= fromDate && End >= toDate;
+        }
     }
 }
