@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Kalendario.Api\Kalendario.Api.csproj" />
       <ProjectReference Include="..\Kalendario.Infrastructure\Kalendario.Infrastructure.csproj" />
       <ProjectReference Include="..\Kalendario.Persistence\Kalendario.Persistence.csproj" />
     </ItemGroup>

@@ -1,4 +1,6 @@
-﻿using FluentValidation.AspNetCore;
+﻿using System.ComponentModel;
+using FluentValidation.AspNetCore;
+using Kalendario.Api.Converters;
 using Kalendario.Api.Filters;
 using Kalendario.Api.Services;
 using Kalendario.Application;
@@ -38,7 +40,15 @@ public class Startup
         services.AddControllers()
             .AddNewtonsoftJson();
 
-        services.AddControllersWithViews(o => { o.Filters.Add<ApiExceptionFilterAttribute>(); })
+        services.AddControllersWithViews(o =>
+            {
+                o.Filters.Add<ApiExceptionFilterAttribute>();
+                TypeDescriptor.AddAttributes(typeof(DateOnly), new TypeConverterAttribute(typeof(DateOnlyTypeConverter)));
+            })
+            .AddJsonOptions(o =>
+            {
+                o.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+            })
             .AddFluentValidation(fv =>
             {
                 fv.AutomaticValidationEnabled = true;
@@ -57,6 +67,11 @@ public class Startup
             {
                 Type = "string",
                 Example = new OpenApiString("00:00:00")
+            });
+            options.MapType<DateOnly>(() => new OpenApiSchema 
+            { 
+                Type = "string", 
+                Format = "date" 
             });
         });
 
