@@ -1,14 +1,16 @@
+import moment from 'moment';
 import React from 'react';
+import {Slot} from 'src/app/api/api';
 
 interface SlotButtonProps {
-    // slot: Slot;
+    slot: Slot;
     isSelected: boolean;
     onClick: () => void;
 }
 
 const SlotButton: React.FunctionComponent<SlotButtonProps> = (
     {
-        // slot,
+        slot,
         isSelected,
         onClick
     }) => {
@@ -18,7 +20,7 @@ const SlotButton: React.FunctionComponent<SlotButtonProps> = (
     }
     return (
         <div className={className} onClick={() => onClick()}>
-            {/*<div>{slot.title}</div>*/}
+            <div>{moment.utc(slot.start).format("HH:mm")} - {moment.utc(slot.end).format('HH:mm')}</div>
             <div hidden={!isSelected}>
                 Book Now
             </div>

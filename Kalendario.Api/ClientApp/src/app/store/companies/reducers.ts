@@ -5,17 +5,12 @@ import {RequestModel} from 'src/app/api/requests';
 import {ApiValidationError} from '../../api/common/api-errors';
 import {ACTION_TYPES} from './types';
 
-export interface SlotDict {
-    // [key: string]: Slot[];
-}
 
 export interface CompaniesState {
     apiError: ApiValidationError | null;
     company: CompanyDetailsResourceModel | null;
     companyRequestCompleted: boolean;
     selectedServiceId: string | null;
-    slots: SlotDict;
-    selectedSlotId: number | null;
     selectedDate: string;
     currentRequest: RequestModel | null;
     currentRequestCompleted: boolean;
@@ -26,8 +21,6 @@ const initialState: CompaniesState = {
     company: null,
     companyRequestCompleted: false,
     selectedServiceId: null,
-    slots: {},
-    selectedSlotId: null,
     selectedDate: moment.utc().startOf('day').toISOString(),
     currentRequest: null,
     currentRequestCompleted: false

@@ -555,6 +555,13 @@ export interface ICompaniesClient {
      * @return Success
      */
     companiesFind(name: string): Promise<CompanyDetailsResourceModel>;
+    /**
+     * @param serviceId (optional)
+     * @param employeeId (optional)
+     * @param date (optional)
+     * @return Success
+     */
+    companiesSlots(serviceId: string | undefined, employeeId: string | undefined, date: string | undefined): Promise<FindAppointmentAvailabilityResult>;
 }
 
 export class CompaniesClient implements ICompaniesClient {
@@ -678,6 +685,72 @@ export class CompaniesClient implements ICompaniesClient {
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
         return Promise.resolve<CompanyDetailsResourceModel>(<any>null);
+    }
+
+    /**
+     * @param serviceId (optional)
+     * @param employeeId (optional)
+     * @param date (optional)
+     * @return Success
+     */
+    companiesSlots(serviceId: string | undefined, employeeId: string | undefined, date: string | undefined , cancelToken?: CancelToken | undefined): Promise<FindAppointmentAvailabilityResult> {
+        let url_ = this.baseUrl + "/api/Companies/slots?";
+        if (serviceId === null)
+            throw new Error("The parameter 'serviceId' cannot be null.");
+        else if (serviceId !== undefined)
+            url_ += "ServiceId=" + encodeURIComponent("" + serviceId) + "&";
+        if (employeeId === null)
+            throw new Error("The parameter 'employeeId' cannot be null.");
+        else if (employeeId !== undefined)
+            url_ += "EmployeeId=" + encodeURIComponent("" + employeeId) + "&";
+        if (date === null)
+            throw new Error("The parameter 'date' cannot be null.");
+        else if (date !== undefined)
+            url_ += "Date=" + encodeURIComponent("" + date) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "GET",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.instance.request(options_).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.processCompaniesSlots(_response);
+        });
+    }
+
+    protected processCompaniesSlots(response: AxiosResponse): Promise<FindAppointmentAvailabilityResult> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = JSON.parse(resultData200);
+            return Promise.resolve<FindAppointmentAvailabilityResult>(result200);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<FindAppointmentAvailabilityResult>(<any>null);
     }
 }
 
@@ -3267,6 +3340,10 @@ export interface EmployeeUserResourceModel {
     services: ServiceUserResourceModel[] | undefined;
 }
 
+export interface FindAppointmentAvailabilityResult {
+    slots: Slot[] | undefined;
+}
+
 export interface GetAllRolesQuery {
 }
 
@@ -3402,6 +3479,11 @@ export interface ServiceUserResourceModel {
     description: string | undefined;
     duration: string;
     serviceCategoryId: string | undefined;
+}
+
+export interface Slot {
+    start: string;
+    end: string;
 }
 
 export interface UpsertApplicationRoleGroupCommand {

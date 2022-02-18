@@ -1,22 +1,12 @@
+import {createSelector} from '@reduxjs/toolkit';
 import moment, {Moment} from 'moment';
 import {CompanyDetailsResourceModel} from 'src/app/api/api';
 import {RequestModel} from 'src/app/api/requests';
-import {SlotDict} from 'src/app/store/companies/reducers';
 import {RootState} from 'src/app/store/store';
-import { createSelector } from '@reduxjs/toolkit';
 
 
 export const selectCompany: (rootState: RootState) => CompanyDetailsResourceModel | null =
     (rootState) => rootState.companies.company;
-
-
-export const selectSlots: (rootState: RootState) => SlotDict =
-    (rootState) => rootState.companies.slots;
-
-
-export const selectSelectedSlotId: (rootState: RootState) => number | null =
-    (rootState) => rootState.companies.selectedSlotId;
-
 
 
 export const selectSelectedDate: (rootState: RootState) => Moment =
@@ -25,7 +15,6 @@ export const selectSelectedDate: (rootState: RootState) => Moment =
 
 export const selectCurrentRequest: (rootState: RootState) => RequestModel | null =
     (rootState) => rootState.companies.currentRequest;
-
 
 
 export const selectSelectedServiceId: (rootState: RootState) => string | null =

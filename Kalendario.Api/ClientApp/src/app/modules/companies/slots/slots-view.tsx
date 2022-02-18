@@ -1,40 +1,33 @@
 import React from 'react';
 import {isMobile} from 'react-device-detect';
 import {FormattedMessage} from 'react-intl';
+import {Slot} from 'src/app/api/api';
 import SlotButton from 'src/app/modules/companies/slots/slot-button';
-import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
-import {stringToMoment} from 'src/app/shared/util/moment-helpers';
-import {SlotDict} from 'src/app/store/companies';
+import {KFlexRow} from 'src/app/shared/components/flex';
 
 interface SlotsViewProps {
     isEmpty: boolean;
-    slots: SlotDict;
-    selectedSlotId: number | null;
-    // onClick: (slot: Slot) => void;
+    slots: Slot[];
+    selectedSlot: Slot | null;
+    onClick: (slot: Slot) => void;
 }
 
 const SlotsView: React.FunctionComponent<SlotsViewProps> = (
     {
         isEmpty,
         slots,
-        selectedSlotId,
-        // onClick
+        selectedSlot,
+        onClick
     }) => {
-    // const slotComponents = (slots: Slot[]) => slots.map((slot) =>
-    //     <SlotButton slot={slot}
-    //                 key={slot.id}
-    //                 isSelected={slot.id === selectedSlotId}
-    //                 onClick={() => onClick(slot)}/>
-    // );
 
     return (
-        <KFlexRow justify={isMobile ? 'center' : 'between'}>
-            {slots && Object.keys(slots).map(key =>
-                <KFlexColumn key={key} className="text-center">
-                    <h5>{stringToMoment(key).format('ddd DD/MM/YYYY')}</h5>
-                    {/*{slotComponents(slots[key])}*/}
-                </KFlexColumn>
-            )}
+        <KFlexRow flexWrap={true} justify={isMobile ? 'center' : 'between'}>
+            {slots.map((slot) =>
+                <SlotButton slot={slot}
+                            key={slot.start}
+                            isSelected={!!selectedSlot && slot.start === selectedSlot.start}
+                            onClick={() => onClick(slot)}/>)
+            }
             {isEmpty && <FormattedMessage id="COMPANY.NO-SLOTS"/>}
         </KFlexRow>
     )

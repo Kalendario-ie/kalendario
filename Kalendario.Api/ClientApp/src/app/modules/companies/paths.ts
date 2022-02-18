@@ -6,7 +6,7 @@ export const companiesUrls = (company: CompanyDetailsResourceModel) => {
     return {
         index: `/c/${company.name}`,
         cart: `/c/${company.name}/cart`,
-        // book: (params: CreateAppointmentRequest) => pathWithParams(`/c/${company.name}/book`, {...params}),
+        book: (params: CreateAppointmentRequest) => pathWithParams(`/c/${company.name}/book`, {...params}),
         checkout: `/c/${company.name}/checkout`,
     }
 }
