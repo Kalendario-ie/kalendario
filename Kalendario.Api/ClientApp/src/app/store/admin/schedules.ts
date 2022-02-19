@@ -1,6 +1,6 @@
 import {createEntityAdapter, createSelector, createSlice} from '@reduxjs/toolkit';
 import {adminScheduleClient} from 'src/app/api/adminSchedulesApi';
-import {ScheduleAdminResourceModel, ServiceCategoryAdminResourceModel} from 'src/app/api/api';
+import {ScheduleAdminResourceModel} from 'src/app/api/api';
 import {BaseQueryParams} from 'src/app/api/common/clients/base-django-api';
 import {compareByName} from 'src/app/shared/util/comparers';
 import {BaseSelectors, useInitializeStore} from 'src/app/store/admin/common/adapter';

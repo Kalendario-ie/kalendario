@@ -1,6 +1,5 @@
 import {CancelToken} from 'axios';
 import {AccountsClient, CreateAccountCommand} from 'src/app/api/api';
-import {PermissionModel} from 'src/app/api/auth';
 import baseApiAxios from 'src/app/api/common/clients/base-api';
 import {companyConfigParser} from 'src/app/api/company-config/parsers';
 
@@ -45,7 +44,6 @@ export function adminCompanyParser(data: any): CreateAccountCommand {
     data = typeof data === 'object' ? data : {};
     return {
         ...data,
-        permissionModel: PermissionModel.company,
         config: data?.config ? companyConfigParser(data.config) : null
     }
 }

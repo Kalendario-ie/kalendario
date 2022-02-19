@@ -1,6 +1,6 @@
 import {createEntityAdapter, createSelector, createSlice} from '@reduxjs/toolkit';
 import {adminAppointmentClient, AppointmentsGetParams} from 'src/app/api/adminAppointments';
-import {AppointmentAdminResourceModel, SchedulingPanelAdminResourceModel} from 'src/app/api/api';
+import {AppointmentAdminResourceModel} from 'src/app/api/api';
 import {compareByName} from 'src/app/shared/util/comparers';
 import {BaseSelectors, useInitializeStore} from 'src/app/store/admin/common/adapter';
 import {RootState} from 'src/app/store/store';

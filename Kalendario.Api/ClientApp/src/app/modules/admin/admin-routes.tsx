@@ -63,7 +63,7 @@ const AdminRoutes: React.FunctionComponent = () => {
                 name: intl.formatMessage({id: 'ADMIN.COMMON.PERMISSION-GROUPS'}),
                 url: ADMIN_ROUTES.PERMISSION_GROUPS,
                 icon: 'users-slash',
-                permissionModel: PermissionModel.groupprofile
+                permissionModel: PermissionModel.group
             },
         ]
     });
@@ -93,7 +93,7 @@ const AdminRoutes: React.FunctionComponent = () => {
                                     path={ADMIN_ROUTES.USERS}
                                     component={UsersContainer}/>
 
-                    <ProtectedRoute permissionModel={PermissionModel.groupprofile}
+                    <ProtectedRoute permissionModel={PermissionModel.group}
                                     path={ADMIN_ROUTES.PERMISSION_GROUPS}
                                     component={PermissionGroupsContainer}/>
 

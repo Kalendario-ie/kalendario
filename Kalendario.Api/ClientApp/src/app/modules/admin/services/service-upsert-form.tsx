@@ -40,10 +40,10 @@ const ServiceUpsertForm: React.FunctionComponent<AdminFormProps<ServiceAdminReso
                     <KFlexRow align={'center'} justify={'center'}>
                         <KFormikInput className="flex-fill" name="serviceCategoryId" as={'select'} options={serviceCategories}/>
                         <AdminButton type={PermissionType.change}
-                                     model={PermissionModel.servicecategory}
+                                     model={PermissionModel.serviceCategory}
                                      onClick={() => openModal(serviceCategory(formik.getFieldProps('category').value))}/>
                         <AdminButton type={PermissionType.add}
-                                     model={PermissionModel.servicecategory}
+                                     model={PermissionModel.serviceCategory}
                                      onClick={() => openModal(null)}/>
                     </KFlexRow>
                     <KFormikInput name="name"/>

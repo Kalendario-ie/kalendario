@@ -1,6 +1,6 @@
 import {createEntityAdapter, createSelector, createSlice, OutputSelector} from '@reduxjs/toolkit';
 import {adminPermissionGroupClient} from 'src/app/api/adminRoleGroupsApi';
-import {RoleGroupAdminResourceModel, ScheduleAdminResourceModel} from 'src/app/api/api';
+import {RoleGroupAdminResourceModel} from 'src/app/api/api';
 import {BaseQueryParams} from 'src/app/api/common/clients/base-django-api';
 import {compareByName} from 'src/app/shared/util/comparers';
 import {BaseSelectors, useInitializeStore} from 'src/app/store/admin/common/adapter';

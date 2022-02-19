@@ -16,6 +16,7 @@ import {
     UncontrolledDropdown,
 } from 'reactstrap';
 import {CompanyDetailsResourceModel} from 'src/app/api/api';
+import {hasPermission, PermissionModel, PermissionType} from 'src/app/api/auth';
 import {RequestModel} from 'src/app/api/requests';
 import {ADMIN_ROUTES} from 'src/app/modules/admin/urls';
 import {companiesUrls} from 'src/app/modules/companies/paths';
@@ -99,7 +100,7 @@ const AppNavbar: React.FunctionComponent<AppNavbarProps> = (
                                     </NavLink>
                                 </DropdownItem>
                                 <DropdownItem divider/>
-                                {user.AccountId &&
+                                {user.AccountId && hasPermission(user, PermissionType.view, PermissionModel.account) &&
                                 <DropdownItem>
                                     <NavLink tag={Link} to={ADMIN_ROUTES.ROOT}>
                                         <FormattedMessage id={'NAVBAR.ADMIN'}/>

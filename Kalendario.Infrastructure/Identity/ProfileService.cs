@@ -17,7 +17,7 @@ public class ProfileService : IProfileService
     public async Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
         var user = await _userManager.GetUserAsync(context.Subject);
-        context.IssuedClaims.AddRange(ClaimsHelper.UserClaims(user));
+        context.IssuedClaims.AddRange(await ClaimsHelper.UserClaims(user, _userManager));
     }
 
     public async Task IsActiveAsync(IsActiveContext context)

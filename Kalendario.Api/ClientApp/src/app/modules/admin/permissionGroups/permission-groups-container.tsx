@@ -14,7 +14,7 @@ const PermissionGroupsContainer: React.FunctionComponent = () => {
             <AdminListEditContainer entities={entities}
                                     actions={permissionGroupActions}
                                     client={adminPermissionGroupClient}
-                                    modelType={PermissionModel.groupprofile}
+                                    modelType={PermissionModel.group}
                                     EditContainer={PermissionGroupUpsertForm}
                                     ListContainer={PermissionGroupsTable}/>
     )

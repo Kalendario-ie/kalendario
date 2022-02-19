@@ -15,7 +15,7 @@ public class KalendarioUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<A
     protected override async Task<ClaimsIdentity> GenerateClaimsAsync(ApplicationUser user)
     {
         var identity = await base.GenerateClaimsAsync(user);
-        identity.AddClaims(ClaimsHelper.UserClaims(user));
+        identity.AddClaims(await ClaimsHelper.UserClaims(user, UserManager));
         return identity;
     }
 }

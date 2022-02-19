@@ -2,14 +2,8 @@ import moment, {Moment} from 'moment';
 import React, {useEffect, useState} from 'react';
 import {isMobile} from 'react-device-detect';
 import {useSelector} from 'react-redux';
-import {adminAppointmentClient} from 'src/app/api/adminAppointments';
 import {getFramesForDate} from 'src/app/api/adminSchedulesApi';
-import {
-    AppointmentAdminResourceModel, AppointmentUserResourceModel,
-    EmployeeUserResourceModel,
-    ScheduleAdminResourceModel,
-    ScheduleUserResourceModel
-} from 'src/app/api/api';
+import {AppointmentUserResourceModel, EmployeeUserResourceModel, ScheduleUserResourceModel} from 'src/app/api/api';
 import {userEmployeeClient} from 'src/app/api/userEmployeeApi';
 import {KFlexColumn, KFlexRow} from 'src/app/shared/components/flex';
 import {KIconButton, KRoundedButton} from 'src/app/shared/components/primitives/buttons';

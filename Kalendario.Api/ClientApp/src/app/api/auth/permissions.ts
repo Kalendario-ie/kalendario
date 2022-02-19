@@ -1,28 +1,23 @@
 export enum PermissionModel {
-    groupprofile = 'groupprofile',
-    user = 'user',
-    appointment = 'appointment',
-    company = 'company',
+    employee = 'Employee',
+    group = 'ApplicationRoleGroup',
+    user = 'ApplicationUser',
     config = 'config',
-    customer = 'customer',
-    employee = 'employee',
-    historicalappointment = 'historicalappointment',
-    person = 'person',
-    photo = 'photo',
-    request = 'request',
-    schedule = 'schedule',
-    schedulingpanel = 'schedulingpanel',
-    service = 'service',
-    servicecategory = 'servicecategory',
-    shift = 'shift',
-    timeframe = 'timeframe',
+    service = 'Service',
+    serviceCategory = 'ServiceCategory',
+    shift = 'Shift',
+    schedulePanel = 'SchedulePanel',
+    schedule = 'Schedule',
+    customer = 'Customer',
+    appointment = 'Appointment',
+    account = 'Account'
 }
 
 export enum PermissionType {
-    add = 'add',
-    change = 'change',
-    delete = 'delete',
-    view = 'view',
+    add = 'Create',
+    change = 'Update',
+    delete = 'Delete',
+    view = 'View',
 }
 
 

@@ -3,7 +3,7 @@ import {adminSchedulingPanelsClient, upsertSchedulingPanelCommandParser} from 's
 import {SchedulingPanelAdminResourceModel} from 'src/app/api/api';
 import {AdminFormProps, useHandleSubmit} from 'src/app/shared/admin/interfaces';
 import {KFormikForm, KFormikInput} from 'src/app/shared/components/forms';
-import {employeeActions, employeeSelectors, useInitializeEmployees} from 'src/app/store/admin/employees';
+import {useInitializeEmployees} from 'src/app/store/admin/employees';
 
 const SchedulingPanelForm: React.FunctionComponent<AdminFormProps<SchedulingPanelAdminResourceModel>> = (
     {

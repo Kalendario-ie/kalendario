@@ -1,6 +1,6 @@
 import {createEntityAdapter, createSelector, createSlice} from '@reduxjs/toolkit';
 import {adminServiceCategoryClient} from 'src/app/api/adminServiceCategoryApi';
-import {ServiceAdminResourceModel, ServiceCategoryAdminResourceModel} from 'src/app/api/api';
+import {ServiceCategoryAdminResourceModel} from 'src/app/api/api';
 import {BaseQueryParams} from 'src/app/api/common/clients/base-django-api';
 import {compareByName} from 'src/app/shared/util/comparers';
 import {BaseSelectors, useInitializeStore} from 'src/app/store/admin/common/adapter';
