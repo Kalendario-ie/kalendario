@@ -97,7 +97,7 @@ const EmployeeScheduleView: React.FunctionComponent<EmployeeScheduleViewProps> =
     const frames = getFramesForDate(schedule, date);
     return (
         <KFlexRow justify="center">
-            {frames.map(frame => `${frame.start} - ${frame.end}`).reduce((f1, f2) => `${f1} | ${f2}`)}
+            {frames.map(frame => `${frame.start} - ${frame.end}`).reduce((f1, f2) => `${f1} | ${f2}`, '')}
             {!frames &&
             <>
                 No shift available
